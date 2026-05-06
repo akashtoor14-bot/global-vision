@@ -194,24 +194,13 @@
        ============================================================ */
     .ticker{
       position:relative;z-index:101;
-      background:#040a18;color:#c8d3e3;
+      background:#040a18;
       border-bottom:1px solid rgba(103,154,203,.14);
-      overflow:hidden;font-size:12px;letter-spacing:.5px;
+      overflow:hidden;
     }
-    .ticker-track{
-      display:flex;gap:2.5rem;padding:.55rem 0;white-space:nowrap;
-      animation:scroll 40s linear infinite;
-      width:max-content;
-    }
-    .ticker-item{display:inline-flex;align-items:center;gap:.5rem}
-    .ticker-item .sym{color:#fff;font-weight:700}
-    .ticker-item .up{color:var(--mint)}
-    .ticker-item .dn{color:var(--rose)}
-    .ticker-item .sep{opacity:.3;margin:0 .5rem}
-    @keyframes scroll{
-      from{transform:translateX(0)}
-      to{transform:translateX(-50%)}
-    }
+    /* TradingView widget container fits inside our dark ticker bar */
+    .tv-ticker .tradingview-widget-container{padding:.15rem 0}
+    .tv-ticker iframe{display:block !important}
 
     /* ============================================================
        HEADER
@@ -612,6 +601,16 @@
     .db-price .main{font-size:34px;font-weight:800;letter-spacing:-1px;color:#fff;font-variant-numeric:tabular-nums}
     .db-price .chg{font-size:13px;color:var(--mint);font-weight:700}
 
+    /* TradingView Symbol Overview widget inside dashboard card */
+    .db-tv{
+      position:relative;border-radius:10px;overflow:hidden;
+      background:rgba(7,16,34,.4);
+      border:1px solid rgba(190,222,245,.08);
+      min-height:320px;
+    }
+    .db-tv .tradingview-widget-container,
+    .db-tv .tradingview-widget-container__widget{height:100%;width:100%}
+
     .db-chart{
       position:relative;height:240px;border-radius:10px;overflow:hidden;
       background:
@@ -963,11 +962,34 @@
   <div class="cursor-glow" id="cursorGlow" aria-hidden="true"></div>
 
   <!-- ============================================================
-       LIVE TICKER
+       LIVE TICKER (TradingView Ticker Tape — real-time)
        ============================================================ -->
-  <div class="ticker" aria-label="Live market ticker">
-    <div class="ticker-track" id="tickerTrack">
-      <!-- Items duplicated by JS for seamless loop -->
+  <div class="ticker tv-ticker" aria-label="Live market ticker">
+    <div class="tradingview-widget-container">
+      <div class="tradingview-widget-container__widget"></div>
+      <script type="text/javascript" src="https://s3.tradingview.com/external-embed/widget-ticker-tape.js" async>
+      {
+        "symbols": [
+          {"description": "Gold (XAU/USD)",     "proName": "OANDA:XAUUSD"},
+          {"description": "Bitcoin",            "proName": "BITSTAMP:BTCUSD"},
+          {"description": "Dow Jones (US30)",   "proName": "TVC:DJI"},
+          {"description": "Crude Oil (WTI)",    "proName": "TVC:USOIL"},
+          {"description": "Brent Oil",          "proName": "TVC:UKOIL"},
+          {"description": "Silver (XAG/USD)",   "proName": "OANDA:XAGUSD"},
+          {"description": "S&P 500",            "proName": "TVC:SPX"},
+          {"description": "Nasdaq 100",         "proName": "NASDAQ:NDX"},
+          {"description": "Ethereum",           "proName": "BITSTAMP:ETHUSD"},
+          {"description": "EUR/USD",            "proName": "FX:EURUSD"},
+          {"description": "GBP/USD",            "proName": "FX:GBPUSD"},
+          {"description": "USD Index (DXY)",    "proName": "TVC:DXY"}
+        ],
+        "showSymbolLogo": true,
+        "isTransparent": true,
+        "displayMode": "adaptive",
+        "colorTheme": "dark",
+        "locale": "en"
+      }
+      </script>
     </div>
   </div>
 
@@ -1161,37 +1183,51 @@
           <a href="#" class="btn btn-neon btn-lg" data-open-modal>Launch Demo <span class="arrow">→</span></a>
         </div>
 
-        <!-- Live dashboard visual -->
+        <!-- Live dashboard visual — TradingView Symbol Overview (real-time) -->
         <div class="dashboard reveal">
           <div class="db-head">
-            <div class="pair"><span class="emoji">●</span> XAUUSD <span style="color:#8fa3c5;font-weight:500">· 15m</span></div>
-            <div class="pill"><span class="dot"></span>Live</div>
+            <div class="pair"><span class="emoji">●</span> Live Markets</div>
+            <div class="pill"><span class="dot"></span>Real-Time</div>
           </div>
 
-          <div class="db-price">
-            <div class="main" id="livePrice">2384.50</div>
-            <div class="chg" id="liveChg">+1.24%  ▲ 29.30</div>
-          </div>
-
-          <div class="db-chart">
-            <svg viewBox="0 0 600 240" preserveAspectRatio="none" aria-hidden="true">
-              <defs>
-                <linearGradient id="lineGrad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stop-color="#BEDEF5"/>
-                  <stop offset="50%" stop-color="#7AE0FF"/>
-                  <stop offset="100%" stop-color="#679ACB"/>
-                </linearGradient>
-                <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0%" stop-color="#7AE0FF" stop-opacity=".55"/>
-                  <stop offset="100%" stop-color="#7AE0FF" stop-opacity="0"/>
-                </linearGradient>
-              </defs>
-              <path class="chart-area"
-                d="M0,170 C50,150 90,180 140,160 C190,140 220,115 270,125 C320,135 360,95 410,70 C460,48 500,60 560,35 L600,35 L600,240 L0,240 Z"/>
-              <path class="chart-line"
-                d="M0,170 C50,150 90,180 140,160 C190,140 220,115 270,125 C320,135 360,95 410,70 C460,48 500,60 560,35 L600,35"/>
-              <circle class="chart-dot" cx="560" cy="35" r="5"/>
-            </svg>
+          <div class="db-tv">
+            <div class="tradingview-widget-container">
+              <div class="tradingview-widget-container__widget"></div>
+              <script type="text/javascript" src="https://s3.tradingview.com/external-embed/widget-symbol-overview.js" async>
+              {
+                "symbols": [
+                  ["Gold (XAU/USD)", "OANDA:XAUUSD|1D"],
+                  ["Bitcoin",        "BITSTAMP:BTCUSD|1D"],
+                  ["Dow Jones (US30)","TVC:DJI|1D"],
+                  ["Crude Oil (WTI)","TVC:USOIL|1D"]
+                ],
+                "chartOnly": false,
+                "width": "100%",
+                "height": "320",
+                "locale": "en",
+                "colorTheme": "dark",
+                "autosize": true,
+                "showVolume": false,
+                "showMA": false,
+                "hideDateRanges": false,
+                "hideMarketStatus": false,
+                "hideSymbolLogo": false,
+                "scalePosition": "right",
+                "scaleMode": "Normal",
+                "fontFamily": "Inter, -apple-system, BlinkMacSystemFont, sans-serif",
+                "fontSize": "10",
+                "noTimeScale": false,
+                "valuesTracking": "1",
+                "changeMode": "price-and-percent",
+                "chartType": "area",
+                "lineColor": "#7ae0ff",
+                "topColor": "rgba(122, 224, 255, 0.3)",
+                "bottomColor": "rgba(122, 224, 255, 0)",
+                "isTransparent": true,
+                "dateRanges": ["1d|1","5d|5","1m|30","3m|60","12m|1D","60m|1W","all|1M"]
+              }
+              </script>
+            </div>
           </div>
 
           <div class="db-meta">
@@ -1591,48 +1627,7 @@
     populateStars(document.getElementById('stars'), 70);
     populateStars(document.getElementById('starsCta'), 40);
 
-    /* ---------- Live ticker (seamless loop) ---------- */
-    const tickerData = [
-      ['XAUUSD','2,384.50','+1.24%','up'],
-      ['EURUSD','1.0852','-0.18%','dn'],
-      ['GBPUSD','1.2671','+0.32%','up'],
-      ['USDJPY','154.20','+0.11%','up'],
-      ['BTCUSD','67,420','+2.18%','up'],
-      ['ETHUSD','3,540','+1.44%','up'],
-      ['USOIL','78.12','-0.64%','dn'],
-      ['SPX500','5,267.45','+0.42%','up'],
-      ['NAS100','18,420','+0.71%','up'],
-      ['DXY','105.12','-0.09%','dn'],
-      ['XAGUSD','28.42','+1.81%','up'],
-    ];
-    const track = document.getElementById('tickerTrack');
-    function buildTicker(){
-      const frag = document.createDocumentFragment();
-      for(let pass=0; pass<2; pass++){
-        tickerData.forEach(([sym,px,chg,dir])=>{
-          const el = document.createElement('span');
-          el.className = 'ticker-item';
-          el.innerHTML = `<span class="sym">${sym}</span> <span>${px}</span> <span class="${dir}">${dir==='up'?'▲':'▼'} ${chg}</span><span class="sep">·</span>`;
-          frag.appendChild(el);
-        });
-      }
-      track.appendChild(frag);
-    }
-    buildTicker();
-
-    /* ---------- Live-ish price flicker ---------- */
-    const livePrice = document.getElementById('livePrice');
-    const liveChg   = document.getElementById('liveChg');
-    let basePx = 2384.50;
-    setInterval(()=>{
-      const delta = (Math.random()-.45) * 1.4;
-      basePx += delta;
-      const pct = ((basePx - 2355)/2355 * 100).toFixed(2);
-      const arrow = delta >= 0 ? '▲' : '▼';
-      livePrice.textContent = basePx.toFixed(2);
-      liveChg.textContent = `${pct>=0?'+':''}${pct}%  ${arrow} ${(basePx-2355).toFixed(2)}`;
-      liveChg.style.color = delta >= 0 ? 'var(--mint)' : 'var(--rose)';
-    }, 1500);
+    /* ---------- (Removed: fake ticker + price flicker — replaced by TradingView widgets) ---------- */
 
     /* ---------- Header shadow on scroll ---------- */
     const header = document.querySelector('.site-header');
