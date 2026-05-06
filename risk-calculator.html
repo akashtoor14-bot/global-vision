@@ -311,7 +311,18 @@
       transform:translateY(-2px);
       box-shadow:0 14px 40px rgba(122,224,255,.12);
     }
-    .broker-name{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.3px}
+    .broker-name{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.3px;display:flex;align-items:baseline;flex-wrap:wrap;gap:.6rem}
+    .broker-fav{
+      font-size:11px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;
+      color:var(--cyan);
+      font-family:'JetBrains Mono','SF Mono',ui-monospace,Menlo,monospace;
+      display:inline-flex;align-items:center;gap:.5rem;
+    }
+    .broker-fav::before{
+      content:"";width:6px;height:6px;border-radius:50%;
+      background:var(--cyan);box-shadow:0 0 8px var(--cyan),0 0 14px rgba(122,224,255,.6);
+      animation:pulse 1.6s ease-in-out infinite;
+    }
     .broker-desc{font-size:13px;color:#9fb0cb;line-height:1.55;flex:1}
     .broker-btn{
       display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
@@ -624,7 +635,7 @@
           <div class="calc-label"><span class="dot"></span>Recommended Brokers</div>
           <div class="broker-grid">
             <div class="broker-card">
-              <div class="broker-name">VT Markets</div>
+              <div class="broker-name">VT Markets <span class="broker-fav">GV Pick</span></div>
               <div class="broker-desc">Competitive spreads on XAU/USD, indices, and crypto with fast execution.</div>
               <a class="broker-btn" href="https://vtm.pro/FzQJfy" target="_blank" rel="noopener noreferrer">Open Account <span class="arrow">↗</span></a>
             </div>
