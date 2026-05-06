@@ -328,25 +328,6 @@
     .meta-card strong{font-size:22px;color:#fff;font-weight:800;letter-spacing:-.4px;display:block}
     .meta-card span{font-size:11px;color:#8fa3c5;text-transform:uppercase;letter-spacing:1.5px}
 
-    /* Tier Tabs */
-    .tier-tabs{
-      display:inline-flex;gap:.25rem;
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(190,222,245,.14);
-      padding:.35rem;border-radius:12px;margin-top:2rem;backdrop-filter:blur(8px);
-    }
-    .tier-tab{
-      padding:.75rem 1.6rem;font-size:11.5px;font-weight:700;letter-spacing:2px;
-      text-transform:uppercase;color:#b8c4d8;border-radius:9px;
-      transition:all .3s var(--ease);
-    }
-    .tier-tab:hover{color:#fff}
-    .tier-tab.active{
-      background:linear-gradient(135deg, #7ae0ff, #BEDEF5);
-      color:var(--navy-900);
-      box-shadow:0 10px 20px rgba(122,224,255,.35);
-    }
-
     /* ============================================================
        GLOBE + FLOATING CARDS
        ============================================================ */
@@ -813,7 +794,6 @@
       .grid-3,.grid-2,.stats-row,.community-grid{grid-template-columns:1fr}
       .academy-grid{grid-template-columns:repeat(2,1fr)}
       .footer-grid{grid-template-columns:1fr 1fr;gap:2rem}
-      .tier-tab{padding:.6rem 1rem;font-size:10.5px;letter-spacing:1.4px}
       .cta-banner{padding:5rem 1.25rem}
       .globe{width:280px;height:280px}.globe-wrap{height:380px}
       .orbit{width:360px;height:360px}.orbit.two{width:420px;height:420px}
@@ -1040,7 +1020,6 @@
 
         <div class="hero-cta fade-in delay-3">
           <a href="#" class="btn btn-neon btn-lg" data-open-modal>Join Free Forever <span class="arrow">→</span></a>
-          <a href="#dashboard" class="btn btn-ghost btn-lg">Watch Live Demo</a>
         </div>
 
         <div class="hero-meta fade-in delay-4">
@@ -1058,11 +1037,6 @@
           </div>
         </div>
 
-        <div class="tier-tabs fade-in delay-4" role="tablist" aria-label="Access tier">
-          <button class="tier-tab active" role="tab" aria-selected="true" onclick="setActiveTier(this)">Starter</button>
-          <button class="tier-tab" role="tab" aria-selected="false" onclick="setActiveTier(this)">Advanced</button>
-          <button class="tier-tab" role="tab" aria-selected="false" onclick="setActiveTier(this)">Elite</button>
-        </div>
       </div>
 
       <!-- Globe & HUD -->
@@ -1523,14 +1497,6 @@
        JAVASCRIPT
        ============================================================ -->
   <script>
-    /* ---------- Tier tabs ---------- */
-    function setActiveTier(el){
-      el.parentElement.querySelectorAll('.tier-tab').forEach(t=>{
-        t.classList.remove('active');t.setAttribute('aria-selected','false');
-      });
-      el.classList.add('active');el.setAttribute('aria-selected','true');
-    }
-
     /* ---------- Smooth scroll ---------- */
     document.querySelectorAll('a[href^="#"]').forEach(link=>{
       link.addEventListener('click', (e)=>{
