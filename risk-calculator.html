@@ -290,6 +290,43 @@
     .qr-row.dim .lotv,.qr-row.dim .riskv{color:#5b6577;font-weight:600}
     .qr-row.dim{opacity:.55}
 
+    /* ============================================================
+       RECOMMENDED BROKERS
+       ============================================================ */
+    .broker-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .broker-card{
+      position:relative;padding:1.6rem 1.4rem;border-radius:14px;
+      background:linear-gradient(180deg,rgba(7,16,34,.6),rgba(7,16,34,.4));
+      border:1px solid rgba(190,222,245,.14);
+      display:flex;flex-direction:column;gap:.7rem;
+      transition:border-color .25s var(--ease),transform .25s var(--ease),box-shadow .25s var(--ease);
+      overflow:hidden;
+    }
+    .broker-card::before{
+      content:"";position:absolute;top:0;left:10%;right:10%;height:2px;
+      background:linear-gradient(90deg,transparent,var(--cyan),transparent);opacity:.6;
+    }
+    .broker-card:hover{
+      border-color:rgba(122,224,255,.4);
+      transform:translateY(-2px);
+      box-shadow:0 14px 40px rgba(122,224,255,.12);
+    }
+    .broker-name{font-size:22px;font-weight:800;color:#fff;letter-spacing:-.3px}
+    .broker-desc{font-size:13px;color:#9fb0cb;line-height:1.55;flex:1}
+    .broker-btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:.5rem;
+      margin-top:.5rem;padding:.8rem 1rem;border-radius:8px;
+      font-size:12px;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;
+      font-family:'JetBrains Mono','SF Mono',ui-monospace,Menlo,monospace;
+      color:var(--cyan);
+      background:rgba(122,224,255,.08);
+      border:1px solid rgba(122,224,255,.35);
+      transition:all .25s var(--ease);
+    }
+    .broker-btn:hover{background:rgba(122,224,255,.18);border-color:rgba(122,224,255,.65);color:#fff}
+    .broker-btn .arrow{transition:transform .25s var(--ease);font-family:inherit}
+    .broker-btn:hover .arrow{transform:translate(2px,-2px)}
+
     @media (max-width:680px){
       .calc-card{padding:1.4rem 1.25rem}
       .calc-grid{grid-template-columns:1fr}
@@ -298,6 +335,7 @@
       .calc-tabs{width:100%;justify-content:center;flex-wrap:wrap}
       .calc-tab{padding:.6rem .9rem;font-size:11px;letter-spacing:1px;flex:1;min-width:0;justify-content:center}
       .r-value{font-size:26px}
+      .broker-grid{grid-template-columns:1fr}
     }
 
     /* ============================================================
@@ -578,6 +616,23 @@
               <div>Risk ($)</div>
             </div>
             <div id="qrBody"></div>
+          </div>
+        </div>
+
+        <!-- Recommended Brokers -->
+        <div class="calc-card">
+          <div class="calc-label"><span class="dot"></span>Recommended Brokers</div>
+          <div class="broker-grid">
+            <div class="broker-card">
+              <div class="broker-name">VTMarkets</div>
+              <div class="broker-desc">Competitive spreads on XAU/USD, indices, and crypto with fast execution.</div>
+              <a class="broker-btn" href="https://vtm.pro/FzQJfy" target="_blank" rel="noopener noreferrer">Open Account <span class="arrow">↗</span></a>
+            </div>
+            <div class="broker-card">
+              <div class="broker-name">PUPrime</div>
+              <div class="broker-desc">Tight spreads + deep liquidity on metals, indices, and majors.</div>
+              <a class="broker-btn" href="https://puvip.co/la-partners/oZZXP2d3" target="_blank" rel="noopener noreferrer">Open Account <span class="arrow">↗</span></a>
+            </div>
           </div>
         </div>
 
