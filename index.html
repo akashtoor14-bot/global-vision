@@ -836,6 +836,133 @@
       .footer-grid{grid-template-columns:1fr}
       .nav-cta .btn.nav-login{display:none}
     }
+
+    /* ============================================================
+       JOIN MODAL
+       ============================================================ */
+    .modal-backdrop{
+      position:fixed;inset:0;z-index:200;
+      background:radial-gradient(ellipse at center, rgba(7,21,43,.85) 0%, rgba(4,12,29,.95) 100%);
+      backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+      display:flex;align-items:center;justify-content:center;
+      padding:1.5rem;opacity:0;pointer-events:none;
+      transition:opacity .35s var(--ease);
+    }
+    .modal-backdrop.open{opacity:1;pointer-events:auto}
+    .modal-backdrop.open .modal{transform:translateY(0) scale(1);opacity:1}
+
+    .modal{
+      position:relative;width:100%;max-width:520px;
+      background:linear-gradient(180deg,#07152b 0%,#040c1d 100%);
+      border:1px solid rgba(190,222,245,.18);
+      border-radius:18px;padding:2.5rem 2.25rem 2.25rem;
+      box-shadow:0 40px 100px rgba(0,0,0,.6), 0 0 0 1px rgba(122,224,255,.08), 0 0 80px rgba(103,154,203,.25);
+      transform:translateY(20px) scale(.96);opacity:0;
+      transition:transform .45s var(--ease-out),opacity .35s var(--ease);
+      overflow:hidden;
+    }
+    .modal::before{
+      content:"";position:absolute;inset:0;pointer-events:none;
+      background:
+        radial-gradient(500px 200px at 50% -20%, rgba(122,224,255,.18), transparent 60%),
+        linear-gradient(to right, rgba(190,222,245,.06) 1px, transparent 1px) 0 0/40px 40px,
+        linear-gradient(to bottom, rgba(190,222,245,.06) 1px, transparent 1px) 0 0/40px 40px;
+      mask-image:radial-gradient(ellipse at center, black 50%, transparent 90%);
+      -webkit-mask-image:radial-gradient(ellipse at center, black 50%, transparent 90%);
+    }
+    .modal-close{
+      position:absolute;top:14px;right:14px;z-index:2;
+      width:34px;height:34px;border-radius:50%;
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(190,222,245,.18);
+      color:#c8d3e3;font-size:16px;line-height:1;
+      display:flex;align-items:center;justify-content:center;
+      transition:all .25s var(--ease);
+    }
+    .modal-close:hover{background:rgba(190,222,245,.15);color:#fff;transform:rotate(90deg)}
+
+    .modal-content{position:relative;z-index:1}
+    .modal h3{
+      color:#fff;font-size:24px;font-weight:800;letter-spacing:-.5px;
+      line-height:1.2;margin-bottom:.6rem;text-align:center;
+    }
+    .modal h3 .grad-text{display:inline}
+    .modal-note{
+      font-size:13px;color:#9fb0cb;text-align:center;
+      margin-bottom:1.75rem;line-height:1.55;
+    }
+    .modal-note b{color:#fff;font-weight:700}
+    .modal-note .accent{color:var(--cyan)}
+
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-bottom:.85rem}
+    .form-field{position:relative;margin-bottom:.85rem}
+    .form-field label{
+      display:block;font-size:11px;font-weight:700;letter-spacing:1.5px;
+      text-transform:uppercase;color:var(--blue-soft);margin-bottom:.4rem;
+    }
+    .form-field label .req{color:var(--cyan);margin-left:.2rem}
+    .form-field input{
+      width:100%;font-family:inherit;font-size:15px;color:#fff;
+      background:rgba(255,255,255,.04);
+      border:1px solid rgba(190,222,245,.18);
+      border-radius:999px;padding:.95rem 1.15rem;outline:none;
+      transition:border-color .25s var(--ease),background .25s var(--ease),box-shadow .25s var(--ease);
+    }
+    .form-field.has-icon input{padding-left:2.6rem}
+    .form-field input::placeholder{color:#5b6577}
+    .form-field input:focus{
+      border-color:rgba(122,224,255,.55);
+      background:rgba(122,224,255,.06);
+      box-shadow:0 0 0 4px rgba(122,224,255,.1);
+    }
+    .form-field .ico{
+      position:absolute;left:1rem;top:calc(50% + 9px);transform:translateY(-50%);
+      color:#5b6577;font-size:14px;pointer-events:none;
+    }
+    .form-field.error input{border-color:rgba(255,122,155,.6);background:rgba(255,122,155,.05)}
+    .form-field .err-msg{display:none;color:var(--rose);font-size:11.5px;margin-top:.4rem;padding-left:.4rem}
+    .form-field.error .err-msg{display:block}
+
+    .modal-submit{
+      width:100%;margin-top:.5rem;padding:1.05rem 1.5rem;border-radius:999px;
+      font-size:15px;font-weight:800;letter-spacing:.4px;cursor:pointer;
+      color:#fff;border:none;
+      background:linear-gradient(180deg,#3b6fb5 0%,#1A3D6C 100%);
+      box-shadow:0 16px 32px rgba(26,61,108,.45), inset 0 1px 0 rgba(255,255,255,.18), 0 0 0 1px rgba(122,224,255,.25);
+      transition:transform .25s var(--ease),box-shadow .3s var(--ease),filter .25s var(--ease);
+      position:relative;overflow:hidden;
+    }
+    .modal-submit:hover{transform:translateY(-2px);box-shadow:0 20px 40px rgba(26,61,108,.55), inset 0 1px 0 rgba(255,255,255,.22), 0 0 0 1px rgba(122,224,255,.45)}
+    .modal-submit::after{
+      content:"";position:absolute;top:0;left:-120%;width:40%;height:100%;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
+      transform:skewX(-20deg);transition:left .8s var(--ease-out);
+    }
+    .modal-submit:hover::after{left:130%}
+
+    /* Success state */
+    .modal-success{
+      display:none;text-align:center;padding:1rem 0 .25rem;
+    }
+    .modal-success .check-circle{
+      width:68px;height:68px;border-radius:50%;margin:0 auto 1.25rem;
+      display:flex;align-items:center;justify-content:center;
+      background:linear-gradient(135deg, #6cf3b4, #7ae0ff);
+      color:#062139;font-size:32px;font-weight:800;
+      box-shadow:0 16px 36px rgba(108,243,180,.35), 0 0 0 1px rgba(108,243,180,.4);
+      animation:popIn .5s var(--ease-out);
+    }
+    @keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+    .modal-success h3{margin-bottom:.4rem}
+    .modal-success p{color:#9fb0cb;font-size:14.5px;line-height:1.6}
+    .modal.is-success .modal-form{display:none}
+    .modal.is-success .modal-success{display:block}
+
+    @media (max-width:520px){
+      .modal{padding:2rem 1.5rem 1.75rem}
+      .form-row{grid-template-columns:1fr;gap:0}
+      .modal h3{font-size:20px}
+    }
   </style>
 </head>
 <body>
@@ -870,8 +997,8 @@
         <li><a href="#community">Community</a></li>
       </ul>
       <div class="nav-cta">
-        <a href="#" class="btn btn-ghost nav-login">Login</a>
-        <a href="#cta" class="btn btn-neon">Join Free <span class="arrow">→</span></a>
+        <a href="https://globalv.me/free-community-optin?utm_source=ig&utm_medium=social&utm_content=link_in_bio&fbclid=PAZnRzaARn3CNleHRuA2FlbQIxMQBzcnRjBmFwcF9pZA8xMjQwMjQ1NzQyODc0MTQAAac054_fbuzB5sN0TkNvdKVkAZrSDCNpKKw-TtaiaK9bfMTyJIEBtNniHvb4Yw_aem_nCLZ68fmdQ_aa-dMwMIPag" target="_blank" rel="noopener noreferrer" class="btn btn-ghost nav-login">Login</a>
+        <a href="#" class="btn btn-neon" data-open-modal>Join Free <span class="arrow">→</span></a>
       </div>
     </nav>
   </header>
@@ -892,7 +1019,7 @@
         <p class="sub fade-in delay-2">Live XAUUSD signals, institutional tooling, and an active worldwide community — entirely free, forever. No paywalls. No upsells. Just the edge.</p>
 
         <div class="hero-cta fade-in delay-3">
-          <a href="#cta" class="btn btn-neon btn-lg">Join Free Forever <span class="arrow">→</span></a>
+          <a href="#" class="btn btn-neon btn-lg" data-open-modal>Join Free Forever <span class="arrow">→</span></a>
           <a href="#dashboard" class="btn btn-ghost btn-lg">Watch Live Demo</a>
         </div>
 
@@ -1039,7 +1166,7 @@
             <li><span class="check">✓</span>Session-level performance dashboards and risk tracking</li>
             <li><span class="check">✓</span>Personal edge scoring to surface what's actually working</li>
           </ul>
-          <a href="#cta" class="btn btn-neon btn-lg">Launch Demo <span class="arrow">→</span></a>
+          <a href="#" class="btn btn-neon btn-lg" data-open-modal>Launch Demo <span class="arrow">→</span></a>
         </div>
 
         <!-- Live dashboard visual -->
@@ -1144,7 +1271,7 @@
       </div>
 
       <div style="text-align:center">
-        <a href="#cta" class="btn btn-primary btn-lg">Start Learning Today <span class="arrow">→</span></a>
+        <a href="#" class="btn btn-primary btn-lg" data-open-modal>Start Learning Today <span class="arrow">→</span></a>
       </div>
     </div>
   </section>
@@ -1243,9 +1370,57 @@
       <span class="eyebrow"><span class="dot"></span>Join Global Vision</span>
       <h2>Ready to Claim <span class="grad-text">Your Edge?</span></h2>
       <p>Step into the world's fastest-growing free community for gold traders. Live signals, full tooling, and a global network — no paywalls, ever.</p>
-      <a href="#" class="btn btn-neon btn-lg">Join Free Forever <span class="arrow">→</span></a>
+      <a href="#" class="btn btn-neon btn-lg" data-open-modal>Join Free Forever <span class="arrow">→</span></a>
     </div>
   </section>
+
+  <!-- ============================================================
+       JOIN MODAL
+       ============================================================ -->
+  <div class="modal-backdrop" id="joinModal" role="dialog" aria-modal="true" aria-labelledby="joinTitle" aria-hidden="true">
+    <div class="modal" role="document">
+      <button class="modal-close" id="modalClose" aria-label="Close form">✕</button>
+
+      <div class="modal-content">
+        <!-- Form view -->
+        <div class="modal-form">
+          <h3 id="joinTitle">Fill Out The Form To<br/><span class="grad-text">Access The Next Step</span></h3>
+          <p class="modal-note"><b>NOTE:</b> Make sure to use your <span class="accent">real email address</span>. You'll be prompted to verify it. A <span class="accent">verification code</span> will be sent to your email.</p>
+
+          <form id="joinForm" novalidate>
+            <div class="form-row">
+              <div class="form-field">
+                <label for="firstName">First Name<span class="req">*</span></label>
+                <input type="text" id="firstName" name="firstName" placeholder="First name" autocomplete="given-name" required />
+                <div class="err-msg">Please enter your first name</div>
+              </div>
+              <div class="form-field">
+                <label for="lastName">Last Name<span class="req">*</span></label>
+                <input type="text" id="lastName" name="lastName" placeholder="Last name" autocomplete="family-name" required />
+                <div class="err-msg">Please enter your last name</div>
+              </div>
+            </div>
+
+            <div class="form-field has-icon">
+              <label for="emailAddr">Email<span class="req">*</span></label>
+              <span class="ico">✉</span>
+              <input type="email" id="emailAddr" name="email" placeholder="you@email.com" autocomplete="email" required />
+              <div class="err-msg">Please enter a valid email</div>
+            </div>
+
+            <button type="submit" class="modal-submit">Submit</button>
+          </form>
+        </div>
+
+        <!-- Success view -->
+        <div class="modal-success">
+          <div class="check-circle">✓</div>
+          <h3>You're <span class="grad-text">In.</span></h3>
+          <p>Check your email for a verification code. We'll get you set up with VIP access in the next 60 seconds.</p>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- ============================================================
        FOOTER
@@ -1476,6 +1651,87 @@
 
     /* ---------- Year ---------- */
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* ---------- Join Modal ---------- */
+    const joinModal   = document.getElementById('joinModal');
+    const joinForm    = document.getElementById('joinForm');
+    const modalClose  = document.getElementById('modalClose');
+    const modalInner  = joinModal.querySelector('.modal');
+
+    function openJoinModal(){
+      joinModal.classList.add('open');
+      joinModal.setAttribute('aria-hidden','false');
+      document.body.style.overflow = 'hidden';
+      // Focus first field shortly after open animation
+      setTimeout(()=>{
+        const first = joinModal.querySelector('input');
+        if(first) first.focus();
+      }, 250);
+    }
+    function closeJoinModal(){
+      joinModal.classList.remove('open');
+      joinModal.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+      // Reset to form view after close anim, in case it was in success state
+      setTimeout(()=>{
+        modalInner.classList.remove('is-success');
+        joinForm.reset();
+        joinForm.querySelectorAll('.form-field').forEach(f=>f.classList.remove('error'));
+      }, 400);
+    }
+
+    // Open triggers — any element with data-open-modal
+    document.querySelectorAll('[data-open-modal]').forEach(el=>{
+      el.addEventListener('click', (e)=>{
+        e.preventDefault();
+        openJoinModal();
+      });
+    });
+
+    // Close triggers
+    modalClose.addEventListener('click', closeJoinModal);
+    joinModal.addEventListener('click', (e)=>{
+      if(e.target === joinModal) closeJoinModal();
+    });
+    document.addEventListener('keydown', (e)=>{
+      if(e.key === 'Escape' && joinModal.classList.contains('open')) closeJoinModal();
+    });
+
+    // Form submit (no backend yet — just validate + show success state)
+    joinForm.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const data = {
+        firstName: joinForm.firstName.value.trim(),
+        lastName:  joinForm.lastName.value.trim(),
+        email:     joinForm.emailAddr.value.trim()
+      };
+
+      // Simple validation
+      let valid = true;
+      const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      [
+        ['firstName', !!data.firstName],
+        ['lastName',  !!data.lastName],
+        ['emailAddr', emailRe.test(data.email)]
+      ].forEach(([id, ok])=>{
+        const field = joinForm.querySelector('#'+id).closest('.form-field');
+        field.classList.toggle('error', !ok);
+        if(!ok) valid = false;
+      });
+      if(!valid) return;
+
+      // TODO: hook this up to the CRM later.
+      // For now, log it and store in localStorage so submissions aren't lost.
+      try{
+        const queue = JSON.parse(localStorage.getItem('gv_submissions') || '[]');
+        queue.push({ ...data, ts: new Date().toISOString() });
+        localStorage.setItem('gv_submissions', JSON.stringify(queue));
+      }catch(err){ /* ignore */ }
+      console.log('[Global Vision] Form submission:', data);
+
+      // Switch to success view
+      modalInner.classList.add('is-success');
+    });
   </script>
 </body>
 </html>
