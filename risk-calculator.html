@@ -406,35 +406,41 @@
 </head>
 <body>
 
-  <!-- LIVE TICKER (TradingView Ticker Tape — real-time) -->
+  <!-- LIVE TICKER (TradingView — iframe embed, real-time) -->
   <div class="ticker tv-ticker" aria-label="Live market ticker">
-    <div class="tradingview-widget-container">
-      <div class="tradingview-widget-container__widget"></div>
-      <script type="text/javascript" src="https://s3.tradingview.com/external-embed/widget-ticker-tape.js" async>
-      {
+    <iframe id="tv-ticker-frame"
+      style="display:block;width:100%;height:46px;border:0"
+      allowtransparency="true" frameborder="0" scrolling="no"
+      title="Live market ticker"></iframe>
+  </div>
+  <script>
+    (function(){
+      var cfg = {
         "symbols": [
-          {"description": "Gold (XAU/USD)",     "proName": "OANDA:XAUUSD"},
-          {"description": "Bitcoin",            "proName": "BITSTAMP:BTCUSD"},
-          {"description": "Dow Jones (US30)",   "proName": "TVC:DJI"},
-          {"description": "Crude Oil (WTI)",    "proName": "TVC:USOIL"},
-          {"description": "Brent Oil",          "proName": "TVC:UKOIL"},
-          {"description": "Silver (XAG/USD)",   "proName": "OANDA:XAGUSD"},
-          {"description": "S&P 500",            "proName": "TVC:SPX"},
-          {"description": "Nasdaq 100",         "proName": "NASDAQ:NDX"},
-          {"description": "Ethereum",           "proName": "BITSTAMP:ETHUSD"},
-          {"description": "EUR/USD",            "proName": "FX:EURUSD"},
-          {"description": "GBP/USD",            "proName": "FX:GBPUSD"},
-          {"description": "USD Index (DXY)",    "proName": "TVC:DXY"}
+          {"description": "Gold (XAU/USD)",   "proName": "OANDA:XAUUSD"},
+          {"description": "Bitcoin",          "proName": "BITSTAMP:BTCUSD"},
+          {"description": "Dow Jones (US30)", "proName": "TVC:DJI"},
+          {"description": "Crude Oil (WTI)",  "proName": "TVC:USOIL"},
+          {"description": "Brent Oil",        "proName": "TVC:UKOIL"},
+          {"description": "Silver (XAG/USD)", "proName": "OANDA:XAGUSD"},
+          {"description": "S&P 500",          "proName": "TVC:SPX"},
+          {"description": "Nasdaq 100",       "proName": "NASDAQ:NDX"},
+          {"description": "Ethereum",         "proName": "BITSTAMP:ETHUSD"},
+          {"description": "EUR/USD",          "proName": "FX:EURUSD"},
+          {"description": "GBP/USD",          "proName": "FX:GBPUSD"},
+          {"description": "USD Index (DXY)",  "proName": "TVC:DXY"}
         ],
         "showSymbolLogo": true,
         "isTransparent": true,
         "displayMode": "adaptive",
         "colorTheme": "dark",
         "locale": "en"
-      }
-      </script>
-    </div>
-  </div>
+      };
+      document.getElementById('tv-ticker-frame').src =
+        'https://s.tradingview.com/embed-widget/ticker-tape/?locale=en#' +
+        encodeURIComponent(JSON.stringify(cfg));
+    })();
+  </script>
 
   <!-- HEADER -->
   <header class="site-header">
