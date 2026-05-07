@@ -256,6 +256,44 @@
     .nav-cta{display:flex;gap:.65rem;align-items:center}
     .nav-cta .btn{padding:.65rem 1.15rem;font-size:13px}
 
+    /* ---------- Mobile menu (hamburger + drawer) ---------- */
+    .nav-toggle{
+      display:none;
+      width:42px;height:42px;padding:0;
+      background:transparent;border:1px solid rgba(190,222,245,.18);
+      border-radius:10px;cursor:pointer;
+      flex-direction:column;align-items:center;justify-content:center;gap:5px;
+      transition:border-color .2s var(--ease),background .2s var(--ease);
+    }
+    .nav-toggle:hover{border-color:rgba(122,224,255,.45);background:rgba(122,224,255,.06)}
+    .nav-toggle span{
+      display:block;width:18px;height:2px;background:#dfeaf6;border-radius:2px;
+      transition:transform .25s var(--ease),opacity .2s var(--ease);
+    }
+    .nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+    .nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+    .mobile-menu{
+      display:none;
+      position:absolute;top:100%;left:0;right:0;
+      background:rgba(6,14,30,.96);
+      backdrop-filter:blur(18px) saturate(180%);
+      -webkit-backdrop-filter:blur(18px) saturate(180%);
+      border-bottom:1px solid rgba(103,154,203,.18);
+      padding:1.25rem 1.5rem 1.5rem;
+      transform:translateY(-12px);opacity:0;pointer-events:none;
+      transition:transform .3s var(--ease),opacity .25s var(--ease);
+    }
+    .mobile-menu.open{transform:translateY(0);opacity:1;pointer-events:auto}
+    .mobile-menu-links{display:flex;flex-direction:column;gap:.25rem;margin-bottom:1rem}
+    .mobile-menu-links a{
+      display:block;padding:.85rem .25rem;font-size:15px;font-weight:500;color:#c8d3e3;
+      border-bottom:1px solid rgba(103,154,203,.08);
+    }
+    .mobile-menu-links a:hover,.mobile-menu-links a:active{color:#fff}
+    .mobile-menu-login{width:100%;justify-content:center;margin-top:.5rem}
+
     /* ============================================================
        HERO
        ============================================================ */
@@ -633,7 +671,7 @@
     .cal-bar .stats span b{color:#fff;font-weight:700}
     .cal-bar .stats .up{color:var(--mint)}
     .cal{
-      display:grid;grid-template-columns:repeat(7,1fr);gap:4px;
+      display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:4px;
     }
     .cal-h{
       font-size:9.5px;letter-spacing:1.4px;text-transform:uppercase;
@@ -821,23 +859,29 @@
       h3{font-size:19px}
       .nav{padding:.85rem 1.25rem}
       .nav-links{display:none}
+      .nav-toggle{display:flex}
+      .nav-cta .nav-login{display:none}
+      .mobile-menu{display:block}
       .hero{padding:5rem 1.25rem 5rem}
       .hero .sub{font-size:16px}
       .grid-3,.grid-2,.stats-row,.community-grid{grid-template-columns:1fr}
       .academy-grid{grid-template-columns:repeat(2,1fr)}
       .footer-grid{grid-template-columns:1fr 1fr;gap:2rem}
       .cta-banner{padding:5rem 1.25rem}
-      .globe{width:280px;height:280px}.globe-wrap{height:380px}
-      .orbit{width:360px;height:360px}.orbit.two{width:420px;height:420px}
-      .atmosphere{width:320px;height:320px}
+      .globe{width:220px;height:220px}.globe-wrap{height:280px;order:-1;margin-top:0}
+      .orbit{width:280px;height:280px}.orbit.two{width:330px;height:330px}
+      .atmosphere{width:260px;height:260px}
       .hud-card{display:none}
+      .cal-d .pnl{display:none}
+      .cal-d .num{font-size:10px}
+      .cal-bar{flex-direction:column;align-items:flex-start;gap:.4rem}
+      .cal-bar .stats{gap:.75rem;font-size:10.5px}
       .cursor-glow{display:none}
       .hero-meta{grid-template-columns:1fr;gap:.6rem}
     }
     @media (max-width:480px){
       .academy-grid{grid-template-columns:1fr}
       .footer-grid{grid-template-columns:1fr}
-      .nav-cta .btn.nav-login{display:none}
     }
 
     /* ============================================================
@@ -997,7 +1041,7 @@
         ],
         "showSymbolLogo": true,
         "isTransparent": true,
-        "displayMode": "adaptive",
+        "displayMode": window.matchMedia('(max-width:768px)').matches ? "compact" : "adaptive",
         "colorTheme": "dark",
         "locale": "en"
       };
@@ -1027,8 +1071,23 @@
       <div class="nav-cta">
         <a href="https://portal.globalv.me" target="_blank" rel="noopener noreferrer" class="btn btn-ghost nav-login">Login</a>
         <a href="#" class="btn btn-neon" data-open-modal>Join Free <span class="arrow">→</span></a>
+        <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </nav>
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+      <ul class="mobile-menu-links">
+        <li><a href="#hero">Home</a></li>
+        <li><a href="#signals">Signals</a></li>
+        <li><a href="#tools">Tools</a></li>
+        <li><a href="#dashboard">Dashboard</a></li>
+        <li><a href="#academy">Academy</a></li>
+        <li><a href="#community">Community</a></li>
+        <li><a href="risk-calculator.html">Risk Calculator</a></li>
+      </ul>
+      <a href="https://portal.globalv.me" target="_blank" rel="noopener noreferrer" class="btn btn-ghost mobile-menu-login">Login</a>
+    </div>
   </header>
 
   <!-- ============================================================
@@ -1838,6 +1897,22 @@
 
     /* ---------- Year ---------- */
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* ---------- Mobile menu ---------- */
+    const navToggle = document.getElementById('navToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    function setMobileMenu(open){
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      mobileMenu.classList.toggle('open', open);
+      mobileMenu.setAttribute('aria-hidden', open ? 'false' : 'true');
+    }
+    navToggle.addEventListener('click', ()=>{
+      const open = navToggle.getAttribute('aria-expanded') !== 'true';
+      setMobileMenu(open);
+    });
+    mobileMenu.querySelectorAll('a').forEach(a=>{
+      a.addEventListener('click', ()=>setMobileMenu(false));
+    });
 
     /* ---------- Join Modal ---------- */
     const joinModal   = document.getElementById('joinModal');
