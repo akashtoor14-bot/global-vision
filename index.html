@@ -43,7 +43,8 @@
     html{scroll-behavior:smooth;font-size:16px}
     body{
       font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-      color:var(--ink);background:#070c18;
+      color:var(--ink);
+      background:linear-gradient(180deg,#01040d 0%, #03091a 50%, #01040d 100%);
       line-height:1.6;-webkit-font-smoothing:antialiased;
       overflow-x:hidden;
     }
@@ -113,9 +114,10 @@
     .section-header h2{margin-bottom:1rem}
     .section-header p{font-size:18px;color:var(--muted)}
 
-    /* DARK SECTION */
+    /* DARK SECTION — space theme (matches hero). Background lives on the body
+       so adjacent sections flow seamlessly; here we only add the accent glow. */
     .section.dark{
-      background:linear-gradient(180deg,var(--navy-990) 0%,var(--navy-950) 100%);
+      background:radial-gradient(1200px 800px at 50% 0%, rgba(103,154,203,.10), transparent 65%);
       color:#eaf1fb;
     }
     .section.dark h2,.section.dark h3,.section.dark h4{color:#fff}
@@ -136,12 +138,17 @@
       mask-image:radial-gradient(ellipse at center, black 40%, transparent 85%);
       -webkit-mask-image:radial-gradient(ellipse at center, black 40%, transparent 85%);
     }
+    /* Hide the grid in dark sections / CTA — space theme uses stars instead */
+    .section.dark .bg-grid,
+    .cta-banner .bg-grid{display:none}
+
+    /* Soft nebula-style glow (replaces the brighter blob orbs) */
     .bg-orb{
       position:absolute;pointer-events:none;z-index:0;border-radius:50%;
-      filter:blur(80px);opacity:.55;
+      filter:blur(110px);opacity:.30;
     }
-    .bg-orb.a{width:520px;height:520px;background:#1a3d6c;top:-120px;left:-120px}
-    .bg-orb.b{width:460px;height:460px;background:#679acb;bottom:-180px;right:-140px;opacity:.35}
+    .bg-orb.a{width:520px;height:520px;background:#0f2647;top:-150px;left:-150px}
+    .bg-orb.b{width:460px;height:460px;background:#1a3d6c;bottom:-200px;right:-160px;opacity:.22}
 
     /* ============================================================
        BUTTONS
@@ -255,9 +262,8 @@
     .hero{
       position:relative;overflow:hidden;color:#fff;padding:7rem 2rem 9rem;
       background:
-        radial-gradient(1400px 700px at 80% 0%, rgba(103,154,203,.35), transparent 60%),
-        radial-gradient(900px 500px at 0% 80%, rgba(122,224,255,.15), transparent 60%),
-        linear-gradient(180deg,#040c1d 0%, #07152b 60%, #0a1d3a 100%);
+        radial-gradient(1200px 700px at 75% 35%, rgba(103,154,203,.18), transparent 55%),
+        radial-gradient(900px 600px at 10% 90%, rgba(122,224,255,.08), transparent 55%);
     }
     .hero-grid-bg{
       position:absolute;inset:0;z-index:0;pointer-events:none;
@@ -337,40 +343,16 @@
     }
     .globe{
       position:relative;width:440px;height:440px;border-radius:50%;
-      background:
-        radial-gradient(circle at 30% 28%, rgba(190,222,245,.55), transparent 38%),
-        radial-gradient(circle at 70% 72%, rgba(26,61,108,.75), transparent 55%),
-        linear-gradient(135deg,#2a5a9c 0%,#1A3D6C 55%,#0f2647 100%);
+      background:#04101f;
       box-shadow:
-        inset 0 0 90px rgba(9,26,51,.75),
-        inset -30px -40px 90px rgba(0,0,0,.5),
         0 40px 80px rgba(9,26,51,.55),
-        0 0 0 1px rgba(190,222,245,.12),
-        0 0 80px rgba(103,154,203,.35);
+        0 0 100px rgba(103,154,203,.3);
       overflow:hidden;
       animation:float 7s ease-in-out infinite;
     }
-    .globe::before{
-      content:"";position:absolute;inset:0;border-radius:50%;
-      background:
-        repeating-linear-gradient(0deg, rgba(190,222,245,.18) 0 1px, transparent 1px 32px),
-        repeating-linear-gradient(90deg, rgba(190,222,245,.18) 0 1px, transparent 1px 32px);
-      mix-blend-mode:screen;
-      mask:radial-gradient(circle at center, black 60%, transparent 80%);
-      -webkit-mask:radial-gradient(circle at center, black 60%, transparent 80%);
-      animation:spin 22s linear infinite;
-    }
-    .globe::after{
-      content:"";position:absolute;inset:0;border-radius:50%;
-      background:
-        radial-gradient(40px 22px at 28% 38%, rgba(190,222,245,.55), transparent 70%),
-        radial-gradient(60px 34px at 55% 30%, rgba(190,222,245,.42), transparent 70%),
-        radial-gradient(70px 44px at 62% 60%, rgba(190,222,245,.5), transparent 72%),
-        radial-gradient(44px 26px at 34% 68%, rgba(190,222,245,.45), transparent 72%),
-        radial-gradient(28px 18px at 76% 44%, rgba(190,222,245,.4), transparent 72%);
-      animation:spin 28s linear infinite reverse;
-      mask:radial-gradient(circle at center, black 62%, transparent 76%);
-      -webkit-mask:radial-gradient(circle at center, black 62%, transparent 76%);
+    .globe canvas{
+      width:100% !important;height:100% !important;display:block;border-radius:50%;
+      filter:drop-shadow(0 0 10px rgba(122,224,255,.22));
     }
     .orbit{
       position:absolute;width:580px;height:580px;border-radius:50%;
@@ -640,6 +622,58 @@
     .sig-row .pnl.dn{color:var(--rose);font-weight:700}
     .sig-row .sym{font-weight:700;color:#fff}
 
+    /* Vision Sync — calendar P&L heatmap (centerpiece of the journal mock) */
+    .cal-bar{
+      display:flex;align-items:center;justify-content:space-between;
+      margin-top:.4rem;margin-bottom:.6rem;
+      font-size:11px;color:#9fb0cb;letter-spacing:.4px;
+    }
+    .cal-bar .month{color:#fff;font-weight:700;letter-spacing:.3px;font-size:13px}
+    .cal-bar .stats{display:flex;gap:1rem}
+    .cal-bar .stats span b{color:#fff;font-weight:700}
+    .cal-bar .stats .up{color:var(--mint)}
+    .cal{
+      display:grid;grid-template-columns:repeat(7,1fr);gap:4px;
+    }
+    .cal-h{
+      font-size:9.5px;letter-spacing:1.4px;text-transform:uppercase;
+      color:#6e8099;text-align:center;padding:2px 0 4px;font-weight:600;
+    }
+    .cal-d{
+      aspect-ratio:1;border-radius:6px;
+      background:rgba(7,16,34,.5);
+      border:1px solid rgba(190,222,245,.06);
+      display:flex;flex-direction:column;align-items:flex-start;justify-content:space-between;
+      padding:5px 6px;font-size:10px;color:#6e8099;position:relative;
+      transition:transform .2s var(--ease);
+    }
+    .cal-d .num{font-size:11px;font-weight:600;color:#c8d3e3;line-height:1}
+    .cal-d .pnl{font-size:9.5px;font-weight:700;font-variant-numeric:tabular-nums;line-height:1}
+    .cal-d.empty{opacity:.35}
+    .cal-d.empty .num{color:#4a5a73}
+    .cal-d.win{
+      background:linear-gradient(180deg,rgba(108,243,180,.10),rgba(108,243,180,.20));
+      border-color:rgba(108,243,180,.28);
+    }
+    .cal-d.win .pnl{color:var(--mint)}
+    .cal-d.win.heavy{
+      background:linear-gradient(180deg,rgba(108,243,180,.22),rgba(108,243,180,.42));
+      border-color:rgba(108,243,180,.55);
+    }
+    .cal-d.loss{
+      background:linear-gradient(180deg,rgba(255,122,155,.10),rgba(255,122,155,.20));
+      border-color:rgba(255,122,155,.28);
+    }
+    .cal-d.loss .pnl{color:var(--rose)}
+    .cal-d.loss.heavy{
+      background:linear-gradient(180deg,rgba(255,122,155,.22),rgba(255,122,155,.42));
+      border-color:rgba(255,122,155,.55);
+    }
+    .cal-d.today{
+      box-shadow:0 0 0 1px var(--cyan), 0 0 14px rgba(122,224,255,.45);
+      border-color:var(--cyan);
+    }
+
     /* ============================================================
        ACADEMY
        ============================================================ */
@@ -712,9 +746,7 @@
        ============================================================ */
     .cta-banner{
       position:relative;overflow:hidden;color:#fff;text-align:center;padding:7rem 2rem;
-      background:
-        radial-gradient(1200px 600px at 50% 0%, rgba(122,224,255,.28), transparent 60%),
-        linear-gradient(180deg,#040c1d 0%,#07152b 100%);
+      background:radial-gradient(1200px 600px at 50% 0%, rgba(122,224,255,.16), transparent 65%);
     }
     .cta-banner .bg-grid{mask-image:radial-gradient(ellipse at center, black 30%, transparent 75%)}
     .cta-inner{position:relative;z-index:2;max-width:800px;margin:0 auto}
@@ -813,8 +845,8 @@
        ============================================================ */
     .modal-backdrop{
       position:fixed;inset:0;z-index:200;
-      background:radial-gradient(ellipse at center, rgba(7,21,43,.85) 0%, rgba(4,12,29,.95) 100%);
-      backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+      background:radial-gradient(ellipse at center, rgba(3,9,26,.85) 0%, rgba(1,4,13,.95) 100%);
+      backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
       display:flex;align-items:center;justify-content:center;
       padding:1.5rem;opacity:0;pointer-events:none;
       transition:opacity .35s var(--ease);
@@ -824,22 +856,17 @@
 
     .modal{
       position:relative;width:100%;max-width:520px;
-      background:linear-gradient(180deg,#07152b 0%,#040c1d 100%);
-      border:1px solid rgba(190,222,245,.18);
+      background:linear-gradient(180deg,#03091a 0%,#01040d 100%);
+      border:1px solid rgba(122,224,255,.18);
       border-radius:18px;padding:2.5rem 2.25rem 2.25rem;
-      box-shadow:0 40px 100px rgba(0,0,0,.6), 0 0 0 1px rgba(122,224,255,.08), 0 0 80px rgba(103,154,203,.25);
+      box-shadow:0 40px 100px rgba(0,0,0,.65), 0 0 0 1px rgba(122,224,255,.08), 0 0 80px rgba(103,154,203,.22);
       transform:translateY(20px) scale(.96);opacity:0;
       transition:transform .45s var(--ease-out),opacity .35s var(--ease);
       overflow:hidden;
     }
     .modal::before{
       content:"";position:absolute;inset:0;pointer-events:none;
-      background:
-        radial-gradient(500px 200px at 50% -20%, rgba(122,224,255,.18), transparent 60%),
-        linear-gradient(to right, rgba(190,222,245,.06) 1px, transparent 1px) 0 0/40px 40px,
-        linear-gradient(to bottom, rgba(190,222,245,.06) 1px, transparent 1px) 0 0/40px 40px;
-      mask-image:radial-gradient(ellipse at center, black 50%, transparent 90%);
-      -webkit-mask-image:radial-gradient(ellipse at center, black 50%, transparent 90%);
+      background:radial-gradient(500px 220px at 50% -10%, rgba(122,224,255,.20), transparent 65%);
     }
     .modal-close{
       position:absolute;top:14px;right:14px;z-index:2;
@@ -897,13 +924,13 @@
     .modal-submit{
       width:100%;margin-top:.5rem;padding:1.05rem 1.5rem;border-radius:999px;
       font-size:15px;font-weight:800;letter-spacing:.4px;cursor:pointer;
-      color:#fff;border:none;
-      background:linear-gradient(180deg,#3b6fb5 0%,#1A3D6C 100%);
-      box-shadow:0 16px 32px rgba(26,61,108,.45), inset 0 1px 0 rgba(255,255,255,.18), 0 0 0 1px rgba(122,224,255,.25);
+      color:#062139;border:none;
+      background:linear-gradient(135deg, #7ae0ff 0%, #BEDEF5 100%);
+      box-shadow:0 0 0 1px rgba(122,224,255,.5), 0 10px 30px rgba(122,224,255,.35), inset 0 1px 0 rgba(255,255,255,.6);
       transition:transform .25s var(--ease),box-shadow .3s var(--ease),filter .25s var(--ease);
       position:relative;overflow:hidden;
     }
-    .modal-submit:hover{transform:translateY(-2px);box-shadow:0 20px 40px rgba(26,61,108,.55), inset 0 1px 0 rgba(255,255,255,.22), 0 0 0 1px rgba(122,224,255,.45)}
+    .modal-submit:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(122,224,255,.7), 0 20px 45px rgba(122,224,255,.55), inset 0 1px 0 rgba(255,255,255,.7)}
     .modal-submit::after{
       content:"";position:absolute;top:0;left:-120%;width:40%;height:100%;
       background:linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
@@ -935,6 +962,7 @@
       .modal h3{font-size:20px}
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
 </head>
 <body>
 
@@ -1007,8 +1035,6 @@
        HERO
        ============================================================ -->
   <section id="hero" class="hero">
-    <div class="hero-grid-bg"></div>
-    <div class="hero-floor"></div>
     <div class="stars" id="stars"></div>
 
     <div class="hero-grid">
@@ -1044,7 +1070,9 @@
         <div class="atmosphere"></div>
         <div class="orbit two"></div>
         <div class="orbit"></div>
-        <div class="globe"></div>
+        <div class="globe">
+          <canvas id="earthCanvas"></canvas>
+        </div>
 
         <div class="hud-card hud-1">
           <div class="lbl"><span class="dot"></span>XAUUSD</div>
@@ -1151,113 +1179,107 @@
     <div class="container">
       <div class="demo-grid">
         <div class="demo-copy reveal">
-          <span class="eyebrow"><span class="dot"></span>VisionSync</span>
-          <h2>Your Live <span class="grad-text">Trading Dashboard</span></h2>
-          <p>A synchronized workspace connecting charts, signals, and performance into one real-time view — from the first alert to the final close.</p>
+          <span class="eyebrow"><span class="dot"></span>Vision Sync</span>
+          <h2>Your <span class="grad-text">Trading Journal.</span> Free Forever.</h2>
+          <p>A premium trading journal built for the Global Vision community — log every trade, surface every mistake, and watch your edge compound. Hosted free at <b>journal.globalv.me</b>.</p>
           <ul class="checklist">
-            <li><span class="check">✓</span>Real-time signal ingestion with sound + push alerts</li>
-            <li><span class="check">✓</span>Automated trade logging with structured post-analysis</li>
-            <li><span class="check">✓</span>Session-level performance dashboards and risk tracking</li>
-            <li><span class="check">✓</span>Personal edge scoring to surface what's actually working</li>
+            <li><span class="check">✓</span>Calendar P&amp;L heatmap — every winning day and every drawdown at a glance</li>
+            <li><span class="check">✓</span>Sentinel AI auto-tags psychological errors and repeat setup failures</li>
+            <li><span class="check">✓</span>One-click CSV import from VT Markets, PU Prime, Vantage and any MT5 broker</li>
+            <li><span class="check">✓</span>Multi-account tracking, leaderboards, equity curves, and R-multiples</li>
           </ul>
-          <a href="#" class="btn btn-neon btn-lg" data-open-modal>Launch Demo <span class="arrow">→</span></a>
+          <a href="https://journal.globalv.me" target="_blank" rel="noopener noreferrer" class="btn btn-neon btn-lg">Open Journal <span class="arrow">→</span></a>
         </div>
 
-        <!-- Live dashboard visual — TradingView Symbol Overview (real-time) -->
+        <!-- Vision Sync journal preview — calendar P&L heatmap mock -->
         <div class="dashboard reveal">
           <div class="db-head">
-            <div class="pair"><span class="emoji">●</span> Live Markets</div>
-            <div class="pill"><span class="dot"></span>Real-Time</div>
+            <div class="pair"><span class="emoji">●</span> Vision Sync · Journal</div>
+            <div class="pill"><span class="dot"></span>This Month</div>
           </div>
 
-          <div class="db-tv">
-            <iframe id="tv-overview-frame"
-              style="display:block;width:100%;height:320px;border:0"
-              allowtransparency="true" frameborder="0" scrolling="no"
-              title="Live markets chart"></iframe>
+          <div class="cal-bar">
+            <div class="month">May 2026</div>
+            <div class="stats">
+              <span>Days <b>17</b></span>
+              <span>Wins <b>13</b></span>
+              <span class="up">P&amp;L <b>+14.2%</b></span>
+            </div>
           </div>
-          <script>
-            (function(){
-              var cfg = {
-                "symbols": [
-                  ["Gold (XAU/USD)",   "OANDA:XAUUSD|1D"],
-                  ["Bitcoin",          "BITSTAMP:BTCUSD|1D"],
-                  ["Dow Jones (US30)", "TVC:DJI|1D"],
-                  ["Crude Oil (WTI)",  "TVC:USOIL|1D"]
-                ],
-                "chartOnly": false,
-                "width": "100%",
-                "height": "320",
-                "locale": "en",
-                "colorTheme": "dark",
-                "autosize": true,
-                "showVolume": false,
-                "showMA": false,
-                "hideDateRanges": false,
-                "hideMarketStatus": false,
-                "hideSymbolLogo": false,
-                "scalePosition": "right",
-                "scaleMode": "Normal",
-                "fontFamily": "Inter, -apple-system, BlinkMacSystemFont, sans-serif",
-                "fontSize": "10",
-                "noTimeScale": false,
-                "valuesTracking": "1",
-                "changeMode": "price-and-percent",
-                "chartType": "area",
-                "lineColor": "#7ae0ff",
-                "topColor": "rgba(122, 224, 255, 0.3)",
-                "bottomColor": "rgba(122, 224, 255, 0)",
-                "isTransparent": true,
-                "dateRanges": ["1d|1","5d|5","1m|30","3m|60","12m|1D","60m|1W","all|1M"]
-              };
-              document.getElementById('tv-overview-frame').src =
-                'https://s.tradingview.com/embed-widget/symbol-overview/?locale=en#' +
-                encodeURIComponent(JSON.stringify(cfg));
-            })();
-          </script>
+
+          <div class="cal">
+            <div class="cal-h">S</div><div class="cal-h">M</div><div class="cal-h">T</div><div class="cal-h">W</div><div class="cal-h">T</div><div class="cal-h">F</div><div class="cal-h">S</div>
+
+            <div class="cal-d empty"><div class="num">27</div></div>
+            <div class="cal-d empty"><div class="num">28</div></div>
+            <div class="cal-d empty"><div class="num">29</div></div>
+            <div class="cal-d empty"><div class="num">30</div></div>
+            <div class="cal-d win"><div class="num">1</div><div class="pnl">+1.2%</div></div>
+            <div class="cal-d win heavy"><div class="num">2</div><div class="pnl">+2.8%</div></div>
+            <div class="cal-d empty"><div class="num">3</div></div>
+
+            <div class="cal-d empty"><div class="num">4</div></div>
+            <div class="cal-d loss"><div class="num">5</div><div class="pnl">-0.6%</div></div>
+            <div class="cal-d win"><div class="num">6</div><div class="pnl">+0.8%</div></div>
+            <div class="cal-d win heavy"><div class="num">7</div><div class="pnl">+3.1%</div></div>
+            <div class="cal-d win"><div class="num">8</div><div class="pnl">+1.5%</div></div>
+            <div class="cal-d loss heavy"><div class="num">9</div><div class="pnl">-1.8%</div></div>
+            <div class="cal-d empty"><div class="num">10</div></div>
+
+            <div class="cal-d empty"><div class="num">11</div></div>
+            <div class="cal-d win"><div class="num">12</div><div class="pnl">+0.9%</div></div>
+            <div class="cal-d win"><div class="num">13</div><div class="pnl">+2.2%</div></div>
+            <div class="cal-d loss"><div class="num">14</div><div class="pnl">-0.4%</div></div>
+            <div class="cal-d win heavy"><div class="num">15</div><div class="pnl">+3.6%</div></div>
+            <div class="cal-d win"><div class="num">16</div><div class="pnl">+1.1%</div></div>
+            <div class="cal-d empty"><div class="num">17</div></div>
+
+            <div class="cal-d empty"><div class="num">18</div></div>
+            <div class="cal-d win"><div class="num">19</div><div class="pnl">+1.4%</div></div>
+            <div class="cal-d loss"><div class="num">20</div><div class="pnl">-0.9%</div></div>
+            <div class="cal-d today win heavy"><div class="num">21</div><div class="pnl">+4.2%</div></div>
+            <div class="cal-d"><div class="num">22</div></div>
+            <div class="cal-d"><div class="num">23</div></div>
+            <div class="cal-d empty"><div class="num">24</div></div>
+          </div>
 
           <div class="db-meta">
-            <div class="m"><div class="n">+247</div><div class="l">Pips</div></div>
-            <div class="m"><div class="n">5/6</div><div class="l">Wins</div></div>
-            <div class="m"><div class="n">86%</div><div class="l">Hit Rate</div></div>
-            <div class="m"><div class="n">1 : 3.2</div><div class="l">R:R</div></div>
+            <div class="m"><div class="n">76%</div><div class="l">Win Rate</div></div>
+            <div class="m"><div class="n">+4.2%</div><div class="l">Best Day</div></div>
+            <div class="m"><div class="n">+14.2%</div><div class="l">P&amp;L · MTD</div></div>
+            <div class="m"><div class="n">1 : 2.8</div><div class="l">Avg R</div></div>
           </div>
 
-          <!-- Recent signals table -->
+          <!-- Recent trades (Sentinel-tagged) -->
           <div class="signals-list">
             <div class="sig-row">
               <div class="side buy">B</div>
-              <div class="sym">BTCUSD · 82,400 → 82,950</div>
-              <div>H1</div>
-              <div class="pnl up">+550</div>
+              <div class="sym">XAUUSD · London Open</div>
+              <div>15m</div>
+              <div class="pnl up">+1.4R</div>
             </div>
             <div class="sig-row">
               <div class="side buy">B</div>
-              <div class="sym">XAUUSD · 4680 → 4710</div>
-              <div>15m</div>
-              <div class="pnl up">+30.0</div>
+              <div class="sym">BTCUSD · Trend Continuation</div>
+              <div>H1</div>
+              <div class="pnl up">+2.6R</div>
             </div>
             <div class="sig-row">
               <div class="side sell">S</div>
-              <div class="sym">EURUSD · 1.0890 → 1.0855</div>
+              <div class="sym">EURUSD · NY Reversal</div>
               <div>M15</div>
-              <div class="pnl up">+35.0</div>
+              <div class="pnl up">+0.9R</div>
             </div>
             <div class="sig-row">
               <div class="side sell">S</div>
-              <div class="sym">US30 · 49,850 → 49,920</div>
+              <div class="sym">US30 · Stopped — chased entry</div>
               <div>M30</div>
-              <div class="pnl dn">-70</div>
+              <div class="pnl dn">-1.0R</div>
             </div>
           </div>
         </div>
       </div>
 
-      <div class="stats-row">
-        <div class="stat-box reveal"><div class="num" data-count="15" data-suffix="K+">0</div><div class="lbl">Members</div></div>
-        <div class="stat-box reveal"><div class="num">24/5</div><div class="lbl">Live Coverage</div></div>
-        <div class="stat-box reveal"><div class="num">$0</div><div class="lbl">Monthly Cost</div></div>
-      </div>
     </div>
   </section>
 
@@ -1602,8 +1624,219 @@
         container.appendChild(s);
       }
     }
-    populateStars(document.getElementById('stars'), 70);
-    populateStars(document.getElementById('starsCta'), 40);
+    populateStars(document.getElementById('stars'), 200);
+    populateStars(document.getElementById('starsCta'), 80);
+
+    /* Auto-add a starfield to every dark section so the space theme runs site-wide */
+    document.querySelectorAll('.section.dark').forEach((sec)=>{
+      if (sec.querySelector('.stars')) return;
+      const div = document.createElement('div');
+      div.className = 'stars';
+      sec.insertBefore(div, sec.firstChild);
+      populateStars(div, 90);
+    });
+
+    /* ---------- 3D Earth (three.js) ----------------------------------------
+       Layered architecture (separable — visual layers do NOT alter geometry):
+         1. Earth foundation  : accurate UV-mapped sphere + NASA Blue Marble.
+                                Mathematically exact. No styling baked in.
+         2. Continent outlines: edge-detection shader on the same texture,
+                                rendered as a thin overlay sphere, additive blend.
+         3. Atmosphere halo   : Fresnel rim shader on a backside sphere.
+         4. Particle field    : Points scattered in space around the globe.
+         5. Marker group      : empty group parented to earth — future home of
+                                location dots, network arcs, etc.
+
+       Lat/lng convention (window.GVLatLngToVec3):
+         lat in [-90, 90]   (North positive)
+         lng in [-180, 180] (East positive)
+         With a standard equirectangular Blue Marble texture, the prime
+         meridian (Greenwich, lng=0) lands at +X axis under three.js's default
+         SphereGeometry UV mapping.
+    ----------------------------------------------------------------------- */
+    (function initEarth(){
+      const canvas = document.getElementById('earthCanvas');
+      if(!canvas || typeof THREE === 'undefined') return;
+
+      const parent = canvas.parentElement;
+      let size = parent.getBoundingClientRect().width || 440;
+
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(size, size, false);
+      if('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+      const scene  = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
+      camera.position.set(0, 0, 5);
+
+      // ---- 1. Earth foundation (accurate; styling is layered, not baked) ----
+      const EARTH_RADIUS = 1.55;
+      const tex = new THREE.TextureLoader().load('earth-texture.jpg');
+      if('SRGBColorSpace' in THREE) tex.colorSpace = THREE.SRGBColorSpace;
+      tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+
+      const earth = new THREE.Mesh(
+        new THREE.SphereGeometry(EARTH_RADIUS, 96, 96),
+        new THREE.MeshStandardMaterial({
+          map: tex,
+          color: 0xb8d8f0,
+          roughness: 0.85,
+          metalness: 0.06,
+          emissive: 0x0a1f3d,
+          emissiveIntensity: 0.18
+        })
+      );
+      earth.rotation.z = 0.41; // 23.5° axial tilt
+      scene.add(earth);
+
+      // ---- 2. Continent outlines (edge-detected coastlines, additive glow) ----
+      const outlineMat = new THREE.ShaderMaterial({
+        uniforms: {
+          map:       { value: tex },
+          glow:      { value: new THREE.Color(0x7ae0ff) },
+          texelSize: { value: new THREE.Vector2(1/2048, 1/1024) }
+        },
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        vertexShader: `
+          varying vec2 vUv;
+          varying vec3 vNormalW;
+          varying vec3 vViewDir;
+          void main() {
+            vUv = uv;
+            vNormalW = normalize(mat3(modelMatrix) * normal);
+            vec4 mPos = modelMatrix * vec4(position, 1.0);
+            vViewDir = normalize(cameraPosition - mPos.xyz);
+            gl_Position = projectionMatrix * viewMatrix * mPos;
+          }
+        `,
+        fragmentShader: `
+          uniform sampler2D map;
+          uniform vec3 glow;
+          uniform vec2 texelSize;
+          varying vec2 vUv;
+          varying vec3 vNormalW;
+          varying vec3 vViewDir;
+          float lum(vec3 c){ return dot(c, vec3(0.299, 0.587, 0.114)); }
+          float landMask(vec2 uv){
+            return smoothstep(0.18, 0.24, lum(texture2D(map, uv).rgb));
+          }
+          void main() {
+            float l = landMask(vUv - vec2(texelSize.x, 0.0));
+            float r = landMask(vUv + vec2(texelSize.x, 0.0));
+            float u = landMask(vUv - vec2(0.0, texelSize.y));
+            float d = landMask(vUv + vec2(0.0, texelSize.y));
+            float edge = sqrt((r-l)*(r-l) + (d-u)*(d-u));
+            float coast = smoothstep(0.15, 0.55, edge);
+            float facing = max(dot(vNormalW, vViewDir), 0.0);
+            gl_FragColor = vec4(glow, coast * facing * 0.85);
+          }
+        `
+      });
+      const outlines = new THREE.Mesh(
+        new THREE.SphereGeometry(EARTH_RADIUS * 1.001, 128, 128),
+        outlineMat
+      );
+      earth.add(outlines); // rotates with earth -> stays geographically anchored
+
+      // ---- 3. Atmosphere halo (Fresnel rim, additive) ----
+      const atmosphereMat = new THREE.ShaderMaterial({
+        uniforms: { glow: { value: new THREE.Color(0x7ae0ff) } },
+        transparent: true,
+        depthWrite: false,
+        side: THREE.BackSide,
+        blending: THREE.AdditiveBlending,
+        vertexShader: `
+          varying vec3 vNormalW;
+          varying vec3 vViewDir;
+          void main() {
+            vNormalW = normalize(mat3(modelMatrix) * normal);
+            vec4 mPos = modelMatrix * vec4(position, 1.0);
+            vViewDir = normalize(cameraPosition - mPos.xyz);
+            gl_Position = projectionMatrix * viewMatrix * mPos;
+          }
+        `,
+        fragmentShader: `
+          uniform vec3 glow;
+          varying vec3 vNormalW;
+          varying vec3 vViewDir;
+          void main() {
+            float fresnel = pow(1.0 - max(dot(vNormalW, vViewDir), 0.0), 2.5);
+            gl_FragColor = vec4(glow, fresnel * 0.6);
+          }
+        `
+      });
+      const atmosphere = new THREE.Mesh(
+        new THREE.SphereGeometry(EARTH_RADIUS * 1.08, 64, 64),
+        atmosphereMat
+      );
+      scene.add(atmosphere); // not parented; stays fixed relative to camera
+
+      // ---- 4. Particle field (data-effect dots in space) ----
+      const PCOUNT = 220;
+      const pPositions = new Float32Array(PCOUNT * 3);
+      for (let i = 0; i < PCOUNT; i++) {
+        const r = 2.4 + Math.random() * 1.6;
+        const theta = Math.random() * Math.PI * 2;
+        const phi = Math.acos(2 * Math.random() - 1);
+        pPositions[i*3]   = r * Math.sin(phi) * Math.cos(theta);
+        pPositions[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
+        pPositions[i*3+2] = r * Math.cos(phi);
+      }
+      const pGeom = new THREE.BufferGeometry();
+      pGeom.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
+      const particles = new THREE.Points(pGeom, new THREE.PointsMaterial({
+        color: 0x7ae0ff,
+        size: 0.025,
+        transparent: true,
+        opacity: 0.55,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      }));
+      scene.add(particles);
+
+      // ---- Lighting ----
+      const sun = new THREE.DirectionalLight(0xddedff, 2.8);
+      sun.position.set(-0.7, 0.5, 2);
+      scene.add(sun);
+      scene.add(new THREE.AmbientLight(0x14305a, 0.32));
+
+      // ---- Lat/lng -> world-space vector (foundation for marker placement) ----
+      window.GVLatLngToVec3 = function(lat, lng, radius){
+        const r = radius || EARTH_RADIUS;
+        const phi   = (90 - lat) * Math.PI / 180;
+        const theta = (lng + 180) * Math.PI / 180;
+        return new THREE.Vector3(
+          -r * Math.sin(phi) * Math.cos(theta),
+           r * Math.cos(phi),
+           r * Math.sin(phi) * Math.sin(theta)
+        );
+      };
+      // Marker group (parented to earth so future dots ride along on rotation).
+      const markerGroup = new THREE.Group();
+      earth.add(markerGroup);
+      window.GVMarkerGroup = markerGroup;
+      window.GVEarth = earth;
+
+      // ---- Resize & animate ----
+      function onResize(){
+        size = parent.getBoundingClientRect().width || size;
+        renderer.setSize(size, size, false);
+      }
+      window.addEventListener('resize', onResize, { passive:true });
+
+      let last = performance.now();
+      function tick(now){
+        const dt = (now - last) / 1000; last = now;
+        earth.rotation.y     += 0.10  * dt; // ~1 rotation / minute
+        particles.rotation.y -= 0.005 * dt; // slight counter-drift
+        renderer.render(scene, camera);
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    })();
 
     /* ---------- (Removed: fake ticker + price flicker — replaced by TradingView widgets) ---------- */
 
