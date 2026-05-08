@@ -504,7 +504,7 @@
     }
     .f-card::before{
       content:"";position:absolute;inset:-1px;border-radius:16px;
-      background:conic-gradient(from 0deg, transparent, rgba(122,224,255,.5), transparent 30%);
+      background:conic-gradient(from 0deg, transparent, rgba(122,224,255,.3), transparent 30%);
       opacity:0;transition:opacity .6s var(--ease-out);
       z-index:0;
       animation:spin 4s linear infinite;
@@ -515,8 +515,8 @@
     .f-card:hover::before,.f-card.glow::before{opacity:1}
     .f-card:hover,.f-card.glow{
       transform:translateY(-6px) scale(1.04);
-      border-color:var(--cyan);
-      box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.5);
+      border-color:rgba(122,224,255,.6);
+      box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.3);
     }
     .f-card.has-banner:hover .card-banner .glyph-fg{transform:scale(1.12)}
     /* Community cards get a subtle scale-up on hover (Primeverse-style) */
@@ -1033,7 +1033,7 @@
     }
     .level-card::before{
       content:"";position:absolute;inset:-1px;border-radius:16px;
-      background:conic-gradient(from 0deg, transparent, rgba(122,224,255,.5), transparent 30%);
+      background:conic-gradient(from 0deg, transparent, rgba(122,224,255,.3), transparent 30%);
       opacity:0;transition:opacity .6s var(--ease-out);
       animation:spin 4s linear infinite;
       mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -1044,8 +1044,8 @@
     .level-card > *{position:relative;z-index:1}
     .level-card:hover,.level-card.glow{
       transform:translateY(-6px) scale(1.04);
-      border-color:var(--cyan);
-      box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.5);
+      border-color:rgba(122,224,255,.6);
+      box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.3);
     }
     .level-card .badge-num{
       width:44px;height:44px;border-radius:50%;
