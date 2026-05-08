@@ -48,12 +48,15 @@
        1. Overscroll rubber-band at top/bottom shows navy, not white.
        2. content-visibility:auto sections that haven't rendered yet
           fall back to navy instead of the browser's white default —
-          eliminates white flashes during fast scroll. */
+          eliminates white flashes during fast scroll.
+       Body keeps just the gradient (no bg-color) — adding a bg-color
+       to body causes iOS Safari to push fixed z-index:-1 elements
+       behind the body bg, hiding the global star layer. */
     html{background:#01040d}
     body{
       font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
       color:var(--ink);
-      background:#01040d linear-gradient(180deg,#01040d 0%, #03091a 50%, #01040d 100%);
+      background:linear-gradient(180deg,#01040d 0%, #03091a 50%, #01040d 100%);
       line-height:1.6;-webkit-font-smoothing:antialiased;
       overflow-x:hidden;
     }
