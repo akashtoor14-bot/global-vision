@@ -2067,36 +2067,23 @@
           <h3 id="joinTitle">Fill Out The Form To<br/><span class="grad-text">Access The Next Step</span></h3>
           <p class="modal-note"><b>NOTE:</b> Make sure to use your <span class="accent">real email address</span>. You'll be prompted to verify it. A <span class="accent">verification code</span> will be sent to your email.</p>
 
-          <form id="joinForm" novalidate>
-            <div class="form-row">
-              <div class="form-field">
-                <label for="firstName">First Name<span class="req">*</span></label>
-                <input type="text" id="firstName" name="firstName" placeholder="First name" autocomplete="given-name" required />
-                <div class="err-msg">Please enter your first name</div>
-              </div>
-              <div class="form-field">
-                <label for="lastName">Last Name<span class="req">*</span></label>
-                <input type="text" id="lastName" name="lastName" placeholder="Last name" autocomplete="family-name" required />
-                <div class="err-msg">Please enter your last name</div>
-              </div>
-            </div>
-
-            <div class="form-field has-icon">
-              <label for="emailAddr">Email<span class="req">*</span></label>
-              <span class="ico">✉</span>
-              <input type="email" id="emailAddr" name="email" placeholder="you@email.com" autocomplete="email" required />
-              <div class="err-msg">Please enter a valid email</div>
-            </div>
-
-            <button type="submit" class="modal-submit">Submit</button>
-          </form>
-        </div>
-
-        <!-- Success view -->
-        <div class="modal-success">
-          <div class="check-circle">✓</div>
-          <h3>You're <span class="grad-text">In.</span></h3>
-          <p>Check your email for a verification code. We'll get you set up with VIP access in the next 60 seconds.</p>
+          <iframe
+            src="https://links.globalv.me/widget/form/VB3CWvgWHZP5QJaaPQnY"
+            style="width:100%;height:441px;border:none;border-radius:14px;background:transparent"
+            id="inline-VB3CWvgWHZP5QJaaPQnY"
+            data-layout="{'id':'INLINE'}"
+            data-trigger-type="alwaysShow"
+            data-trigger-value=""
+            data-activation-type="alwaysActivated"
+            data-activation-value=""
+            data-deactivation-type="neverDeactivate"
+            data-deactivation-value=""
+            data-form-name="Free Community: Opt-in Form"
+            data-height="441"
+            data-layout-iframe-id="inline-VB3CWvgWHZP5QJaaPQnY"
+            data-form-id="VB3CWvgWHZP5QJaaPQnY"
+            title="Free Community: Opt-in Form"
+          ></iframe>
         </div>
       </div>
     </div>
@@ -2571,30 +2558,17 @@
 
     /* ---------- Join Modal ---------- */
     const joinModal   = document.getElementById('joinModal');
-    const joinForm    = document.getElementById('joinForm');
     const modalClose  = document.getElementById('modalClose');
-    const modalInner  = joinModal.querySelector('.modal');
 
     function openJoinModal(){
       joinModal.classList.add('open');
       joinModal.setAttribute('aria-hidden','false');
       document.body.style.overflow = 'hidden';
-      // Focus first field shortly after open animation
-      setTimeout(()=>{
-        const first = joinModal.querySelector('input');
-        if(first) first.focus();
-      }, 250);
     }
     function closeJoinModal(){
       joinModal.classList.remove('open');
       joinModal.setAttribute('aria-hidden','true');
       document.body.style.overflow = '';
-      // Reset to form view after close anim, in case it was in success state
-      setTimeout(()=>{
-        modalInner.classList.remove('is-success');
-        joinForm.reset();
-        joinForm.querySelectorAll('.form-field').forEach(f=>f.classList.remove('error'));
-      }, 400);
     }
 
     // Open triggers — any element with data-open-modal
@@ -2613,42 +2587,9 @@
     document.addEventListener('keydown', (e)=>{
       if(e.key === 'Escape' && joinModal.classList.contains('open')) closeJoinModal();
     });
-
-    // Form submit (no backend yet — just validate + show success state)
-    joinForm.addEventListener('submit', (e)=>{
-      e.preventDefault();
-      const data = {
-        firstName: joinForm.firstName.value.trim(),
-        lastName:  joinForm.lastName.value.trim(),
-        email:     joinForm.emailAddr.value.trim()
-      };
-
-      // Simple validation
-      let valid = true;
-      const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      [
-        ['firstName', !!data.firstName],
-        ['lastName',  !!data.lastName],
-        ['emailAddr', emailRe.test(data.email)]
-      ].forEach(([id, ok])=>{
-        const field = joinForm.querySelector('#'+id).closest('.form-field');
-        field.classList.toggle('error', !ok);
-        if(!ok) valid = false;
-      });
-      if(!valid) return;
-
-      // TODO: hook this up to the CRM later.
-      // For now, log it and store in localStorage so submissions aren't lost.
-      try{
-        const queue = JSON.parse(localStorage.getItem('gv_submissions') || '[]');
-        queue.push({ ...data, ts: new Date().toISOString() });
-        localStorage.setItem('gv_submissions', JSON.stringify(queue));
-      }catch(err){ /* ignore */ }
-      console.log('[Global Vision] Form submission:', data);
-
-      // Switch to success view
-      modalInner.classList.add('is-success');
-    });
   </script>
+
+  <!-- GoHighLevel inline form bootstrap -->
+  <script src="https://links.globalv.me/js/form_embed.js"></script>
 </body>
 </html>
