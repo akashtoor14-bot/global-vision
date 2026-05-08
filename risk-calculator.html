@@ -288,12 +288,13 @@
     .calc-input .suffix{font-size:11px;color:#7c8aa3;letter-spacing:1.5px;text-transform:uppercase;font-family:'JetBrains Mono','SF Mono',ui-monospace,Menlo,monospace;white-space:nowrap}
     .calc-input .suffix.tag{padding:.3rem .55rem;border-radius:5px;background:rgba(122,224,255,.1);color:var(--cyan);font-size:10px}
 
-    .calc-seg{display:grid;grid-template-columns:1fr 1fr;gap:.3rem;background:rgba(7,16,34,.55);border:1px solid rgba(190,222,245,.18);border-radius:10px;padding:.3rem}
-    .calc-seg button{padding:.7rem .8rem;border-radius:7px;cursor:pointer;font-size:11.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#9fb0cb;font-family:inherit;transition:all .25s var(--ease)}
-    .calc-seg button:hover{color:#fff}
-    .calc-seg button.active{background:rgba(122,224,255,.18);color:#fff;box-shadow:inset 0 0 0 1px rgba(122,224,255,.3)}
-    .calc-seg.dir button.active[data-dir="buy"]{background:rgba(108,243,180,.18);color:var(--mint);box-shadow:inset 0 0 0 1px rgba(108,243,180,.4)}
-    .calc-seg.dir button.active[data-dir="sell"]{background:rgba(255,122,155,.18);color:var(--rose);box-shadow:inset 0 0 0 1px rgba(255,122,155,.4)}
+    .calc-seg{display:grid;grid-template-columns:1fr 1fr;gap:.3rem;background:rgba(7,16,34,.55);border:1px solid rgba(190,222,245,.18);border-radius:10px;padding:.3rem;position:relative}
+    .calc-seg .seg-switch{position:absolute;opacity:0;pointer-events:none;width:0;height:0;margin:0;appearance:none;-webkit-appearance:none}
+    .calc-seg label{padding:.7rem .8rem;border-radius:7px;cursor:pointer;font-size:11.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#9fb0cb;font-family:inherit;transition:all .25s var(--ease);text-align:center;user-select:none;-webkit-user-select:none}
+    .calc-seg label:hover{color:#fff}
+    .calc-seg label.active{background:rgba(122,224,255,.18);color:#fff;box-shadow:inset 0 0 0 1px rgba(122,224,255,.3);pointer-events:none}
+    .calc-seg.dir label.active[data-dir="buy"]{background:rgba(108,243,180,.18);color:var(--mint);box-shadow:inset 0 0 0 1px rgba(108,243,180,.4)}
+    .calc-seg.dir label.active[data-dir="sell"]{background:rgba(255,122,155,.18);color:var(--rose);box-shadow:inset 0 0 0 1px rgba(255,122,155,.4)}
 
     .result-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
     .result-tile{
@@ -596,8 +597,9 @@
             <div class="calc-field">
               <label>Risk Mode</label>
               <div class="calc-seg" id="riskModeSeg">
-                <button type="button" class="active" data-risk-mode="percent">% of Balance</button>
-                <button type="button" data-risk-mode="fixed">Fixed $</button>
+                <input type="checkbox" switch class="seg-switch" id="riskModeSwitch" aria-label="Toggle risk mode" />
+                <label for="riskModeSwitch" class="active" data-risk-mode="percent">% of Balance</label>
+                <label for="riskModeSwitch" data-risk-mode="fixed">Fixed $</label>
               </div>
             </div>
             <div class="calc-field">
@@ -610,8 +612,9 @@
             <div class="calc-field">
               <label>Direction</label>
               <div class="calc-seg dir" id="dirSeg">
-                <button type="button" class="active" data-dir="buy">Buy / Long</button>
-                <button type="button" data-dir="sell">Sell / Short</button>
+                <input type="checkbox" switch class="seg-switch" id="dirSwitch" aria-label="Toggle direction" />
+                <label for="dirSwitch" class="active" data-dir="buy">Buy / Long</label>
+                <label for="dirSwitch" data-dir="sell">Sell / Short</label>
               </div>
             </div>
           </div>
@@ -940,30 +943,38 @@
         calcCompute();
       });
     });
-    document.querySelectorAll('#riskModeSeg button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('#riskModeSeg button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        calcRiskMode = btn.dataset.riskMode;
-        if (calcRiskMode === 'percent') {
-          $c('riskInputLabel').textContent  = 'Risk per Trade (%)';
-          $c('riskInputSuffix').textContent = '%';
-          $c('calc-risk').value = '2';
-        } else {
-          $c('riskInputLabel').textContent  = 'Risk per Trade ($)';
-          $c('riskInputSuffix').textContent = 'USD';
-          $c('calc-risk').value = '20';
-        }
-        calcCompute();
-      });
+    /* Tiny haptic/vibrate ping on toggle. iOS may also fire a native
+       haptic via <input type="checkbox" switch> — that's the whole point
+       of using a real switch under the labels. */
+    function pingHaptic(){ if(navigator.vibrate) navigator.vibrate(10); }
+
+    const riskModeSwitch = document.getElementById('riskModeSwitch');
+    riskModeSwitch.addEventListener('change', () => {
+      pingHaptic();
+      const isFixed = riskModeSwitch.checked;
+      document.querySelectorAll('#riskModeSeg label').forEach(l => l.classList.remove('active'));
+      document.querySelector('#riskModeSeg label[data-risk-mode="' + (isFixed ? 'fixed' : 'percent') + '"]').classList.add('active');
+      calcRiskMode = isFixed ? 'fixed' : 'percent';
+      if (calcRiskMode === 'percent') {
+        $c('riskInputLabel').textContent  = 'Risk per Trade (%)';
+        $c('riskInputSuffix').textContent = '%';
+        $c('calc-risk').value = '2';
+      } else {
+        $c('riskInputLabel').textContent  = 'Risk per Trade ($)';
+        $c('riskInputSuffix').textContent = 'USD';
+        $c('calc-risk').value = '20';
+      }
+      calcCompute();
     });
-    document.querySelectorAll('#dirSeg button').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('#dirSeg button').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        calcDir = btn.dataset.dir;
-        calcCompute();
-      });
+
+    const dirSwitch = document.getElementById('dirSwitch');
+    dirSwitch.addEventListener('change', () => {
+      pingHaptic();
+      const isSell = dirSwitch.checked;
+      document.querySelectorAll('#dirSeg label').forEach(l => l.classList.remove('active'));
+      document.querySelector('#dirSeg label[data-dir="' + (isSell ? 'sell' : 'buy') + '"]').classList.add('active');
+      calcDir = isSell ? 'sell' : 'buy';
+      calcCompute();
     });
     ['calc-balance','calc-risk','calc-entry','calc-sl','calc-tp'].forEach(id => {
       $c(id).addEventListener('input', calcCompute);
