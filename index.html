@@ -109,7 +109,15 @@
        LAYOUT
        ============================================================ */
     .container{max-width:1400px;margin:0 auto;padding:0 2rem;position:relative;z-index:2}
-    .section{padding:7rem 2rem;position:relative;overflow:hidden}
+    .section{
+      padding:7rem 2rem;position:relative;overflow:hidden;
+      /* Skip rendering work for sections that aren't on screen — modern
+         browsers (Chrome/Edge/Safari TP) honor this and dramatically
+         reduce paint/layout cost on long pages. Safe fallback for older
+         browsers (just ignored). */
+      content-visibility:auto;
+      contain-intrinsic-size:auto 800px;
+    }
     .section-header{text-align:center;max-width:760px;margin:0 auto 4rem;position:relative;z-index:2}
     .section-header h2{margin-bottom:1rem}
     .section-header p{font-size:18px;color:var(--muted)}
@@ -383,10 +391,17 @@
     }
     .globe{
       position:relative;width:440px;height:440px;border-radius:50%;
-      background:#04101f;
+      /* Layered radial gradients give the dark sphere a sense of curvature
+         and atmosphere even when the 3D canvas inside isn't rendering
+         (mobile / reduced-motion / pre-three.js-load). */
+      background:
+        radial-gradient(circle at 30% 30%, rgba(60,130,200,.40) 0%, transparent 55%),
+        radial-gradient(circle at 70% 70%, rgba(20,60,110,.55) 0%, transparent 60%),
+        radial-gradient(circle at 50% 50%, #061528 0%, #02080f 100%);
       box-shadow:
         0 40px 80px rgba(9,26,51,.55),
-        0 0 100px rgba(103,154,203,.3);
+        0 0 100px rgba(103,154,203,.3),
+        inset 0 0 60px rgba(122,224,255,.06);
       overflow:hidden;
       animation:float 7s ease-in-out infinite;
     }
@@ -1079,12 +1094,18 @@
     /* ============================================================
        REVEAL
        ============================================================ */
-    @keyframes fadeInUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
     .reveal{opacity:0}
-    .reveal.in{animation:fadeInUp .9s var(--ease-out) both}
-    .fade-in{animation:fadeInUp 1s var(--ease-out) both}
-    .delay-1{animation-delay:.12s}.delay-2{animation-delay:.24s}
-    .delay-3{animation-delay:.36s}.delay-4{animation-delay:.48s}
+    .reveal.in{animation:fadeInUp .5s var(--ease-out) both}
+    .fade-in{animation:fadeInUp .6s var(--ease-out) both}
+    .delay-1{animation-delay:.08s}.delay-2{animation-delay:.16s}
+    .delay-3{animation-delay:.24s}.delay-4{animation-delay:.32s}
+    /* On mobile or for reduced-motion users: skip the reveal animation
+       entirely — content shows immediately, no white flash on scroll. */
+    @media (max-width:768px), (prefers-reduced-motion:reduce){
+      .reveal{opacity:1}
+      .reveal.in,.fade-in{animation:none}
+    }
 
     /* ============================================================
        RESPONSIVE
@@ -1136,6 +1157,15 @@
       .cal-bar .stats{gap:.75rem;font-size:10.5px}
       .cursor-glow{display:none}
       .hero-meta{grid-template-columns:1fr;gap:.6rem}
+
+      /* Disable backdrop-filter on mobile — it's the #1 paint cost on
+         phones. Use solid (slightly more opaque) backgrounds instead. */
+      .site-header,.mobile-menu,.modal,.f-card,.meta-card,.hud-card,
+      .dashboard,.signals-list,.l-card,.cta-banner{
+        backdrop-filter:none !important;-webkit-backdrop-filter:none !important;
+      }
+      .site-header{background:rgba(6,14,30,.92)}
+      .mobile-menu{background:rgba(6,14,30,.98)}
     }
     @media (max-width:480px){
       .academy-grid{grid-template-columns:1fr}
@@ -1264,7 +1294,22 @@
       .modal h3{font-size:20px}
     }
   </style>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <!-- three.js is heavy (~670KB) and only used by the hero Earth.
+       Skip it entirely on mobile/touch devices and load with `defer` on
+       desktop so it never blocks initial paint. The Earth init script
+       below also no-ops if THREE isn't present. -->
+  <script>
+    (function(){
+      var isMobile = window.matchMedia('(max-width:768px)').matches;
+      var prefersReduced = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+      if(isMobile || prefersReduced) return; // skip three.js on mobile + reduced-motion
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js';
+      s.defer = true;
+      s.onload = function(){ if (window.GVInitEarth) window.GVInitEarth(); };
+      document.head.appendChild(s);
+    })();
+  </script>
 </head>
 <body>
 
@@ -1284,31 +1329,44 @@
       title="Live market ticker"></iframe>
   </div>
   <script>
+    /* TradingView ticker is the heaviest single asset on the page (it loads
+       its own JS, CSS, and opens WebSockets). Defer until the browser is idle
+       so it never blocks initial paint or first interaction. */
     (function(){
-      var cfg = {
-        "symbols": [
-          {"description": "Gold (XAU/USD)",   "proName": "OANDA:XAUUSD"},
-          {"description": "Bitcoin",          "proName": "BITSTAMP:BTCUSD"},
-          {"description": "Dow Jones (US30)", "proName": "TVC:DJI"},
-          {"description": "Crude Oil (WTI)",  "proName": "TVC:USOIL"},
-          {"description": "Brent Oil",        "proName": "TVC:UKOIL"},
-          {"description": "Silver (XAG/USD)", "proName": "OANDA:XAGUSD"},
-          {"description": "S&P 500",          "proName": "TVC:SPX"},
-          {"description": "Nasdaq 100",       "proName": "NASDAQ:NDX"},
-          {"description": "Ethereum",         "proName": "BITSTAMP:ETHUSD"},
-          {"description": "EUR/USD",          "proName": "FX:EURUSD"},
-          {"description": "GBP/USD",          "proName": "FX:GBPUSD"},
-          {"description": "USD Index (DXY)",  "proName": "TVC:DXY"}
-        ],
-        "showSymbolLogo": true,
-        "isTransparent": true,
-        "displayMode": window.matchMedia('(max-width:768px)').matches ? "compact" : "adaptive",
-        "colorTheme": "dark",
-        "locale": "en"
-      };
-      document.getElementById('tv-ticker-frame').src =
-        'https://s.tradingview.com/embed-widget/ticker-tape/?locale=en#' +
-        encodeURIComponent(JSON.stringify(cfg));
+      function loadTicker(){
+        var cfg = {
+          "symbols": [
+            {"description": "Gold (XAU/USD)",   "proName": "OANDA:XAUUSD"},
+            {"description": "Bitcoin",          "proName": "BITSTAMP:BTCUSD"},
+            {"description": "Dow Jones (US30)", "proName": "TVC:DJI"},
+            {"description": "Crude Oil (WTI)",  "proName": "TVC:USOIL"},
+            {"description": "Brent Oil",        "proName": "TVC:UKOIL"},
+            {"description": "Silver (XAG/USD)", "proName": "OANDA:XAGUSD"},
+            {"description": "S&P 500",          "proName": "TVC:SPX"},
+            {"description": "Nasdaq 100",       "proName": "NASDAQ:NDX"},
+            {"description": "Ethereum",         "proName": "BITSTAMP:ETHUSD"},
+            {"description": "EUR/USD",          "proName": "FX:EURUSD"},
+            {"description": "GBP/USD",          "proName": "FX:GBPUSD"},
+            {"description": "USD Index (DXY)",  "proName": "TVC:DXY"}
+          ],
+          "showSymbolLogo": true,
+          "isTransparent": true,
+          "displayMode": window.matchMedia('(max-width:768px)').matches ? "compact" : "adaptive",
+          "colorTheme": "dark",
+          "locale": "en"
+        };
+        document.getElementById('tv-ticker-frame').src =
+          'https://s.tradingview.com/embed-widget/ticker-tape/?locale=en#' +
+          encodeURIComponent(JSON.stringify(cfg));
+      }
+      // Use requestIdleCallback so the ticker loads only after the page is
+      // visible and interactive. Fallback: setTimeout for browsers that
+      // don't support it (older Safari).
+      if ('requestIdleCallback' in window){
+        requestIdleCallback(loadTicker, { timeout: 2500 });
+      } else {
+        setTimeout(loadTicker, 1500);
+      }
     })();
   </script>
 
@@ -2100,37 +2158,71 @@
     }, { threshold:.3 });
     counters.forEach(c=>cio.observe(c));
 
-    /* ---------- Cursor glow ---------- */
-    const glow = document.getElementById('cursorGlow');
-    let gx = window.innerWidth/2, gy = window.innerHeight/2;
-    let cx = gx, cy = gy;
-    window.addEventListener('mousemove', (e)=>{ gx = e.clientX; gy = e.clientY; });
-    (function loop(){
-      cx += (gx - cx) * .12;
-      cy += (gy - cy) * .12;
-      glow.style.transform = `translate(${cx}px, ${cy}px) translate(-50%,-50%)`;
-      requestAnimationFrame(loop);
-    })();
+    /* ---------- Pointer-driven effects (cursor glow, light-card highlight,
+       3D tilt) — skip on mobile/touch devices where they have no effect
+       and just waste main-thread time. ----------------- */
+    const _isPointerCoarse = window.matchMedia('(hover:none),(pointer:coarse),(max-width:768px)').matches;
 
-    /* ---------- Mouse-tracked highlight on light cards ---------- */
-    document.querySelectorAll('.l-card').forEach(card=>{
-      card.addEventListener('mousemove', (e)=>{
-        const r = card.getBoundingClientRect();
-        card.style.setProperty('--mx', ((e.clientX - r.left)/r.width*100)+'%');
-        card.style.setProperty('--my', ((e.clientY - r.top)/r.height*100)+'%');
+    if (!_isPointerCoarse){
+      /* Cursor glow */
+      const glow = document.getElementById('cursorGlow');
+      let gx = window.innerWidth/2, gy = window.innerHeight/2;
+      let cx = gx, cy = gy;
+      let glowRunning = false;
+      window.addEventListener('mousemove', (e)=>{
+        gx = e.clientX; gy = e.clientY;
+        if (!glowRunning){ glowRunning = true; requestAnimationFrame(loop); }
       });
-    });
+      function loop(){
+        cx += (gx - cx) * .12;
+        cy += (gy - cy) * .12;
+        glow.style.transform = `translate(${cx}px, ${cy}px) translate(-50%,-50%)`;
+        // Stop the rAF loop once we're settled — avoids continuous work
+        // when the cursor is parked.
+        if (Math.abs(gx-cx) < .2 && Math.abs(gy-cy) < .2){
+          glowRunning = false;
+          return;
+        }
+        requestAnimationFrame(loop);
+      }
 
-    /* ---------- 3D tilt on .tilt cards ---------- */
-    document.querySelectorAll('.tilt').forEach(card=>{
-      card.addEventListener('mousemove', (e)=>{
-        const r = card.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width - .5;
-        const y = (e.clientY - r.top)  / r.height - .5;
-        card.style.transform = `perspective(900px) rotateY(${x*6}deg) rotateX(${-y*6}deg) translateY(-4px)`;
+      /* Mouse-tracked highlight on light cards */
+      document.querySelectorAll('.l-card').forEach(card=>{
+        card.addEventListener('mousemove', (e)=>{
+          const r = card.getBoundingClientRect();
+          card.style.setProperty('--mx', ((e.clientX - r.left)/r.width*100)+'%');
+          card.style.setProperty('--my', ((e.clientY - r.top)/r.height*100)+'%');
+        });
       });
-      card.addEventListener('mouseleave', ()=>{ card.style.transform = ''; });
-    });
+
+      /* 3D tilt on .tilt cards */
+      document.querySelectorAll('.tilt').forEach(card=>{
+        card.addEventListener('mousemove', (e)=>{
+          const r = card.getBoundingClientRect();
+          const x = (e.clientX - r.left) / r.width - .5;
+          const y = (e.clientY - r.top)  / r.height - .5;
+          card.style.transform = `perspective(900px) rotateY(${x*6}deg) rotateX(${-y*6}deg) translateY(-4px)`;
+        });
+        card.addEventListener('mouseleave', ()=>{ card.style.transform = ''; });
+      });
+    }
+
+    /* ---------- Pause SVG card animations when offscreen ----------
+       Each .has-anim card gets `animation-play-state: paused` while it's
+       not in the viewport. Big perf win when many cards are below the
+       fold (no GPU/CPU spent on invisible animations). */
+    if ('IntersectionObserver' in window){
+      const animPauseStyle = document.createElement('style');
+      animPauseStyle.textContent =
+        '.has-anim:not(.in-view) .anim-svg *{animation-play-state:paused !important}';
+      document.head.appendChild(animPauseStyle);
+      const animIO = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          e.target.classList.toggle('in-view', e.isIntersecting);
+        });
+      }, { threshold: 0, rootMargin: '100px' });
+      document.querySelectorAll('.has-anim').forEach(el=>animIO.observe(el));
+    }
 
     /* ---------- Stars ---------- */
     function populateStars(container, count){
@@ -2148,8 +2240,14 @@
       }
     }
     /* Single global star layer — fixed-position, behind all content.
-       True scroll parallax: stars stay in viewport while content scrolls past. */
-    populateStars(document.getElementById('starsBg'), 280);
+       True scroll parallax: stars stay in viewport while content scrolls past.
+       Reduced count on mobile + when reduced-motion is preferred for perf. */
+    (function(){
+      var isMobile = window.matchMedia('(max-width:768px)').matches;
+      var prefersReduced = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+      var count = prefersReduced ? 60 : (isMobile ? 90 : 160);
+      populateStars(document.getElementById('starsBg'), count);
+    })();
 
     /* ---------- 3D Earth (three.js) ----------------------------------------
        Layered architecture (separable — visual layers do NOT alter geometry):
@@ -2169,9 +2267,11 @@
          meridian (Greenwich, lng=0) lands at +X axis under three.js's default
          SphereGeometry UV mapping.
     ----------------------------------------------------------------------- */
-    (function initEarth(){
+    window.GVInitEarth = function initEarth(){
+      if (window.__gvEarthInited) return;
       const canvas = document.getElementById('earthCanvas');
       if(!canvas || typeof THREE === 'undefined') return;
+      window.__gvEarthInited = true;
 
       const parent = canvas.parentElement;
       let size = parent.getBoundingClientRect().width || 440;
@@ -2351,7 +2451,11 @@
         requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
-    })();
+    };
+    // Try to init right away (works if three.js is already loaded). The
+    // deferred three.js loader also calls this on its onload — both paths
+    // are idempotent thanks to __gvEarthInited.
+    if (typeof THREE !== 'undefined') window.GVInitEarth();
 
     /* ---------- (Removed: fake ticker + price flicker — replaced by TradingView widgets) ---------- */
 
