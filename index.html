@@ -514,7 +514,7 @@
     }
     .f-card:hover::before,.f-card.glow::before{opacity:1}
     .f-card:hover,.f-card.glow{
-      transform:translateY(-6px) scale(1.04);
+      transform:translateY(-6px) scale(1.04) !important;
       border-color:rgba(122,224,255,.6);
       box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.3);
     }
@@ -1043,7 +1043,7 @@
     .level-card:hover::before,.level-card.glow::before{opacity:1}
     .level-card > *{position:relative;z-index:1}
     .level-card:hover,.level-card.glow{
-      transform:translateY(-6px) scale(1.04);
+      transform:translateY(-6px) scale(1.04) !important;
       border-color:rgba(122,224,255,.6);
       box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.3);
     }
@@ -2175,8 +2175,10 @@
     }, { threshold:.12, rootMargin:'0px 0px -40px 0px' });
     document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
-    /* ---------- Card glow: only the card nearest the trigger line glows ---------- */
-    if(!window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+    /* ---------- Card glow: only the card nearest the trigger line glows.
+       Mobile only — desktop uses :hover via CSS. ---------- */
+    if(!window.matchMedia('(prefers-reduced-motion:reduce)').matches
+       && window.matchMedia('(max-width:768px)').matches){
       const glowCards = Array.from(document.querySelectorAll('.f-card, .level-card'));
       let lastGlow = null;
       function updateGlow(){
