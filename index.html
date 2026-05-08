@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Sets the URL bar / system UI color on mobile Safari + Chrome to
+       match the deep-space theme (no white iOS Safari rubber-band). -->
+  <meta name="theme-color" content="#01040d" />
   <title>Global Vision — VIP Signals. Free Forever.</title>
   <style>
     /* ============================================================
@@ -41,10 +44,16 @@
        ============================================================ */
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     html{scroll-behavior:smooth;font-size:16px}
+    /* Set the html element to the deepest navy so:
+       1. Overscroll rubber-band at top/bottom shows navy, not white.
+       2. content-visibility:auto sections that haven't rendered yet
+          fall back to navy instead of the browser's white default —
+          eliminates white flashes during fast scroll. */
+    html{background:#01040d}
     body{
       font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
       color:var(--ink);
-      background:linear-gradient(180deg,#01040d 0%, #03091a 50%, #01040d 100%);
+      background:#01040d linear-gradient(180deg,#01040d 0%, #03091a 50%, #01040d 100%);
       line-height:1.6;-webkit-font-smoothing:antialiased;
       overflow-x:hidden;
     }
