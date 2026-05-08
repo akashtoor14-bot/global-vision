@@ -1162,6 +1162,12 @@
          instead of an endless single-column scroll. Padding/gaps are
          tightened so cards still breathe. */
       .grid-3,.grid-2,.community-grid{grid-template-columns:repeat(2,1fr);gap:.75rem}
+      /* Orphan handler: when an odd-numbered grid (e.g. 3 cards) ends with
+         a single card alone in its row, stretch it across both columns so
+         the layout looks balanced instead of leaving empty space on one side. */
+      .grid-3 > *:nth-child(odd):last-child,
+      .grid-2 > *:nth-child(odd):last-child,
+      .community-grid > *:nth-child(odd):last-child{grid-column:1 / -1}
       .stats-row{grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:2rem}
       .stat-box{padding:.8rem .4rem;border-radius:11px}
       .stat-box .num{font-size:19px;letter-spacing:-.3px}
@@ -1202,7 +1208,14 @@
     }
     @media (max-width:480px){
       .academy-grid{grid-template-columns:1fr}
-      .footer-grid{grid-template-columns:1fr}
+      /* Keep footer link columns side by side on small phones — brand
+         block spans full width on top, link sections sit in a 2x2 grid
+         below. Avoids the long single-column stack the user saw. */
+      .footer-grid{grid-template-columns:1fr 1fr;gap:1.25rem}
+      .footer-brand{grid-column:1 / -1;margin-bottom:.5rem}
+      .footer-col h5{font-size:11px;margin-bottom:.65rem}
+      .footer-col li{margin-bottom:.4rem}
+      .footer-col a{font-size:13px}
     }
 
     /* ============================================================
