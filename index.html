@@ -489,6 +489,11 @@
       box-shadow:0 24px 50px rgba(0,0,0,.4),0 0 0 1px rgba(122,224,255,.35);
     }
     .f-card.has-banner:hover .card-banner .glyph-fg{transform:scale(1.12)}
+    /* Community cards get a subtle scale-up on hover (Primeverse-style) */
+    .community-grid .f-card:hover{
+      transform:translateY(-6px) scale(1.03);
+      box-shadow:0 28px 60px rgba(0,0,0,.5),0 0 0 1px rgba(122,224,255,.45),0 0 28px rgba(122,224,255,.18);
+    }
     .f-card > *{position:relative;z-index:1}
 
     .f-card .icon{
