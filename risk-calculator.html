@@ -226,17 +226,20 @@
       padding:.4rem;border-radius:14px;
       margin:0 auto 2rem;width:fit-content;
       backdrop-filter:blur(8px);
+      position:relative;
     }
     .calc-tab{
       padding:.75rem 1.5rem;font-size:12.5px;font-weight:700;letter-spacing:1.4px;
       text-transform:uppercase;color:#9fb0cb;border-radius:10px;cursor:pointer;
       display:inline-flex;align-items:center;gap:.55rem;
       transition:all .25s var(--ease);font-family:inherit;
+      user-select:none;-webkit-user-select:none;
     }
     .calc-tab:hover{color:#fff;background:rgba(122,224,255,.05)}
     .calc-tab.active{
       background:linear-gradient(135deg,#7ae0ff,#BEDEF5);color:var(--navy-900);
       box-shadow:0 10px 22px rgba(122,224,255,.35);
+      pointer-events:none;
     }
     .calc-tab .ico{font-size:14px;line-height:1}
 
@@ -289,7 +292,7 @@
     .calc-input .suffix.tag{padding:.3rem .55rem;border-radius:5px;background:rgba(122,224,255,.1);color:var(--cyan);font-size:10px}
 
     .calc-seg{display:grid;grid-template-columns:1fr 1fr;gap:.3rem;background:rgba(7,16,34,.55);border:1px solid rgba(190,222,245,.18);border-radius:10px;padding:.3rem;position:relative}
-    .calc-seg .seg-switch{position:absolute;opacity:0;pointer-events:none;width:0;height:0;margin:0;appearance:none;-webkit-appearance:none}
+    .seg-switch{position:absolute;opacity:0;pointer-events:none;width:0;height:0;margin:0;appearance:none;-webkit-appearance:none}
     .calc-seg label{padding:.7rem .8rem;border-radius:7px;cursor:pointer;font-size:11.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#9fb0cb;font-family:inherit;transition:all .25s var(--ease);text-align:center;user-select:none;-webkit-user-select:none}
     .calc-seg label:hover{color:#fff}
     .calc-seg label.active{background:rgba(122,224,255,.18);color:#fff;box-shadow:inset 0 0 0 1px rgba(122,224,255,.3);pointer-events:none}
@@ -576,9 +579,10 @@
 
         <!-- Instrument switcher -->
         <div class="calc-tabs" role="tablist" aria-label="Instrument">
-          <button class="calc-tab active" type="button" data-pair="XAUUSD"><span class="ico">●</span>XAU/USD</button>
-          <button class="calc-tab" type="button" data-pair="BTCUSD"><span class="ico">₿</span>BTC/USD</button>
-          <button class="calc-tab" type="button" data-pair="US30"><span class="ico">▦</span>US30</button>
+          <input type="checkbox" switch class="seg-switch" id="pairSwitch" aria-label="Toggle instrument" />
+          <label class="calc-tab active" for="pairSwitch" data-pair="XAUUSD"><span class="ico">●</span>XAU/USD</label>
+          <label class="calc-tab" for="pairSwitch" data-pair="BTCUSD"><span class="ico">₿</span>BTC/USD</label>
+          <label class="calc-tab" for="pairSwitch" data-pair="US30"><span class="ico">▦</span>US30</label>
         </div>
 
         <!-- Trade Setup -->
@@ -936,6 +940,7 @@
 
     document.querySelectorAll('.calc-tab').forEach(tab => {
       tab.addEventListener('click', () => {
+        pingHaptic();
         document.querySelectorAll('.calc-tab').forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
         calcPair = tab.dataset.pair;
