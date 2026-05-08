@@ -2177,9 +2177,11 @@
     document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
 
     /* ---------- Card glow: only the card nearest the trigger line glows.
-       Mobile only — desktop uses :hover via CSS. ---------- */
+       Mobile/touch-only — desktop with mouse uses :hover via CSS. The
+       (hover:none) check excludes desktops in narrow windows. ---------- */
     if(!window.matchMedia('(prefers-reduced-motion:reduce)').matches
-       && window.matchMedia('(max-width:768px)').matches){
+       && window.matchMedia('(max-width:768px)').matches
+       && window.matchMedia('(hover:none)').matches){
       const glowCards = Array.from(document.querySelectorAll('.f-card, .level-card'));
       let lastGlow = null;
       function updateGlow(){
