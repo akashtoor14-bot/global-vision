@@ -1158,7 +1158,18 @@
       .mobile-menu{display:block}
       .hero{padding:3.5rem 1rem 3.5rem}
       .hero .sub{font-size:16px}
-      .grid-3,.grid-2,.stats-row,.community-grid{grid-template-columns:1fr}
+      /* Keep 2-up grids on mobile so the page feels closer to desktop
+         instead of an endless single-column scroll. Padding/gaps are
+         tightened so cards still breathe. */
+      .grid-3,.grid-2,.community-grid{grid-template-columns:repeat(2,1fr);gap:.75rem}
+      .stats-row{grid-template-columns:repeat(3,1fr);gap:.6rem}
+      .f-card{padding:1.1rem}
+      .f-card.has-banner{padding:0}
+      .f-card.has-banner > h3{padding:.9rem 1rem 0}
+      .f-card.has-banner > p {padding:0 1rem 1rem;font-size:13px}
+      .f-card .icon{width:40px;height:40px;font-size:18px;margin-bottom:.75rem;border-radius:10px}
+      .f-card h3{font-size:16px;margin-bottom:.4rem}
+      .f-card p{font-size:13px}
       .academy-grid{grid-template-columns:repeat(2,1fr)}
       .footer-grid{grid-template-columns:1fr 1fr;gap:2rem}
       .cta-banner{padding:3.5rem 1rem}
@@ -1172,7 +1183,10 @@
       .cal-bar{flex-direction:column;align-items:flex-start;gap:.4rem}
       .cal-bar .stats{gap:.75rem;font-size:10.5px}
       .cursor-glow{display:none}
-      .hero-meta{grid-template-columns:1fr;gap:.6rem}
+      .hero-meta{grid-template-columns:repeat(3,1fr);gap:.5rem}
+      .meta-card{padding:.7rem .55rem;border-radius:11px}
+      .meta-card strong{font-size:18px;letter-spacing:-.3px}
+      .meta-card span{font-size:9.5px;letter-spacing:1px}
 
       /* Disable backdrop-filter on mobile — it's the #1 paint cost on
          phones. Use solid (slightly more opaque) backgrounds instead. */
