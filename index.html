@@ -579,6 +579,175 @@
       .anim-chat .bubble,.anim-chat .dot{animation:none;opacity:1}
     }
 
+    /* ---- Microphone illustration (Live Rooms) ----
+       Audio waveform bars on each side of the mic pulse vertically
+       at different rhythms, like an EQ visualizer. Capsule glow steady. */
+    .anim-mic .bar{
+      transform-origin:center;transform-box:fill-box;
+      animation:micBarPulse 1.1s ease-in-out infinite;
+      filter:drop-shadow(0 0 4px rgba(122,224,255,.55));
+    }
+    .anim-mic .bar.b1{animation-duration:1.30s; animation-delay:-.10s}
+    .anim-mic .bar.b2{animation-duration:0.95s; animation-delay:-.45s}
+    .anim-mic .bar.b3{animation-duration:1.50s; animation-delay:-.20s}
+    .anim-mic .bar.b4{animation-duration:1.05s; animation-delay:-.65s}
+    .anim-mic .bar.b5{animation-duration:1.20s; animation-delay:-.30s}
+    .anim-mic .bar.b6{animation-duration:0.90s; animation-delay:-.55s}
+    .anim-mic .bar.b7{animation-duration:1.40s; animation-delay:-.15s}
+    .anim-mic .bar.b8{animation-duration:1.10s; animation-delay:-.70s}
+    @keyframes micBarPulse{
+      0%,100%{transform:scaleY(.30)}
+      50%    {transform:scaleY(1.25)}
+    }
+    .anim-mic .mic-glow{
+      transform-origin:center;transform-box:fill-box;
+      animation:micGlowPulse 2.0s ease-in-out infinite;
+    }
+    @keyframes micGlowPulse{
+      0%,100%{transform:scale(1);  opacity:.85}
+      50%    {transform:scale(1.4);opacity:1}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .anim-mic .bar,.anim-mic .mic-glow{animation:none}
+    }
+
+    /* ---- Stacked-docs illustration (Resource Vault) ----
+       Front document gently bobs up/down; checkmarks reveal sequentially. */
+    .anim-vault .doc-front{
+      transform-origin:center;transform-box:fill-box;
+      animation:vaultFrontFloat 5s ease-in-out infinite;
+    }
+    @keyframes vaultFrontFloat{
+      0%,100%{transform:translateY(0)}
+      50%    {transform:translateY(-3px)}
+    }
+    /* Each tick path is hidden initially (drawn via stroke-dashoffset),
+       then "draws in" sequentially. Loops every 6s. */
+    .anim-vault .tick{
+      stroke-dasharray:7;stroke-dashoffset:7;
+      animation:vaultTickDraw 6s ease-in-out infinite;
+    }
+    .anim-vault .c1 .tick{animation-delay:.4s}
+    .anim-vault .c2 .tick{animation-delay:1.2s}
+    .anim-vault .c3 .tick{animation-delay:2.0s}
+    .anim-vault .c4 .tick{animation-delay:2.8s}
+    @keyframes vaultTickDraw{
+      0%   {stroke-dashoffset:7}
+      8%   {stroke-dashoffset:0}
+      80%  {stroke-dashoffset:0}
+      90%  {stroke-dashoffset:7}
+      100% {stroke-dashoffset:7}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .anim-vault .doc-front,.anim-vault .tick{animation:none;stroke-dashoffset:0}
+    }
+
+    /* ---- Mentorship illustration (two avatars + flowing connection) ----
+       Connection line dashes flow toward right avatar; a pellet travels
+       along the curved path; both avatars gently breathe out of phase. */
+    .anim-mentor .conn{
+      animation:mentorDashFlow 2.4s linear infinite;
+    }
+    @keyframes mentorDashFlow{
+      0%  {stroke-dashoffset:0}
+      100%{stroke-dashoffset:-28}
+    }
+    .anim-mentor .pellet{
+      offset-path:path("M126,90 Q160,68 194,90");
+      offset-rotate:0deg;
+      animation:mentorPellet 2.4s linear infinite;
+      filter:drop-shadow(0 0 5px #7ae0ff);
+    }
+    @keyframes mentorPellet{
+      0%  {offset-distance:0%; opacity:0}
+      10% {opacity:1}
+      90% {opacity:1}
+      100%{offset-distance:100%; opacity:0}
+    }
+    .anim-mentor .avatar{
+      transform-origin:center;transform-box:fill-box;
+      animation:mentorBreathe 3.6s ease-in-out infinite;
+    }
+    .anim-mentor .av-r{animation-delay:-1.8s}
+    @keyframes mentorBreathe{
+      0%,100%{transform:scale(1)}
+      50%    {transform:scale(1.04)}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .anim-mentor .conn,.anim-mentor .pellet,.anim-mentor .avatar{animation:none}
+    }
+
+    /* ---- Phone-with-alert illustration (Signal Alerts) ----
+       Phone subtly wobbles like it's vibrating; notification badge
+       pulses; rose-colored ripples emanate from the badge. */
+    .anim-alert .phone{
+      transform-origin:center;transform-box:fill-box;
+      animation:alertWobble 3s ease-in-out infinite;
+    }
+    @keyframes alertWobble{
+      0%,100%{transform:rotate(0)}
+      40%    {transform:rotate(-1.5deg)}
+      55%    {transform:rotate(1.5deg)}
+      70%    {transform:rotate(-1deg)}
+      85%    {transform:rotate(0)}
+    }
+    .anim-alert .badge{
+      transform-origin:center;transform-box:fill-box;
+      animation:alertBadgePulse 1.6s ease-in-out infinite;
+      filter:drop-shadow(0 0 6px #ff7a9b);
+    }
+    @keyframes alertBadgePulse{
+      0%,100%{transform:scale(1)}
+      50%    {transform:scale(1.18)}
+    }
+    .anim-alert .ripple{
+      transform-origin:center;transform-box:fill-box;
+      opacity:0;
+      animation:alertRipple 2.2s ease-out infinite;
+    }
+    .anim-alert .ripple.rp2{animation-delay:.7s}
+    .anim-alert .ripple.rp3{animation-delay:1.4s}
+    @keyframes alertRipple{
+      0%   {transform:scale(.6); opacity:0}
+      15%  {opacity:.85}
+      100% {transform:scale(2.6); opacity:0}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .anim-alert .phone,.anim-alert .badge,.anim-alert .ripple{animation:none}
+    }
+
+    /* ---- Calendar illustration (Monthly Events) ----
+       Event dates pulse out of phase; today indicator has an
+       outward ring pulse + a steady center glow. */
+    .anim-cal .event{
+      transform-origin:center;transform-box:fill-box;
+      animation:calEventPulse 2.4s ease-in-out infinite;
+      filter:drop-shadow(0 0 5px rgba(122,224,255,.7));
+    }
+    .anim-cal .event.e2{animation-delay:.6s}
+    .anim-cal .event.e3{animation-delay:1.2s}
+    .anim-cal .event.e4{animation-delay:1.8s}
+    @keyframes calEventPulse{
+      0%,100%{transform:scale(.85);opacity:.6}
+      50%    {transform:scale(1.15);opacity:1}
+    }
+    .anim-cal .today-ring{
+      transform-origin:center;transform-box:fill-box;
+      animation:calTodayRing 2.6s ease-out infinite;
+    }
+    @keyframes calTodayRing{
+      0%   {transform:scale(.7);opacity:1}
+      100% {transform:scale(2);  opacity:0}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .anim-cal .event,.anim-cal .today-ring{animation:none}
+    }
+
     /* Light feature card (light sections) */
     .l-card{
       position:relative;background:#fff;border:1px solid var(--line);
@@ -1502,28 +1671,218 @@
           <h3>Community Chat</h3>
           <p>A 24/5 chat where every member can share trades, ask questions, and learn together across every major session.</p>
         </div>
-        <div class="f-card has-banner reveal" style="--bg-a:120deg;--bg-c1:rgba(108,243,180,.10);--bg-c2:rgba(7,21,43,.65)">
-          <div class="card-banner"><span class="glyph-bg">◎</span><span class="glyph-fg">◎</span></div>
+        <div class="f-card has-banner has-anim reveal" style="--bg-a:120deg;--bg-c1:rgba(108,243,180,.10);--bg-c2:rgba(7,21,43,.65)">
+          <div class="card-banner">
+            <svg class="anim-svg anim-mic" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <!-- Audio waveform bars on each side of the mic -->
+              <g class="bars" fill="#7ae0ff">
+                <rect class="bar b1" x="98"  y="80" width="3" height="22" rx="1.5"/>
+                <rect class="bar b2" x="110" y="80" width="3" height="22" rx="1.5"/>
+                <rect class="bar b3" x="122" y="80" width="3" height="22" rx="1.5"/>
+                <rect class="bar b4" x="134" y="80" width="3" height="22" rx="1.5"/>
+                <rect class="bar b5" x="186" y="80" width="3" height="22" rx="1.5"/>
+                <rect class="bar b6" x="198" y="80" width="3" height="22" rx="1.5"/>
+                <rect class="bar b7" x="210" y="80" width="3" height="22" rx="1.5"/>
+                <rect class="bar b8" x="222" y="80" width="3" height="22" rx="1.5"/>
+              </g>
+              <!-- Microphone -->
+              <g class="mic" stroke="#7ae0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none">
+                <!-- Capsule body -->
+                <rect x="148" y="56" width="24" height="44" rx="12"
+                      fill="rgba(122,224,255,.18)"/>
+                <!-- U-shaped cradle below capsule -->
+                <path d="M134 92 a 26 26 0 0 0 52 0"/>
+                <!-- Stem -->
+                <line x1="160" y1="118" x2="160" y2="134"/>
+                <!-- Base -->
+                <line x1="142" y1="134" x2="178" y2="134"/>
+                <!-- Inner highlight on capsule -->
+                <line x1="156" y1="64" x2="156" y2="92" stroke-width="1.4" opacity=".55"/>
+              </g>
+              <!-- Capsule glow dot -->
+              <circle cx="160" cy="78" r="2.4" fill="#dffaff" class="mic-glow"/>
+            </svg>
+          </div>
           <h3>Live Rooms</h3>
           <p>Daily voice rooms with senior analysts during London, New York, and Asia session opens.</p>
         </div>
-        <div class="f-card has-banner reveal" style="--bg-a:150deg;--bg-c1:rgba(190,222,245,.10);--bg-c2:rgba(7,21,43,.65)">
-          <div class="card-banner"><span class="glyph-bg">◈</span><span class="glyph-fg">◈</span></div>
+        <div class="f-card has-banner has-anim reveal" style="--bg-a:150deg;--bg-c1:rgba(190,222,245,.10);--bg-c2:rgba(7,21,43,.65)">
+          <div class="card-banner">
+            <svg class="anim-svg anim-vault" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <!-- Stacked documents (back → front) for depth -->
+              <g class="doc doc-back">
+                <rect x="92" y="48" width="124" height="100" rx="6"
+                      fill="rgba(190,222,245,.04)" stroke="rgba(190,222,245,.18)" stroke-width="1"/>
+              </g>
+              <g class="doc doc-mid">
+                <rect x="100" y="56" width="124" height="100" rx="6"
+                      fill="rgba(190,222,245,.06)" stroke="rgba(190,222,245,.25)" stroke-width="1"/>
+              </g>
+              <!-- Front document with animated checklist -->
+              <g class="doc doc-front">
+                <rect x="108" y="64" width="124" height="100" rx="6"
+                      fill="rgba(7,21,43,.55)" stroke="rgba(122,224,255,.50)" stroke-width="1.2"/>
+                <!-- Header bar -->
+                <rect x="118" y="74" width="50" height="3" rx="1.5" fill="rgba(122,224,255,.7)"/>
+                <rect x="118" y="80" width="34" height="2.5" rx="1.25" fill="rgba(190,222,245,.35)"/>
+                <!-- Checklist items: each row has checkbox + text line -->
+                <g class="chk c1">
+                  <rect x="118" y="92" width="6" height="6" rx="1.5"
+                        fill="rgba(122,224,255,.18)" stroke="#7ae0ff" stroke-width=".8"/>
+                  <path class="tick" d="M119.5,95 l1.5,1.6 l3.2,-3.2"
+                        fill="none" stroke="#7ae0ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <rect x="130" y="93" width="84" height="2.5" rx="1.25" fill="rgba(190,222,245,.55)"/>
+                </g>
+                <g class="chk c2">
+                  <rect x="118" y="106" width="6" height="6" rx="1.5"
+                        fill="rgba(122,224,255,.18)" stroke="#7ae0ff" stroke-width=".8"/>
+                  <path class="tick" d="M119.5,109 l1.5,1.6 l3.2,-3.2"
+                        fill="none" stroke="#7ae0ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <rect x="130" y="107" width="68" height="2.5" rx="1.25" fill="rgba(190,222,245,.55)"/>
+                </g>
+                <g class="chk c3">
+                  <rect x="118" y="120" width="6" height="6" rx="1.5"
+                        fill="rgba(122,224,255,.18)" stroke="#7ae0ff" stroke-width=".8"/>
+                  <path class="tick" d="M119.5,123 l1.5,1.6 l3.2,-3.2"
+                        fill="none" stroke="#7ae0ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <rect x="130" y="121" width="76" height="2.5" rx="1.25" fill="rgba(190,222,245,.55)"/>
+                </g>
+                <g class="chk c4">
+                  <rect x="118" y="134" width="6" height="6" rx="1.5"
+                        fill="rgba(122,224,255,.18)" stroke="#7ae0ff" stroke-width=".8"/>
+                  <path class="tick" d="M119.5,137 l1.5,1.6 l3.2,-3.2"
+                        fill="none" stroke="#7ae0ff" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <rect x="130" y="135" width="60" height="2.5" rx="1.25" fill="rgba(190,222,245,.55)"/>
+                </g>
+              </g>
+            </svg>
+          </div>
           <h3>Resource Vault</h3>
           <p>A growing library of playbooks, checklists, and session breakdowns — free to every member.</p>
         </div>
-        <div class="f-card has-banner reveal" style="--bg-a:140deg;--bg-c1:rgba(103,154,203,.10);--bg-c2:rgba(7,21,43,.65)">
-          <div class="card-banner"><span class="glyph-bg">◐</span><span class="glyph-fg">◐</span></div>
+        <div class="f-card has-banner has-anim reveal" style="--bg-a:140deg;--bg-c1:rgba(103,154,203,.10);--bg-c2:rgba(7,21,43,.65)">
+          <div class="card-banner">
+            <svg class="anim-svg anim-mentor" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <!-- Connection line between avatars (with flowing dashes) -->
+              <path class="conn" d="M126,90 Q160,68 194,90"
+                    fill="none" stroke="#7ae0ff" stroke-width="1.4"
+                    stroke-linecap="round" stroke-dasharray="3 4"/>
+              <!-- Pulse pellet that travels along the line -->
+              <circle class="pellet" cx="0" cy="0" r="3" fill="#dffaff"/>
+              <!-- Left avatar -->
+              <g class="avatar av-l">
+                <circle cx="100" cy="90" r="24" fill="rgba(122,224,255,.10)"
+                        stroke="rgba(122,224,255,.55)" stroke-width="1.2"/>
+                <!-- Head -->
+                <circle cx="100" cy="84" r="6" fill="none"
+                        stroke="#7ae0ff" stroke-width="1.4"/>
+                <!-- Shoulders -->
+                <path d="M88,103 a 12,10 0 0 1 24,0"
+                      fill="none" stroke="#7ae0ff" stroke-width="1.4" stroke-linecap="round"/>
+              </g>
+              <!-- Right avatar -->
+              <g class="avatar av-r">
+                <circle cx="220" cy="90" r="24" fill="rgba(122,224,255,.10)"
+                        stroke="rgba(122,224,255,.55)" stroke-width="1.2"/>
+                <circle cx="220" cy="84" r="6" fill="none"
+                        stroke="#7ae0ff" stroke-width="1.4"/>
+                <path d="M208,103 a 12,10 0 0 1 24,0"
+                      fill="none" stroke="#7ae0ff" stroke-width="1.4" stroke-linecap="round"/>
+              </g>
+            </svg>
+          </div>
           <h3>Mentorship</h3>
           <p>Structured peer mentorship groups matched by experience level and timezone.</p>
         </div>
-        <div class="f-card has-banner reveal" style="--bg-a:160deg;--bg-c1:rgba(255,122,155,.10);--bg-c2:rgba(7,21,43,.65)">
-          <div class="card-banner"><span class="glyph-bg">◇</span><span class="glyph-fg">◇</span></div>
+        <div class="f-card has-banner has-anim reveal" style="--bg-a:160deg;--bg-c1:rgba(255,122,155,.10);--bg-c2:rgba(7,21,43,.65)">
+          <div class="card-banner">
+            <svg class="anim-svg anim-alert" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <!-- Phone (subtle wobble) -->
+              <g class="phone">
+                <!-- Phone body -->
+                <rect x="135" y="28" width="50" height="120" rx="9"
+                      fill="rgba(7,21,43,.7)" stroke="rgba(122,224,255,.6)" stroke-width="1.4"/>
+                <!-- Screen -->
+                <rect x="139" y="36" width="42" height="100" rx="3"
+                      fill="rgba(122,224,255,.06)" stroke="rgba(122,224,255,.20)" stroke-width=".8"/>
+                <!-- Notch -->
+                <rect x="152" y="32" width="16" height="3" rx="1.5" fill="rgba(122,224,255,.5)"/>
+                <!-- Home indicator -->
+                <rect x="150" y="142" width="20" height="2" rx="1" fill="rgba(122,224,255,.4)"/>
+                <!-- Notification banner inside screen -->
+                <rect x="143" y="60" width="34" height="14" rx="2"
+                      fill="rgba(255,122,155,.18)" stroke="rgba(255,122,155,.6)" stroke-width=".7"/>
+                <circle cx="148" cy="67" r="2" fill="#ff7a9b"/>
+                <rect x="152" y="63" width="22" height="2" rx="1" fill="rgba(255,200,210,.85)"/>
+                <rect x="152" y="69" width="16" height="1.6" rx=".8" fill="rgba(255,200,210,.55)"/>
+                <!-- Mini chart on screen for context -->
+                <polyline points="143,108 152,102 161,106 170,98 177,104"
+                          fill="none" stroke="rgba(108,243,180,.7)" stroke-width="1" stroke-linejoin="round"/>
+                <!-- Notification badge (top-right corner of phone body) -->
+                <circle cx="184" cy="32" r="5" fill="#ff7a9b" class="badge"/>
+              </g>
+              <!-- Notification ripple rings emanating from the badge -->
+              <g class="ripples" fill="none" stroke="#ff7a9b" stroke-width="1.4">
+                <circle cx="184" cy="32" r="6" class="ripple rp1"/>
+                <circle cx="184" cy="32" r="6" class="ripple rp2"/>
+                <circle cx="184" cy="32" r="6" class="ripple rp3"/>
+              </g>
+            </svg>
+          </div>
           <h3>Signal Alerts</h3>
           <p>Instant push and mobile alerts for every call — no alert fatigue, no noise.</p>
         </div>
-        <div class="f-card has-banner reveal" style="--bg-a:130deg;--bg-c1:rgba(122,224,255,.10);--bg-c2:rgba(7,21,43,.65)">
-          <div class="card-banner"><span class="glyph-bg">✦</span><span class="glyph-fg">✦</span></div>
+        <div class="f-card has-banner has-anim reveal" style="--bg-a:130deg;--bg-c1:rgba(122,224,255,.10);--bg-c2:rgba(7,21,43,.65)">
+          <div class="card-banner">
+            <svg class="anim-svg anim-cal" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <!-- Calendar card body -->
+              <rect x="92" y="24" width="136" height="132" rx="8"
+                    fill="rgba(7,21,43,.7)" stroke="rgba(122,224,255,.45)" stroke-width="1.2"/>
+              <!-- Calendar binding tabs at top -->
+              <line x1="116" y1="20" x2="116" y2="34" stroke="#7ae0ff" stroke-width="2.4" stroke-linecap="round"/>
+              <line x1="204" y1="20" x2="204" y2="34" stroke="#7ae0ff" stroke-width="2.4" stroke-linecap="round"/>
+              <!-- Header bar -->
+              <rect x="92" y="40" width="136" height="14" fill="rgba(122,224,255,.10)"/>
+              <rect x="100" y="44" width="40" height="3" rx="1.5" fill="rgba(190,222,245,.65)"/>
+              <rect x="200" y="44" width="20" height="3" rx="1.5" fill="rgba(190,222,245,.35)"/>
+              <!-- Day-of-week row (small marks) -->
+              <g fill="rgba(190,222,245,.4)">
+                <rect x="100" y="60" width="10" height="2" rx="1"/>
+                <rect x="119" y="60" width="10" height="2" rx="1"/>
+                <rect x="138" y="60" width="10" height="2" rx="1"/>
+                <rect x="157" y="60" width="10" height="2" rx="1"/>
+                <rect x="176" y="60" width="10" height="2" rx="1"/>
+                <rect x="195" y="60" width="10" height="2" rx="1"/>
+                <rect x="214" y="60" width="6"  height="2" rx="1"/>
+              </g>
+              <!-- Date grid: 5 rows × 7 cols. Cells are tiny dots. Some have events. -->
+              <g class="dates" fill="rgba(190,222,245,.25)">
+                <!-- Row 1 -->
+                <circle cx="105" cy="78" r="2"/><circle cx="124" cy="78" r="2"/><circle cx="143" cy="78" r="2"/><circle cx="162" cy="78" r="2"/><circle cx="181" cy="78" r="2"/><circle cx="200" cy="78" r="2"/><circle cx="219" cy="78" r="2"/>
+                <!-- Row 2 -->
+                <circle cx="105" cy="92" r="2"/><circle cx="124" cy="92" r="2"/><circle cx="143" cy="92" r="2"/><circle cx="162" cy="92" r="2"/><circle cx="181" cy="92" r="2"/><circle cx="200" cy="92" r="2"/><circle cx="219" cy="92" r="2"/>
+                <!-- Row 3 -->
+                <circle cx="105" cy="106" r="2"/><circle cx="124" cy="106" r="2"/><circle cx="143" cy="106" r="2"/><circle cx="162" cy="106" r="2"/><circle cx="181" cy="106" r="2"/><circle cx="200" cy="106" r="2"/><circle cx="219" cy="106" r="2"/>
+                <!-- Row 4 -->
+                <circle cx="105" cy="120" r="2"/><circle cx="124" cy="120" r="2"/><circle cx="143" cy="120" r="2"/><circle cx="162" cy="120" r="2"/><circle cx="181" cy="120" r="2"/><circle cx="200" cy="120" r="2"/><circle cx="219" cy="120" r="2"/>
+                <!-- Row 5 -->
+                <circle cx="105" cy="134" r="2"/><circle cx="124" cy="134" r="2"/><circle cx="143" cy="134" r="2"/><circle cx="162" cy="134" r="2"/><circle cx="181" cy="134" r="2"/>
+              </g>
+              <!-- Highlighted "event" dates: bigger, pulsing -->
+              <g class="events" fill="#7ae0ff">
+                <circle cx="143" cy="92"  r="3.4" class="event e1"/>
+                <circle cx="200" cy="106" r="3.4" class="event e2"/>
+                <circle cx="124" cy="120" r="3.4" class="event e3"/>
+                <circle cx="181" cy="134" r="3.4" class="event e4"/>
+              </g>
+              <!-- Today indicator: ring around one date -->
+              <g class="today">
+                <circle cx="162" cy="106" r="6.5" fill="none"
+                        stroke="#7ae0ff" stroke-width="1.4" class="today-ring"/>
+                <circle cx="162" cy="106" r="2.4" fill="#dffaff"/>
+              </g>
+            </svg>
+          </div>
           <h3>Monthly Events</h3>
           <p>Live Q&amp;As, market outlooks, and community challenges hosted by the GV analyst desk.</p>
         </div>
