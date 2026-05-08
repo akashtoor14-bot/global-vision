@@ -512,11 +512,11 @@
       -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       mask-composite:exclude;-webkit-mask-composite:xor;padding:1px;
     }
-    .f-card:hover::before{opacity:1}
-    .f-card:hover{
-      transform:translateY(-6px);
+    .f-card:hover::before,.f-card.glow::before{opacity:1}
+    .f-card:hover,.f-card.glow{
+      transform:translateY(-6px) scale(1.04);
       border-color:var(--cyan);
-      box-shadow:0 24px 50px rgba(0,0,0,.4),0 0 0 1px rgba(122,224,255,.35);
+      box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.5);
     }
     .f-card.has-banner:hover .card-banner .glyph-fg{transform:scale(1.12)}
     /* Community cards get a subtle scale-up on hover (Primeverse-style) */
@@ -1040,11 +1040,12 @@
       -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       mask-composite:exclude;-webkit-mask-composite:xor;padding:1px;
     }
-    .level-card:hover::before{opacity:1}
+    .level-card:hover::before,.level-card.glow::before{opacity:1}
     .level-card > *{position:relative;z-index:1}
-    .level-card:hover{
-      transform:translateY(-6px);
-      box-shadow:0 24px 45px rgba(0,0,0,.4);
+    .level-card:hover,.level-card.glow{
+      transform:translateY(-6px) scale(1.04);
+      border-color:var(--cyan);
+      box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.5);
     }
     .level-card .badge-num{
       width:44px;height:44px;border-radius:50%;
@@ -1192,8 +1193,10 @@
       .meta-card span{font-size:9.5px;letter-spacing:1px}
 
       /* Disable backdrop-filter on mobile — it's the #1 paint cost on
-         phones. Use solid (slightly more opaque) backgrounds instead. */
-      .site-header,.mobile-menu,.modal,.f-card,.meta-card,.hud-card,
+         phones. Use solid (slightly more opaque) backgrounds instead.
+         .f-card is intentionally excluded so feature cards keep the
+         glass look and visually match the academy level-cards. */
+      .site-header,.mobile-menu,.modal,.meta-card,.hud-card,
       .dashboard,.signals-list,.l-card,.cta-banner{
         backdrop-filter:none !important;-webkit-backdrop-filter:none !important;
       }
@@ -2184,6 +2187,38 @@
       });
     }, { threshold:.12, rootMargin:'0px 0px -40px 0px' });
     document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+    /* ---------- Card glow: only the card nearest the trigger line glows ---------- */
+    if(!window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+      const glowCards = Array.from(document.querySelectorAll('.f-card, .level-card'));
+      let lastGlow = null;
+      function updateGlow(){
+        const targetY = window.innerHeight * 0.45;
+        const tolerance = window.innerHeight * 0.20;
+        let nearest = null;
+        let nearestDist = Infinity;
+        glowCards.forEach(el=>{
+          const rect = el.getBoundingClientRect();
+          const cardCenter = rect.top + rect.height / 2;
+          const dist = Math.abs(cardCenter - targetY);
+          if(dist > tolerance) return;
+          if(dist < nearestDist){ nearestDist = dist; nearest = el; }
+        });
+        if(nearest !== lastGlow){
+          if(lastGlow) lastGlow.classList.remove('glow');
+          if(nearest) nearest.classList.add('glow');
+          lastGlow = nearest;
+        }
+      }
+      let glowRaf = null;
+      function onGlowScroll(){
+        if(glowRaf) return;
+        glowRaf = requestAnimationFrame(()=>{ updateGlow(); glowRaf = null; });
+      }
+      window.addEventListener('scroll', onGlowScroll, { passive: true });
+      window.addEventListener('resize', updateGlow);
+      updateGlow();
+    }
 
     /* ---------- Animated number counters ---------- */
     const counters = document.querySelectorAll('[data-count]');
