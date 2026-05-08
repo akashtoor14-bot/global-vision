@@ -119,10 +119,56 @@
     .nav-cta{display:flex;gap:.65rem;align-items:center}
     .nav-cta .btn{padding:.65rem 1.15rem;font-size:13px}
 
+    /* ---------- Mobile menu (hamburger + drawer) ---------- */
+    .nav-toggle{
+      display:none;
+      width:42px;height:42px;padding:0;
+      background:transparent;border:1px solid rgba(190,222,245,.18);
+      border-radius:10px;cursor:pointer;
+      flex-direction:column;align-items:center;justify-content:center;gap:5px;
+      transition:border-color .2s var(--ease),background .2s var(--ease);
+    }
+    .nav-toggle:hover{border-color:rgba(122,224,255,.45);background:rgba(122,224,255,.06)}
+    .nav-toggle span{
+      display:block;width:18px;height:2px;background:#dfeaf6;border-radius:2px;
+      transition:transform .25s var(--ease),opacity .2s var(--ease);
+    }
+    .nav-toggle[aria-expanded="true"] span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+    .nav-toggle[aria-expanded="true"] span:nth-child(2){opacity:0}
+    .nav-toggle[aria-expanded="true"] span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+    .mobile-menu{
+      display:none;
+      position:absolute;top:100%;left:0;right:0;
+      background:rgba(6,14,30,.96);
+      backdrop-filter:blur(18px) saturate(180%);
+      -webkit-backdrop-filter:blur(18px) saturate(180%);
+      border-bottom:1px solid rgba(103,154,203,.18);
+      padding:1.25rem 1.5rem 1.5rem;
+      transform:translateY(-12px);opacity:0;pointer-events:none;
+      transition:transform .3s var(--ease),opacity .25s var(--ease);
+    }
+    .mobile-menu.open{transform:translateY(0);opacity:1;pointer-events:auto}
+    .mobile-menu-links{display:flex;flex-direction:column;gap:.25rem;margin-bottom:1rem}
+    .mobile-menu-links a{
+      display:block;padding:.85rem .25rem;font-size:15px;font-weight:500;color:#c8d3e3;
+      border-bottom:1px solid rgba(103,154,203,.08);
+    }
+    .mobile-menu-links a:hover,.mobile-menu-links a:active{color:#fff}
+    .mobile-menu-login{width:100%;justify-content:center;margin-top:.5rem}
+
     @media (max-width:768px){
-      .back-link span.lbl{display:none}
+      .back-link{display:none}
       .logo img{height:36px}
       .nav{padding:.85rem 1.25rem}
+      .nav-cta .nav-login{display:none}
+      .nav-toggle{display:flex}
+      .mobile-menu{display:block}
+      .site-header,.mobile-menu{
+        backdrop-filter:none !important;-webkit-backdrop-filter:none !important;
+      }
+      .site-header{background:rgba(6,14,30,.92)}
+      .mobile-menu{background:rgba(6,14,30,.98)}
     }
 
     /* ============================================================
@@ -490,10 +536,19 @@
       </a>
       <a href="index.html" class="back-link"><span class="arrow">←</span><span class="lbl">Back to Site</span></a>
       <div class="nav-cta">
-        <a href="https://portal.globalv.me" target="_blank" rel="noopener noreferrer" class="btn btn-ghost">Login</a>
+        <a href="https://portal.globalv.me" target="_blank" rel="noopener noreferrer" class="btn btn-ghost nav-login">Login</a>
         <a href="#" class="btn btn-neon" data-open-modal>Join Free <span class="arrow">→</span></a>
+        <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="mobileMenu">
+          <span></span><span></span><span></span>
+        </button>
       </div>
     </nav>
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+      <ul class="mobile-menu-links">
+        <li><a href="index.html">← Back to Site</a></li>
+      </ul>
+      <a href="https://portal.globalv.me" target="_blank" rel="noopener noreferrer" class="btn btn-ghost mobile-menu-login">Login</a>
+    </div>
   </header>
 
   <!-- PAGE HERO -->
@@ -695,6 +750,22 @@
 
   <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    /* ---------- Mobile menu ---------- */
+    const navToggle = document.getElementById('navToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    function setMobileMenu(open){
+      navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      mobileMenu.classList.toggle('open', open);
+      mobileMenu.setAttribute('aria-hidden', open ? 'false' : 'true');
+    }
+    navToggle.addEventListener('click', ()=>{
+      const open = navToggle.getAttribute('aria-expanded') !== 'true';
+      setMobileMenu(open);
+    });
+    mobileMenu.querySelectorAll('a').forEach(a=>{
+      a.addEventListener('click', ()=>setMobileMenu(false));
+    });
 
     /* ---------- Stars (space theme) ---------- */
     function populateStars(container, count){
