@@ -538,6 +538,47 @@
     .f-card.has-banner > h3{padding:1.5rem 1.6rem 0;margin-bottom:.55rem}
     .f-card.has-banner > p {padding:0 1.6rem 1.6rem}
 
+    /* Animated SVG illustration — base styles + per-illustration animations */
+    .anim-svg{
+      position:absolute;inset:0;width:100%;height:100%;
+      filter:drop-shadow(0 0 12px rgba(122,224,255,.18));
+    }
+    /* When a card has an animated illustration, hide the static glyph */
+    .f-card.has-anim .glyph-bg,.f-card.has-anim .glyph-fg{display:none}
+
+    /* ---- Chat-bubble illustration (Community Chat) ---- */
+    /* Each bubble pops in (scale+opacity) then gently floats forever */
+    .anim-chat .bubble{
+      transform-origin:center;transform-box:fill-box;
+      opacity:0;animation:chatPopIn .55s var(--ease-out) forwards, chatFloat 4.5s ease-in-out infinite 1.2s;
+    }
+    .anim-chat .bubble.bub1{animation-delay:.2s, 1.2s}
+    .anim-chat .bubble.bub2{animation-delay:1.0s, 2.0s}
+    .anim-chat .bubble.bub3{animation-delay:1.8s, 2.8s}
+    @keyframes chatPopIn{
+      0%  {opacity:0;transform:translateY(8px) scale(.92)}
+      100%{opacity:1;transform:translateY(0) scale(1)}
+    }
+    @keyframes chatFloat{
+      0%,100%{transform:translateY(0)}
+      50%    {transform:translateY(-2.5px)}
+    }
+    /* Typing-indicator dots — pulse opacity in sequence */
+    .anim-chat .dot{
+      transform-origin:center;transform-box:fill-box;
+      animation:chatDotPulse 1.2s ease-in-out infinite;
+    }
+    .anim-chat .dot.d2{animation-delay:.20s}
+    .anim-chat .dot.d3{animation-delay:.40s}
+    @keyframes chatDotPulse{
+      0%,100%{opacity:.30;transform:translateY(0)}
+      50%    {opacity:1;  transform:translateY(-2px)}
+    }
+
+    @media (prefers-reduced-motion: reduce){
+      .anim-chat .bubble,.anim-chat .dot{animation:none;opacity:1}
+    }
+
     /* Light feature card (light sections) */
     .l-card{
       position:relative;background:#fff;border:1px solid var(--line);
@@ -1431,32 +1472,57 @@
       </div>
 
       <div class="community-grid">
-        <div class="f-card has-banner reveal" style="--bg-a:135deg;--bg-c1:rgba(122,224,255,.22);--bg-c2:rgba(26,61,108,.55)">
-          <div class="card-banner"><span class="glyph-bg">◉</span><span class="glyph-fg">◉</span></div>
+        <div class="f-card has-banner has-anim reveal" style="--bg-a:135deg;--bg-c1:rgba(122,224,255,.10);--bg-c2:rgba(7,21,43,.65)">
+          <div class="card-banner">
+            <svg class="anim-svg anim-chat" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <!-- Received message (top left) -->
+              <g class="bubble bub1">
+                <path d="M30,28 h120 a8,8 0 0 1 8,8 v22 a8,8 0 0 1 -8,8 h-110 l-12,8 v-8 h-2 a8,8 0 0 1 -8,-8 v-22 a8,8 0 0 1 8,-8 z"
+                      fill="rgba(190,222,245,.10)" stroke="rgba(190,222,245,.35)" stroke-width="1"/>
+                <rect x="38" y="40" width="76" height="3" rx="1.5" fill="rgba(190,222,245,.55)"/>
+                <rect x="38" y="49" width="56" height="3" rx="1.5" fill="rgba(190,222,245,.35)"/>
+              </g>
+              <!-- Sent message (mid right) -->
+              <g class="bubble bub2">
+                <path d="M170,80 h112 a8,8 0 0 1 8,8 v22 a8,8 0 0 1 -8,8 h-2 v8 l-12,-8 h-98 a8,8 0 0 1 -8,-8 v-22 a8,8 0 0 1 8,-8 z"
+                      fill="rgba(122,224,255,.18)" stroke="rgba(122,224,255,.55)" stroke-width="1"/>
+                <rect x="186" y="92"  width="68" height="3" rx="1.5" fill="rgba(223,250,255,.7)"/>
+                <rect x="186" y="101" width="48" height="3" rx="1.5" fill="rgba(223,250,255,.45)"/>
+              </g>
+              <!-- Typing indicator (bottom left) -->
+              <g class="bubble bub3">
+                <path d="M30,138 h60 a8,8 0 0 1 8,8 v18 a8,8 0 0 1 -8,8 h-50 l-12,8 v-8 h-2 a8,8 0 0 1 -8,-8 v-18 a8,8 0 0 1 8,-8 z"
+                      fill="rgba(190,222,245,.08)" stroke="rgba(190,222,245,.30)" stroke-width="1"/>
+                <circle cx="42" cy="155" r="2.6" fill="#7ae0ff" class="dot d1"/>
+                <circle cx="58" cy="155" r="2.6" fill="#7ae0ff" class="dot d2"/>
+                <circle cx="74" cy="155" r="2.6" fill="#7ae0ff" class="dot d3"/>
+              </g>
+            </svg>
+          </div>
           <h3>Community Chat</h3>
           <p>A 24/5 chat where every member can share trades, ask questions, and learn together across every major session.</p>
         </div>
-        <div class="f-card has-banner reveal" style="--bg-a:120deg;--bg-c1:rgba(108,243,180,.20);--bg-c2:rgba(26,61,108,.55)">
+        <div class="f-card has-banner reveal" style="--bg-a:120deg;--bg-c1:rgba(108,243,180,.10);--bg-c2:rgba(7,21,43,.65)">
           <div class="card-banner"><span class="glyph-bg">◎</span><span class="glyph-fg">◎</span></div>
           <h3>Live Rooms</h3>
           <p>Daily voice rooms with senior analysts during London, New York, and Asia session opens.</p>
         </div>
-        <div class="f-card has-banner reveal" style="--bg-a:150deg;--bg-c1:rgba(190,222,245,.18);--bg-c2:rgba(15,38,71,.65)">
+        <div class="f-card has-banner reveal" style="--bg-a:150deg;--bg-c1:rgba(190,222,245,.10);--bg-c2:rgba(7,21,43,.65)">
           <div class="card-banner"><span class="glyph-bg">◈</span><span class="glyph-fg">◈</span></div>
           <h3>Resource Vault</h3>
           <p>A growing library of playbooks, checklists, and session breakdowns — free to every member.</p>
         </div>
-        <div class="f-card has-banner reveal" style="--bg-a:140deg;--bg-c1:rgba(103,154,203,.25);--bg-c2:rgba(7,21,43,.65)">
+        <div class="f-card has-banner reveal" style="--bg-a:140deg;--bg-c1:rgba(103,154,203,.10);--bg-c2:rgba(7,21,43,.65)">
           <div class="card-banner"><span class="glyph-bg">◐</span><span class="glyph-fg">◐</span></div>
           <h3>Mentorship</h3>
           <p>Structured peer mentorship groups matched by experience level and timezone.</p>
         </div>
-        <div class="f-card has-banner reveal" style="--bg-a:160deg;--bg-c1:rgba(255,122,155,.18);--bg-c2:rgba(15,38,71,.6)">
+        <div class="f-card has-banner reveal" style="--bg-a:160deg;--bg-c1:rgba(255,122,155,.10);--bg-c2:rgba(7,21,43,.65)">
           <div class="card-banner"><span class="glyph-bg">◇</span><span class="glyph-fg">◇</span></div>
           <h3>Signal Alerts</h3>
           <p>Instant push and mobile alerts for every call — no alert fatigue, no noise.</p>
         </div>
-        <div class="f-card has-banner reveal" style="--bg-a:130deg;--bg-c1:rgba(122,224,255,.20);--bg-c2:rgba(26,61,108,.5)">
+        <div class="f-card has-banner reveal" style="--bg-a:130deg;--bg-c1:rgba(122,224,255,.10);--bg-c2:rgba(7,21,43,.65)">
           <div class="card-banner"><span class="glyph-bg">✦</span><span class="glyph-fg">✦</span></div>
           <h3>Monthly Events</h3>
           <p>Live Q&amp;As, market outlooks, and community challenges hosted by the GV analyst desk.</p>
