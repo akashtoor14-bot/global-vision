@@ -2579,10 +2579,26 @@
     const joinModal   = document.getElementById('joinModal');
     const modalClose  = document.getElementById('modalClose');
 
+    /* Lazy-load the GoHighLevel form bootstrap. Loading it on initial
+       page render injects global side effects that break hover at the
+       viewport centre, so we defer it until the user actually opens
+       the Join modal. After first open the script stays loaded for
+       the rest of the session. */
+    let _ghlFormScriptLoaded = false;
+    function loadGHLFormScript(){
+      if(_ghlFormScriptLoaded) return;
+      _ghlFormScriptLoaded = true;
+      const s = document.createElement('script');
+      s.src = 'https://links.globalv.me/js/form_embed.js';
+      s.async = true;
+      document.body.appendChild(s);
+    }
+
     function openJoinModal(){
       joinModal.classList.add('open');
       joinModal.setAttribute('aria-hidden','false');
       document.body.style.overflow = 'hidden';
+      loadGHLFormScript();
     }
     function closeJoinModal(){
       joinModal.classList.remove('open');
