@@ -512,11 +512,23 @@
       -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       mask-composite:exclude;-webkit-mask-composite:xor;padding:1px;
     }
-    .f-card:hover::before,.f-card.glow::before{opacity:1}
-    .f-card:hover,.f-card.glow{
-      transform:translateY(-6px) scale(1.04) !important;
-      border-color:rgba(122,224,255,.6);
-      box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.3);
+    /* Desktop with mouse: trigger via :hover only */
+    @media (hover:hover){
+      .f-card:hover::before{opacity:1}
+      .f-card:hover{
+        transform:translateY(-6px) scale(1.04) !important;
+        border-color:rgba(122,224,255,.6);
+        box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.3);
+      }
+    }
+    /* Touch devices: trigger via .glow class (set by scroll JS) only */
+    @media (hover:none){
+      .f-card.glow::before{opacity:1}
+      .f-card.glow{
+        transform:translateY(-6px) scale(1.04) !important;
+        border-color:rgba(122,224,255,.6);
+        box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.3);
+      }
     }
     .f-card.has-banner:hover .card-banner .glyph-fg{transform:scale(1.12)}
     /* Community cards get a subtle scale-up on hover (Primeverse-style) */
@@ -1041,12 +1053,24 @@
       -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       mask-composite:exclude;-webkit-mask-composite:xor;padding:1px;
     }
-    .level-card:hover::before,.level-card.glow::before{opacity:1}
     .level-card > *{position:relative;z-index:1}
-    .level-card:hover,.level-card.glow{
-      transform:translateY(-6px) scale(1.04) !important;
-      border-color:rgba(122,224,255,.6);
-      box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.3);
+    /* Desktop with mouse: trigger via :hover only */
+    @media (hover:hover){
+      .level-card:hover::before{opacity:1}
+      .level-card:hover{
+        transform:translateY(-6px) scale(1.04) !important;
+        border-color:rgba(122,224,255,.6);
+        box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.3);
+      }
+    }
+    /* Touch devices: trigger via .glow class only */
+    @media (hover:none){
+      .level-card.glow::before{opacity:1}
+      .level-card.glow{
+        transform:translateY(-6px) scale(1.04) !important;
+        border-color:rgba(122,224,255,.6);
+        box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.3);
+      }
     }
     .level-card .badge-num{
       width:44px;height:44px;border-radius:50%;
