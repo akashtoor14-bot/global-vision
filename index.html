@@ -1158,16 +1158,10 @@
       .mobile-menu{display:block}
       .hero{padding:3.5rem 1rem 3.5rem}
       .hero .sub{font-size:16px}
-      /* Keep 2-up grids on mobile so the page feels closer to desktop
-         instead of an endless single-column scroll. Padding/gaps are
-         tightened so cards still breathe. */
-      .grid-3,.grid-2,.community-grid{grid-template-columns:repeat(2,1fr);gap:.75rem}
-      /* Orphan handler: when an odd-numbered grid (e.g. 3 cards) ends with
-         a single card alone in its row, stretch it across both columns so
-         the layout looks balanced instead of leaving empty space on one side. */
-      .grid-3 > *:nth-child(odd):last-child,
-      .grid-2 > *:nth-child(odd):last-child,
-      .community-grid > *:nth-child(odd):last-child{grid-column:1 / -1}
+      /* Cards stack single-column on mobile for max readability. Stats
+         row stays 3-up since the small stat cards are info-dense, not
+         content. */
+      .grid-3,.grid-2,.community-grid{grid-template-columns:1fr;gap:1rem}
       .stats-row{grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:2rem}
       .stat-box{padding:.8rem .4rem;border-radius:11px}
       .stat-box .num{font-size:19px;letter-spacing:-.3px}
