@@ -1429,10 +1429,10 @@
       const camera = new THREE.PerspectiveCamera(50, 1, 1, 2000);
 
       // Aim camera at the configured initial position (Hong Kong by default).
-      // camDist tuned so the globe fills the canvas (matches the original
-      // Earth's apparent size).
+      // camDist tuned so the globe + atmosphere ring both fit comfortably
+      // inside the 440px canvas (no edge clipping).
       const initPos = globeConfig.initialPosition;
-      const camDist = 220;
+      const camDist = 280;
       const initPhi   = (90 - initPos.lat) * Math.PI / 180;
       const initTheta = initPos.lng * Math.PI / 180;
       camera.position.set(
