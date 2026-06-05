@@ -1425,11 +1425,14 @@
       renderer.setSize(size, size, false);
 
       const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(50, 1, 180, 1800);
+      // Wide near/far range so the closer camera does not clip the globe.
+      const camera = new THREE.PerspectiveCamera(50, 1, 1, 2000);
 
       // Aim camera at the configured initial position (Hong Kong by default).
+      // camDist tuned so the globe fills the canvas (matches the original
+      // Earth's apparent size).
       const initPos = globeConfig.initialPosition;
-      const camDist = 300;
+      const camDist = 220;
       const initPhi   = (90 - initPos.lat) * Math.PI / 180;
       const initTheta = initPos.lng * Math.PI / 180;
       camera.position.set(
