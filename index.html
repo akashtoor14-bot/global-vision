@@ -1372,20 +1372,25 @@
       .modal h3{font-size:20px}
     }
   </style>
-  <!-- three.js is heavy (~670KB) and only used by the hero Earth.
-       Skip it entirely on mobile/touch devices and load with `defer` on
-       desktop so it never blocks initial paint. The Earth init script
-       below also no-ops if THREE isn't present. -->
+  <!-- three.js + three-globe are heavy and only used by the hero globe.
+       Skip both on mobile/touch and load them with `defer` on desktop so
+       they never block initial paint. The init below no-ops if either
+       library isn't present. -->
   <script>
     (function(){
       var isMobile = window.matchMedia('(max-width:768px)').matches;
       var prefersReduced = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-      if(isMobile || prefersReduced) return; // skip three.js on mobile + reduced-motion
-      var s = document.createElement('script');
-      s.src = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js';
-      s.defer = true;
-      s.onload = function(){ if (window.GVInitEarth) window.GVInitEarth(); };
-      document.head.appendChild(s);
+      if(isMobile || prefersReduced) return;
+      var three = document.createElement('script');
+      three.src = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js';
+      three.defer = true;
+      three.onload = function(){
+        var tg = document.createElement('script');
+        tg.src = 'https://cdn.jsdelivr.net/npm/three-globe@2.31.1/dist/three-globe.min.js';
+        tg.onload = function(){ if (window.GVInitEarth) window.GVInitEarth(); };
+        document.head.appendChild(tg);
+      };
+      document.head.appendChild(three);
     })();
   </script>
 </head>
@@ -2340,28 +2345,20 @@
       populateStars(document.getElementById('starsBg'), count);
     })();
 
-    /* ---------- 3D Earth (three.js) ----------------------------------------
-       Layered architecture (separable — visual layers do NOT alter geometry):
-         1. Earth foundation  : accurate UV-mapped sphere + NASA Blue Marble.
-                                Mathematically exact. No styling baked in.
-         2. Continent outlines: edge-detection shader on the same texture,
-                                rendered as a thin overlay sphere, additive blend.
-         3. Atmosphere halo   : Fresnel rim shader on a backside sphere.
-         4. Particle field    : Points scattered in space around the globe.
-         5. Marker group      : empty group parented to earth — future home of
-                                location dots, network arcs, etc.
+    /* ---------- 3D Earth (three.js + three-globe) ------------------------
+       Replaced the old NASA Blue Marble + custom shader Earth with the
+       three-globe library — same library GitHub uses for its homepage
+       globe. Dotted country polygons + animated arcs between cities
+       representing the Global Vision community. Brand-matched colors.
 
        Lat/lng convention (window.GVLatLngToVec3):
          lat in [-90, 90]   (North positive)
          lng in [-180, 180] (East positive)
-         With a standard equirectangular Blue Marble texture, the prime
-         meridian (Greenwich, lng=0) lands at +X axis under three.js's default
-         SphereGeometry UV mapping.
-    ----------------------------------------------------------------------- */
+    --------------------------------------------------------------------- */
     window.GVInitEarth = function initEarth(){
       if (window.__gvEarthInited) return;
       const canvas = document.getElementById('earthCanvas');
-      if(!canvas || typeof THREE === 'undefined') return;
+      if(!canvas || typeof THREE === 'undefined' || typeof ThreeGlobe === 'undefined') return;
       window.__gvEarthInited = true;
 
       const parent = canvas.parentElement;
@@ -2370,148 +2367,95 @@
       const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
       renderer.setSize(size, size, false);
-      if('outputColorSpace' in renderer) renderer.outputColorSpace = THREE.SRGBColorSpace;
 
-      const scene  = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100);
-      camera.position.set(0, 0, 5);
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 1000);
+      camera.position.z = 240;
 
-      // ---- 1. Earth foundation (accurate; styling is layered, not baked) ----
-      const EARTH_RADIUS = 1.55;
-      const tex = new THREE.TextureLoader().load('earth-texture.jpg');
-      if('SRGBColorSpace' in THREE) tex.colorSpace = THREE.SRGBColorSpace;
-      tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      // Lighting tuned for the dark-navy + cyan brand palette.
+      scene.add(new THREE.AmbientLight(0x38bdf8, 0.6));
+      const dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
+      dirLight.position.set(-800, 2000, 400);
+      scene.add(dirLight);
+      const cyanLight = new THREE.DirectionalLight(0x7ae0ff, 0.5);
+      cyanLight.position.set(-200, 500, 200);
+      scene.add(cyanLight);
 
-      const earth = new THREE.Mesh(
-        new THREE.SphereGeometry(EARTH_RADIUS, 96, 96),
-        new THREE.MeshStandardMaterial({
-          map: tex,
-          color: 0xb8d8f0,
-          roughness: 0.85,
-          metalness: 0.06,
-          emissive: 0x0a1f3d,
-          emissiveIntensity: 0.18
-        })
-      );
-      earth.rotation.z = 0.41; // 23.5° axial tilt
-      scene.add(earth);
+      // Community city points. Each renders as a small cyan dot on the
+      // globe surface (see pointsData below).
+      const CITIES = [
+        { lat: 14.5995, lng: 120.9842, label: 'Manila' },
+        { lat: 10.3157, lng: 123.8854, label: 'Cebu' },
+        { lat:  3.1390, lng: 101.6869, label: 'Kuala Lumpur' },
+        { lat: 43.6532, lng: -79.3832, label: 'Toronto' },
+        { lat: 49.2827, lng:-123.1207, label: 'Vancouver' },
+        { lat: 25.2048, lng:  55.2708, label: 'Dubai' },
+        { lat: 24.4539, lng:  54.3773, label: 'Abu Dhabi' },
+        { lat: 51.5074, lng:  -0.1278, label: 'London' },
+        { lat: 45.4642, lng:   9.1900, label: 'Milan' },
+        { lat:-23.5505, lng: -46.6333, label: 'Sao Paulo' }
+      ];
 
-      // ---- 2. Continent outlines (edge-detected coastlines, additive glow) ----
-      const outlineMat = new THREE.ShaderMaterial({
-        uniforms: {
-          map:       { value: tex },
-          glow:      { value: new THREE.Color(0x7ae0ff) },
-          texelSize: { value: new THREE.Vector2(1/2048, 1/1024) }
-        },
-        transparent: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-        vertexShader: `
-          varying vec2 vUv;
-          varying vec3 vNormalW;
-          varying vec3 vViewDir;
-          void main() {
-            vUv = uv;
-            vNormalW = normalize(mat3(modelMatrix) * normal);
-            vec4 mPos = modelMatrix * vec4(position, 1.0);
-            vViewDir = normalize(cameraPosition - mPos.xyz);
-            gl_Position = projectionMatrix * viewMatrix * mPos;
-          }
-        `,
-        fragmentShader: `
-          uniform sampler2D map;
-          uniform vec3 glow;
-          uniform vec2 texelSize;
-          varying vec2 vUv;
-          varying vec3 vNormalW;
-          varying vec3 vViewDir;
-          float lum(vec3 c){ return dot(c, vec3(0.299, 0.587, 0.114)); }
-          float landMask(vec2 uv){
-            return smoothstep(0.18, 0.24, lum(texture2D(map, uv).rgb));
-          }
-          void main() {
-            float l = landMask(vUv - vec2(texelSize.x, 0.0));
-            float r = landMask(vUv + vec2(texelSize.x, 0.0));
-            float u = landMask(vUv - vec2(0.0, texelSize.y));
-            float d = landMask(vUv + vec2(0.0, texelSize.y));
-            float edge = sqrt((r-l)*(r-l) + (d-u)*(d-u));
-            float coast = smoothstep(0.15, 0.55, edge);
-            float facing = max(dot(vNormalW, vViewDir), 0.0);
-            gl_FragColor = vec4(glow, coast * facing * 0.85);
-          }
-        `
+      // Distributed arc network — meaningful pairings within the community.
+      // Indices reference the CITIES array entries above.
+      const ARCS = [
+        [0, 2],  // Manila <-> Kuala Lumpur
+        [0, 5],  // Manila <-> Dubai
+        [0, 4],  // Manila <-> Vancouver
+        [1, 3],  // Cebu <-> Toronto
+        [5, 7],  // Dubai <-> London
+        [6, 8],  // Abu Dhabi <-> Milan
+        [7, 3],  // London <-> Toronto
+        [4, 2],  // Vancouver <-> Kuala Lumpur
+        [8, 9],  // Milan <-> Sao Paulo
+        [9, 3]   // Sao Paulo <-> Toronto
+      ].map(function(pair){
+        const a = CITIES[pair[0]], b = CITIES[pair[1]];
+        return {
+          startLat: a.lat, startLng: a.lng,
+          endLat:   b.lat, endLng:   b.lng
+        };
       });
-      const outlines = new THREE.Mesh(
-        new THREE.SphereGeometry(EARTH_RADIUS * 1.001, 128, 128),
-        outlineMat
-      );
-      earth.add(outlines); // rotates with earth -> stays geographically anchored
 
-      // ---- 3. Atmosphere halo (Fresnel rim, additive) ----
-      const atmosphereMat = new THREE.ShaderMaterial({
-        uniforms: { glow: { value: new THREE.Color(0x7ae0ff) } },
-        transparent: true,
-        depthWrite: false,
-        side: THREE.BackSide,
-        blending: THREE.AdditiveBlending,
-        vertexShader: `
-          varying vec3 vNormalW;
-          varying vec3 vViewDir;
-          void main() {
-            vNormalW = normalize(mat3(modelMatrix) * normal);
-            vec4 mPos = modelMatrix * vec4(position, 1.0);
-            vViewDir = normalize(cameraPosition - mPos.xyz);
-            gl_Position = projectionMatrix * viewMatrix * mPos;
-          }
-        `,
-        fragmentShader: `
-          uniform vec3 glow;
-          varying vec3 vNormalW;
-          varying vec3 vViewDir;
-          void main() {
-            float fresnel = pow(1.0 - max(dot(vNormalW, vViewDir), 0.0), 2.5);
-            gl_FragColor = vec4(glow, fresnel * 0.6);
-          }
-        `
-      });
-      const atmosphere = new THREE.Mesh(
-        new THREE.SphereGeometry(EARTH_RADIUS * 1.08, 64, 64),
-        atmosphereMat
-      );
-      scene.add(atmosphere); // not parented; stays fixed relative to camera
+      // Build the globe. Country polygons -> hex-dot mesh, atmosphere ring,
+      // points -> city markers, arcs -> animated connections.
+      const globe = new ThreeGlobe()
+        .showAtmosphere(true)
+        .atmosphereColor('#7ae0ff')
+        .atmosphereAltitude(0.18)
+        .hexPolygonResolution(3)
+        .hexPolygonMargin(0.7)
+        .hexPolygonColor(function(){ return 'rgba(190, 222, 245, 0.55)'; })
+        .pointsData(CITIES)
+        .pointAltitude(0.005)
+        .pointColor(function(){ return '#7ae0ff'; })
+        .pointRadius(0.45)
+        .arcsData(ARCS)
+        .arcColor(function(){ return '#7ae0ff'; })
+        .arcAltitude(0.35)
+        .arcStroke(0.45)
+        .arcDashLength(0.55)
+        .arcDashGap(2.5)
+        .arcDashInitialGap(function(){ return Math.random() * 5; })
+        .arcDashAnimateTime(2400);
 
-      // ---- 4. Particle field (data-effect dots in space) ----
-      const PCOUNT = 220;
-      const pPositions = new Float32Array(PCOUNT * 3);
-      for (let i = 0; i < PCOUNT; i++) {
-        const r = 2.4 + Math.random() * 1.6;
-        const theta = Math.random() * Math.PI * 2;
-        const phi = Math.acos(2 * Math.random() - 1);
-        pPositions[i*3]   = r * Math.sin(phi) * Math.cos(theta);
-        pPositions[i*3+1] = r * Math.sin(phi) * Math.sin(theta);
-        pPositions[i*3+2] = r * Math.cos(phi);
-      }
-      const pGeom = new THREE.BufferGeometry();
-      pGeom.setAttribute('position', new THREE.BufferAttribute(pPositions, 3));
-      const particles = new THREE.Points(pGeom, new THREE.PointsMaterial({
-        color: 0x7ae0ff,
-        size: 0.025,
-        transparent: true,
-        opacity: 0.55,
-        blending: THREE.AdditiveBlending,
-        depthWrite: false
-      }));
-      scene.add(particles);
+      // Match the globe body to the deep-space brand background.
+      const mat = globe.globeMaterial();
+      mat.color = new THREE.Color('#01040d');
+      mat.emissive = new THREE.Color('#01040d');
+      mat.emissiveIntensity = 0.12;
+      mat.shininess = 0.7;
 
-      // ---- Lighting ----
-      const sun = new THREE.DirectionalLight(0xddedff, 2.8);
-      sun.position.set(-0.7, 0.5, 2);
-      scene.add(sun);
-      scene.add(new THREE.AmbientLight(0x14305a, 0.32));
+      scene.add(globe);
 
-      // ---- Lat/lng -> world-space vector (foundation for marker placement) ----
+      // Fetch + apply country polygon data (dotted globe).
+      fetch('globe.json').then(function(r){ return r.json(); }).then(function(data){
+        globe.hexPolygonsData(data.features);
+      }).catch(function(){ /* fail silently — globe still rotates */ });
+
+      // ---- Lat/lng -> world-space vector (compat with the old API). ----
       window.GVLatLngToVec3 = function(lat, lng, radius){
-        const r = radius || EARTH_RADIUS;
+        const r = radius || 100; // three-globe default radius
         const phi   = (90 - lat) * Math.PI / 180;
         const theta = (lng + 180) * Math.PI / 180;
         return new THREE.Vector3(
@@ -2520,11 +2464,11 @@
            r * Math.sin(phi) * Math.sin(theta)
         );
       };
-      // Marker group (parented to earth so future dots ride along on rotation).
+      // Marker group parented to the globe (rides along with rotation).
       const markerGroup = new THREE.Group();
-      earth.add(markerGroup);
+      globe.add(markerGroup);
       window.GVMarkerGroup = markerGroup;
-      window.GVEarth = earth;
+      window.GVEarth = globe;
 
       // ---- Resize & animate ----
       function onResize(){
@@ -2536,17 +2480,16 @@
       let last = performance.now();
       function tick(now){
         const dt = (now - last) / 1000; last = now;
-        earth.rotation.y     += 0.10  * dt; // ~1 rotation / minute
-        particles.rotation.y -= 0.005 * dt; // slight counter-drift
+        globe.rotation.y += 0.06 * dt; // ~1 rotation per ~100s
         renderer.render(scene, camera);
         requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
     };
-    // Try to init right away (works if three.js is already loaded). The
-    // deferred three.js loader also calls this on its onload — both paths
-    // are idempotent thanks to __gvEarthInited.
-    if (typeof THREE !== 'undefined') window.GVInitEarth();
+    // Try to init right away (works if both libs are already loaded). The
+    // deferred loader chain also calls this on its onload — both paths are
+    // idempotent thanks to __gvEarthInited.
+    if (typeof THREE !== 'undefined' && typeof ThreeGlobe !== 'undefined') window.GVInitEarth();
 
     /* ---------- (Removed: fake ticker + price flicker — replaced by TradingView widgets) ---------- */
 
