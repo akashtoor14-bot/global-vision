@@ -1372,26 +1372,190 @@
       .modal h3{font-size:20px}
     }
   </style>
-  <!-- three.js + three-globe are heavy and only used by the hero globe.
-       Skip both on mobile/touch and load them with `defer` on desktop so
-       they never block initial paint. The init below no-ops if either
-       library isn't present. -->
-  <script>
-    (function(){
-      var isMobile = window.matchMedia('(max-width:768px)').matches;
-      var prefersReduced = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-      if(isMobile || prefersReduced) return;
-      var three = document.createElement('script');
-      three.src = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js';
-      three.defer = true;
-      three.onload = function(){
-        var tg = document.createElement('script');
-        tg.src = 'https://cdn.jsdelivr.net/npm/three-globe@2.31.1/dist/three-globe.min.js';
-        tg.onload = function(){ if (window.GVInitEarth) window.GVInitEarth(); };
-        document.head.appendChild(tg);
+  <!-- Aceternity GitHub Globe — vanilla JS port of the React template.
+       three.js + three-globe + OrbitControls loaded as ES modules via an
+       importmap. Desktop only (skipped on mobile/touch / reduced-motion);
+       `type="module"` defers implicitly so nothing blocks paint. -->
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+      "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/",
+      "three-globe": "https://cdn.jsdelivr.net/npm/three-globe@2.31.1/dist/three-globe.module.js"
+    }
+  }
+  </script>
+  <script type="module">
+    if (!window.matchMedia('(max-width:768px)').matches &&
+        !window.matchMedia('(prefers-reduced-motion:reduce)').matches) {
+      initAceternityGlobe();
+    }
+
+    async function initAceternityGlobe(){
+      const THREE = await import('three');
+      const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
+      const ThreeGlobe = (await import('three-globe')).default;
+
+      const canvas = document.getElementById('earthCanvas');
+      if (!canvas) return;
+
+      // Aceternity GitHub Globe — exact defaults from the template.
+      const globeConfig = {
+        pointSize: 4,
+        globeColor: '#062056',
+        showAtmosphere: true,
+        atmosphereColor: '#FFFFFF',
+        atmosphereAltitude: 0.1,
+        emissive: '#062056',
+        emissiveIntensity: 0.1,
+        shininess: 0.9,
+        polygonColor: 'rgba(255,255,255,0.7)',
+        ambientLight: '#38bdf8',
+        directionalLeftLight: '#ffffff',
+        directionalTopLight: '#ffffff',
+        pointLight: '#ffffff',
+        arcTime: 1000,
+        arcLength: 0.9,
+        rings: 1,
+        maxRings: 3,
+        autoRotate: true,
+        autoRotateSpeed: 0.5,
+        initialPosition: { lat: 22.3193, lng: 114.1694 }
       };
-      document.head.appendChild(three);
-    })();
+
+      // Multi-colored sample arcs styled to match the Aceternity demo.
+      const COLORS = ['#06b6d4', '#3b82f6', '#6366f1'];
+      const RAW_ARCS = [
+        [-19.885592, -43.951191,  -22.9068,  -43.1729,   1],
+        [ 28.6139,    77.209,       3.139,    101.6869,  1],
+        [-19.885592, -43.951191,   21.3099,  -157.8581,  1],
+        [  1.3521,   103.8198,     35.6762,   139.6503,  2],
+        [ 51.5074,    -0.1278,     39.9042,   116.4074,  2],
+        [-15.785493, -47.909029,   36.162809,-115.119411,2],
+        [-33.8688,   151.2093,     22.3193,   114.1694,  3],
+        [ 21.3099,  -157.8581,     40.7128,   -74.006,   3],
+        [-34.6037,   -58.3816,    -23.5505,   -46.6333,  3],
+        [ 30.0444,    31.2357,     41.0082,    28.9784,  4],
+        [ 25.2048,    55.2708,     26.8206,    30.8025,  4],
+        [ 19.076,     72.8777,     31.2304,   121.4737,  4],
+        [-33.448891, -70.669265,  -22.9068,   -43.1729,  5],
+        [ 51.5074,    -0.1278,     40.7128,   -74.006,   5],
+        [ 35.6762,   139.6503,     19.4326,   -99.1332,  5],
+        [ 41.9028,    12.4964,    -22.9068,   -43.1729,  6],
+        [ 28.6139,    77.209,       1.3521,   103.8198,  6],
+        [ 13.7563,   100.5018,    -33.8688,   151.2093,  6],
+        [ 55.7558,    37.6173,     41.9028,    12.4964,  7],
+        [  6.5244,     3.3792,     51.5074,    -0.1278,  7]
+      ];
+      const sampleArcs = RAW_ARCS.map((row, i) => ({
+        order: row[4],
+        startLat: row[0], startLng: row[1],
+        endLat:   row[2], endLng:   row[3],
+        arcAlt: 0.1 + (row[4] * 0.07),
+        color: COLORS[i % COLORS.length]
+      }));
+
+      // Rings emanate from the start of the first 10 arcs.
+      const ringsData = sampleArcs.slice(0, 10).map(a => ({
+        lat: a.startLat, lng: a.startLng, color: a.color
+      }));
+
+      const parent = canvas.parentElement;
+      let size = parent.getBoundingClientRect().width || 440;
+
+      const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setSize(size, size, false);
+
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(50, 1, 180, 1800);
+
+      // Aim camera at the configured initial position (Hong Kong by default).
+      const initPos = globeConfig.initialPosition;
+      const camDist = 300;
+      const initPhi   = (90 - initPos.lat) * Math.PI / 180;
+      const initTheta = initPos.lng * Math.PI / 180;
+      camera.position.set(
+        camDist * Math.sin(initPhi) * Math.cos(initTheta),
+        camDist * Math.cos(initPhi),
+        camDist * Math.sin(initPhi) * Math.sin(initTheta)
+      );
+      camera.lookAt(0, 0, 0);
+
+      // Lights — match Aceternity demo.
+      scene.add(new THREE.AmbientLight(globeConfig.ambientLight, 0.6));
+      const dirL = new THREE.DirectionalLight(globeConfig.directionalLeftLight, 1);
+      dirL.position.set(-400, 100, 400);
+      scene.add(dirL);
+      const dirT = new THREE.DirectionalLight(globeConfig.directionalTopLight, 1);
+      dirT.position.set(-200, 500, 200);
+      scene.add(dirT);
+      const ptL = new THREE.PointLight(globeConfig.pointLight, 0.8);
+      ptL.position.set(-200, 500, 200);
+      camera.add(ptL);
+      scene.add(camera);
+
+      // Build the globe with Aceternity defaults.
+      const globe = new ThreeGlobe()
+        .hexPolygonResolution(3)
+        .hexPolygonMargin(0.7)
+        .showAtmosphere(globeConfig.showAtmosphere)
+        .atmosphereColor(globeConfig.atmosphereColor)
+        .atmosphereAltitude(globeConfig.atmosphereAltitude)
+        .hexPolygonColor(() => globeConfig.polygonColor)
+        .arcsData(sampleArcs)
+        .arcColor(d => d.color)
+        .arcAltitude(d => d.arcAlt)
+        .arcStroke(0.5)
+        .arcDashLength(globeConfig.arcLength)
+        .arcDashInitialGap(d => d.order)
+        .arcDashGap(4)
+        .arcDashAnimateTime(globeConfig.arcTime)
+        .ringsData(ringsData)
+        .ringColor(d => d.color)
+        .ringMaxRadius(globeConfig.maxRings)
+        .ringPropagationSpeed(3)
+        .ringRepeatPeriod((globeConfig.arcTime * globeConfig.arcLength) / globeConfig.rings);
+
+      const mat = globe.globeMaterial();
+      mat.color = new THREE.Color(globeConfig.globeColor);
+      mat.emissive = new THREE.Color(globeConfig.emissive);
+      mat.emissiveIntensity = globeConfig.emissiveIntensity;
+      mat.shininess = globeConfig.shininess;
+      scene.add(globe);
+
+      // Country polygon data (dotted globe).
+      fetch('globe.json')
+        .then(r => r.json())
+        .then(data => globe.hexPolygonsData(data.features))
+        .catch(() => { /* still rotates without it */ });
+
+      // OrbitControls: drag to rotate + auto-rotate. No zoom/pan to match demo.
+      const controls = new OrbitControls(camera, canvas);
+      controls.enableZoom = false;
+      controls.enablePan = false;
+      controls.enableDamping = true;
+      controls.autoRotate = globeConfig.autoRotate;
+      controls.autoRotateSpeed = globeConfig.autoRotateSpeed;
+      controls.minPolarAngle = Math.PI / 3.5;
+      controls.maxPolarAngle = Math.PI - Math.PI / 3;
+
+      function onResize(){
+        size = parent.getBoundingClientRect().width || size;
+        renderer.setSize(size, size, false);
+      }
+      window.addEventListener('resize', onResize, { passive:true });
+
+      function tick(){
+        controls.update();
+        renderer.render(scene, camera);
+        requestAnimationFrame(tick);
+      }
+      tick();
+
+      // Expose for future modules (debug/extensions).
+      window.GVEarth = globe;
+    }
   </script>
 </head>
 <body>
@@ -2345,151 +2509,6 @@
       populateStars(document.getElementById('starsBg'), count);
     })();
 
-    /* ---------- 3D Earth (three.js + three-globe) ------------------------
-       Replaced the old NASA Blue Marble + custom shader Earth with the
-       three-globe library — same library GitHub uses for its homepage
-       globe. Dotted country polygons + animated arcs between cities
-       representing the Global Vision community. Brand-matched colors.
-
-       Lat/lng convention (window.GVLatLngToVec3):
-         lat in [-90, 90]   (North positive)
-         lng in [-180, 180] (East positive)
-    --------------------------------------------------------------------- */
-    window.GVInitEarth = function initEarth(){
-      if (window.__gvEarthInited) return;
-      const canvas = document.getElementById('earthCanvas');
-      if(!canvas || typeof THREE === 'undefined' || typeof ThreeGlobe === 'undefined') return;
-      window.__gvEarthInited = true;
-
-      const parent = canvas.parentElement;
-      let size = parent.getBoundingClientRect().width || 440;
-
-      const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      renderer.setSize(size, size, false);
-
-      const scene = new THREE.Scene();
-      const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 1000);
-      camera.position.z = 240;
-
-      // Lighting tuned for the dark-navy + cyan brand palette.
-      scene.add(new THREE.AmbientLight(0x38bdf8, 0.6));
-      const dirLight = new THREE.DirectionalLight(0xffffff, 1.0);
-      dirLight.position.set(-800, 2000, 400);
-      scene.add(dirLight);
-      const cyanLight = new THREE.DirectionalLight(0x7ae0ff, 0.5);
-      cyanLight.position.set(-200, 500, 200);
-      scene.add(cyanLight);
-
-      // Community city points. Each renders as a small cyan dot on the
-      // globe surface (see pointsData below).
-      const CITIES = [
-        { lat: 14.5995, lng: 120.9842, label: 'Manila' },
-        { lat: 10.3157, lng: 123.8854, label: 'Cebu' },
-        { lat:  3.1390, lng: 101.6869, label: 'Kuala Lumpur' },
-        { lat: 43.6532, lng: -79.3832, label: 'Toronto' },
-        { lat: 49.2827, lng:-123.1207, label: 'Vancouver' },
-        { lat: 25.2048, lng:  55.2708, label: 'Dubai' },
-        { lat: 24.4539, lng:  54.3773, label: 'Abu Dhabi' },
-        { lat: 51.5074, lng:  -0.1278, label: 'London' },
-        { lat: 45.4642, lng:   9.1900, label: 'Milan' },
-        { lat:-23.5505, lng: -46.6333, label: 'Sao Paulo' }
-      ];
-
-      // Distributed arc network — meaningful pairings within the community.
-      // Indices reference the CITIES array entries above.
-      const ARCS = [
-        [0, 2],  // Manila <-> Kuala Lumpur
-        [0, 5],  // Manila <-> Dubai
-        [0, 4],  // Manila <-> Vancouver
-        [1, 3],  // Cebu <-> Toronto
-        [5, 7],  // Dubai <-> London
-        [6, 8],  // Abu Dhabi <-> Milan
-        [7, 3],  // London <-> Toronto
-        [4, 2],  // Vancouver <-> Kuala Lumpur
-        [8, 9],  // Milan <-> Sao Paulo
-        [9, 3]   // Sao Paulo <-> Toronto
-      ].map(function(pair){
-        const a = CITIES[pair[0]], b = CITIES[pair[1]];
-        return {
-          startLat: a.lat, startLng: a.lng,
-          endLat:   b.lat, endLng:   b.lng
-        };
-      });
-
-      // Build the globe. Country polygons -> hex-dot mesh, atmosphere ring,
-      // points -> city markers, arcs -> animated connections.
-      const globe = new ThreeGlobe()
-        .showAtmosphere(true)
-        .atmosphereColor('#7ae0ff')
-        .atmosphereAltitude(0.18)
-        .hexPolygonResolution(3)
-        .hexPolygonMargin(0.7)
-        .hexPolygonColor(function(){ return 'rgba(190, 222, 245, 0.55)'; })
-        .pointsData(CITIES)
-        .pointAltitude(0.005)
-        .pointColor(function(){ return '#7ae0ff'; })
-        .pointRadius(0.45)
-        .arcsData(ARCS)
-        .arcColor(function(){ return '#7ae0ff'; })
-        .arcAltitude(0.35)
-        .arcStroke(0.45)
-        .arcDashLength(0.55)
-        .arcDashGap(2.5)
-        .arcDashInitialGap(function(){ return Math.random() * 5; })
-        .arcDashAnimateTime(2400);
-
-      // Match the globe body to the deep-space brand background.
-      const mat = globe.globeMaterial();
-      mat.color = new THREE.Color('#01040d');
-      mat.emissive = new THREE.Color('#01040d');
-      mat.emissiveIntensity = 0.12;
-      mat.shininess = 0.7;
-
-      scene.add(globe);
-
-      // Fetch + apply country polygon data (dotted globe).
-      fetch('globe.json').then(function(r){ return r.json(); }).then(function(data){
-        globe.hexPolygonsData(data.features);
-      }).catch(function(){ /* fail silently — globe still rotates */ });
-
-      // ---- Lat/lng -> world-space vector (compat with the old API). ----
-      window.GVLatLngToVec3 = function(lat, lng, radius){
-        const r = radius || 100; // three-globe default radius
-        const phi   = (90 - lat) * Math.PI / 180;
-        const theta = (lng + 180) * Math.PI / 180;
-        return new THREE.Vector3(
-          -r * Math.sin(phi) * Math.cos(theta),
-           r * Math.cos(phi),
-           r * Math.sin(phi) * Math.sin(theta)
-        );
-      };
-      // Marker group parented to the globe (rides along with rotation).
-      const markerGroup = new THREE.Group();
-      globe.add(markerGroup);
-      window.GVMarkerGroup = markerGroup;
-      window.GVEarth = globe;
-
-      // ---- Resize & animate ----
-      function onResize(){
-        size = parent.getBoundingClientRect().width || size;
-        renderer.setSize(size, size, false);
-      }
-      window.addEventListener('resize', onResize, { passive:true });
-
-      let last = performance.now();
-      function tick(now){
-        const dt = (now - last) / 1000; last = now;
-        globe.rotation.y += 0.06 * dt; // ~1 rotation per ~100s
-        renderer.render(scene, camera);
-        requestAnimationFrame(tick);
-      }
-      requestAnimationFrame(tick);
-    };
-    // Try to init right away (works if both libs are already loaded). The
-    // deferred loader chain also calls this on its onload — both paths are
-    // idempotent thanks to __gvEarthInited.
-    if (typeof THREE !== 'undefined' && typeof ThreeGlobe !== 'undefined') window.GVInitEarth();
 
     /* ---------- (Removed: fake ticker + price flicker — replaced by TradingView widgets) ---------- */
 
