@@ -1089,6 +1089,25 @@
     }
 
     /* ============================================================
+       TESTIMONIALS
+       ============================================================ */
+    .testimonial-grid{gap:1.25rem}
+    .f-card.testimonial{padding:1.65rem 1.5rem}
+    .testimonial-head{display:flex;align-items:center;gap:.85rem;margin-bottom:.85rem}
+    .testimonial-avatar{
+      width:46px;height:46px;border-radius:50%;flex-shrink:0;
+      background:linear-gradient(135deg,var(--cyan),var(--blue-soft));
+      color:var(--navy-900);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:800;font-size:14px;letter-spacing:.5px;
+      box-shadow:0 8px 20px rgba(7,16,34,.4), inset 0 1px 0 rgba(255,255,255,.4), 0 0 18px rgba(122,224,255,.3);
+    }
+    .testimonial-meta strong{display:block;color:#fff;font-size:15px;font-weight:700;line-height:1.2;margin-bottom:.2rem}
+    .testimonial-meta span{color:#9fb0cb;font-size:12.5px}
+    .testimonial-stars{color:var(--cyan);font-size:13.5px;letter-spacing:2.5px;margin-bottom:.6rem;text-shadow:0 0 12px rgba(122,224,255,.4)}
+    .f-card.testimonial p{color:#c8d3e3;font-size:14.5px;line-height:1.6;font-style:italic}
+
+    /* ============================================================
        COMMUNITY
        ============================================================ */
     .community-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
@@ -2061,6 +2080,101 @@
           <div class="icon">◊</div>
           <h3>Capital</h3>
           <p><strong>Wealth.</strong> Guidance to translate trading profits into durable, diversified personal capital.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       TESTIMONIALS
+       PLACEHOLDER content — the 6 names, locations, and quotes below
+       are scaffold copy. Replace with real verified members before
+       launch. The card pattern is locked: 44px avatar (initials),
+       name, location, 5 stars, italic quote.
+       ============================================================ -->
+  <section id="testimonials" class="section dark">
+    <div class="bg-grid"></div>
+    <div class="bg-orb a"></div>
+    <div class="bg-orb b" style="bottom:-200px;right:-160px"></div>
+
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow"><span class="dot"></span>Member Stories</span>
+        <h2>Real Traders.<br/><span class="grad-text">Real Results.</span></h2>
+        <p>From a community of 15,000+ active traders across Asia, the Middle East, and beyond.</p>
+      </div>
+
+      <div class="grid-3 testimonial-grid">
+        <div class="f-card testimonial reveal">
+          <div class="testimonial-head">
+            <div class="testimonial-avatar">MS</div>
+            <div class="testimonial-meta">
+              <strong>Maria Santos</strong>
+              <span>Manila, Philippines</span>
+            </div>
+          </div>
+          <div class="testimonial-stars">★★★★★</div>
+          <p>"Joined three months ago after losing money on other groups. The transparency here is night and day — every signal includes the why, not just the entry."</p>
+        </div>
+
+        <div class="f-card testimonial reveal">
+          <div class="testimonial-head">
+            <div class="testimonial-avatar">LT</div>
+            <div class="testimonial-meta">
+              <strong>Liam Tan</strong>
+              <span>Toronto, Canada</span>
+            </div>
+          </div>
+          <div class="testimonial-stars">★★★★★</div>
+          <p>"The Live Trading Floor sold me. Watching their analysts work through real setups in real time taught me more in 30 days than a year of YouTube."</p>
+        </div>
+
+        <div class="f-card testimonial reveal">
+          <div class="testimonial-head">
+            <div class="testimonial-avatar">AK</div>
+            <div class="testimonial-meta">
+              <strong>Aiyla Khan</strong>
+              <span>Dubai, UAE</span>
+            </div>
+          </div>
+          <div class="testimonial-stars">★★★★★</div>
+          <p>"I'm new to trading and was nervous about signal groups. The free access let me try without risk. Three months in, I haven't touched a paid service since."</p>
+        </div>
+
+        <div class="f-card testimonial reveal">
+          <div class="testimonial-head">
+            <div class="testimonial-avatar">JC</div>
+            <div class="testimonial-meta">
+              <strong>Jose Cruz</strong>
+              <span>Cebu, Philippines</span>
+            </div>
+          </div>
+          <div class="testimonial-stars">★★★★★</div>
+          <p>"Vision Sync changed my journaling. The calendar P&amp;L finally made me see my best and worst trading days at a glance."</p>
+        </div>
+
+        <div class="f-card testimonial reveal">
+          <div class="testimonial-head">
+            <div class="testimonial-avatar">DO</div>
+            <div class="testimonial-meta">
+              <strong>Daniel O'Connor</strong>
+              <span>London, UK</span>
+            </div>
+          </div>
+          <div class="testimonial-stars">★★★★★</div>
+          <p>"TP-verified track record is what separates them. Other groups self-grade their wins. These guys mark it like it actually happened."</p>
+        </div>
+
+        <div class="f-card testimonial reveal">
+          <div class="testimonial-head">
+            <div class="testimonial-avatar">SH</div>
+            <div class="testimonial-meta">
+              <strong>Sara Hassan</strong>
+              <span>Abu Dhabi, UAE</span>
+            </div>
+          </div>
+          <div class="testimonial-stars">★★★★★</div>
+          <p>"Signals delivered straight to my phone the moment they hit. Win or lose, I act fast and learn fast."</p>
         </div>
       </div>
     </div>
