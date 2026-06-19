@@ -1089,10 +1089,35 @@
     }
 
     /* ============================================================
-       TESTIMONIALS
+       TESTIMONIALS — horizontal marquee
        ============================================================ */
-    .testimonial-grid{gap:1.25rem}
-    .f-card.testimonial{padding:1.65rem 1.5rem}
+    /* Full-bleed scroller — breaks out of the .container max-width
+       so the cards drift across the whole viewport. Edge mask fades
+       cards in/out at the sides. Pauses on hover. */
+    .testimonial-marquee{
+      position:relative;
+      width:100vw;margin-left:calc(50% - 50vw);
+      overflow:hidden;
+      -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+              mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+      padding:1rem 0;
+    }
+    .testimonial-track{
+      display:flex;gap:1.25rem;width:max-content;
+      animation:testimonial-scroll 55s linear infinite;
+    }
+    .testimonial-marquee:hover .testimonial-track{animation-play-state:paused}
+    @keyframes testimonial-scroll{
+      from{transform:translateX(0)}
+      to  {transform:translateX(-50%)}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .testimonial-track{animation:none}
+    }
+    .f-card.testimonial{
+      padding:1.65rem 1.5rem;
+      width:380px;flex-shrink:0;
+    }
     .testimonial-head{display:flex;align-items:center;gap:.85rem;margin-bottom:.85rem}
     .testimonial-avatar{
       width:46px;height:46px;border-radius:50%;flex-shrink:0;
@@ -2103,9 +2128,14 @@
         <h2>Real Traders.<br/><span class="grad-text">Real Results.</span></h2>
         <p>From a community of 15,000+ active traders across Asia, the Middle East, and beyond.</p>
       </div>
+    </div>
 
-      <div class="grid-3 testimonial-grid">
-        <div class="f-card testimonial reveal">
+    <!-- Marquee track. The card list is duplicated below (aria-hidden)
+         so the CSS translate of -50% lands cleanly back at start and
+         the loop reads as a single continuous river of cards. -->
+    <div class="testimonial-marquee">
+      <div class="testimonial-track">
+        <div class="f-card testimonial">
           <div class="testimonial-head">
             <div class="testimonial-avatar">MS</div>
             <div class="testimonial-meta">
@@ -2116,8 +2146,7 @@
           <div class="testimonial-stars">★★★★★</div>
           <p>"Joined three months ago after losing money on other groups. The transparency here is night and day — every signal includes the why, not just the entry."</p>
         </div>
-
-        <div class="f-card testimonial reveal">
+        <div class="f-card testimonial">
           <div class="testimonial-head">
             <div class="testimonial-avatar">LT</div>
             <div class="testimonial-meta">
@@ -2128,8 +2157,7 @@
           <div class="testimonial-stars">★★★★★</div>
           <p>"The Live Trading Floor sold me. Watching their analysts work through real setups in real time taught me more in 30 days than a year of YouTube."</p>
         </div>
-
-        <div class="f-card testimonial reveal">
+        <div class="f-card testimonial">
           <div class="testimonial-head">
             <div class="testimonial-avatar">AK</div>
             <div class="testimonial-meta">
@@ -2140,8 +2168,7 @@
           <div class="testimonial-stars">★★★★★</div>
           <p>"I'm new to trading and was nervous about signal groups. The free access let me try without risk. Three months in, I haven't touched a paid service since."</p>
         </div>
-
-        <div class="f-card testimonial reveal">
+        <div class="f-card testimonial">
           <div class="testimonial-head">
             <div class="testimonial-avatar">JC</div>
             <div class="testimonial-meta">
@@ -2152,8 +2179,7 @@
           <div class="testimonial-stars">★★★★★</div>
           <p>"Vision Sync changed my journaling. The calendar P&amp;L finally made me see my best and worst trading days at a glance."</p>
         </div>
-
-        <div class="f-card testimonial reveal">
+        <div class="f-card testimonial">
           <div class="testimonial-head">
             <div class="testimonial-avatar">DO</div>
             <div class="testimonial-meta">
@@ -2164,8 +2190,76 @@
           <div class="testimonial-stars">★★★★★</div>
           <p>"TP-verified track record is what separates them. Other groups self-grade their wins. These guys mark it like it actually happened."</p>
         </div>
+        <div class="f-card testimonial">
+          <div class="testimonial-head">
+            <div class="testimonial-avatar">SH</div>
+            <div class="testimonial-meta">
+              <strong>Sara Hassan</strong>
+              <span>Abu Dhabi, UAE</span>
+            </div>
+          </div>
+          <div class="testimonial-stars">★★★★★</div>
+          <p>"Signals delivered straight to my phone the moment they hit. Win or lose, I act fast and learn fast."</p>
+        </div>
 
-        <div class="f-card testimonial reveal">
+        <!-- Duplicate set for seamless loop. aria-hidden so screen
+             readers don't repeat the testimonials. -->
+        <div class="f-card testimonial" aria-hidden="true">
+          <div class="testimonial-head">
+            <div class="testimonial-avatar">MS</div>
+            <div class="testimonial-meta">
+              <strong>Maria Santos</strong>
+              <span>Manila, Philippines</span>
+            </div>
+          </div>
+          <div class="testimonial-stars">★★★★★</div>
+          <p>"Joined three months ago after losing money on other groups. The transparency here is night and day — every signal includes the why, not just the entry."</p>
+        </div>
+        <div class="f-card testimonial" aria-hidden="true">
+          <div class="testimonial-head">
+            <div class="testimonial-avatar">LT</div>
+            <div class="testimonial-meta">
+              <strong>Liam Tan</strong>
+              <span>Toronto, Canada</span>
+            </div>
+          </div>
+          <div class="testimonial-stars">★★★★★</div>
+          <p>"The Live Trading Floor sold me. Watching their analysts work through real setups in real time taught me more in 30 days than a year of YouTube."</p>
+        </div>
+        <div class="f-card testimonial" aria-hidden="true">
+          <div class="testimonial-head">
+            <div class="testimonial-avatar">AK</div>
+            <div class="testimonial-meta">
+              <strong>Aiyla Khan</strong>
+              <span>Dubai, UAE</span>
+            </div>
+          </div>
+          <div class="testimonial-stars">★★★★★</div>
+          <p>"I'm new to trading and was nervous about signal groups. The free access let me try without risk. Three months in, I haven't touched a paid service since."</p>
+        </div>
+        <div class="f-card testimonial" aria-hidden="true">
+          <div class="testimonial-head">
+            <div class="testimonial-avatar">JC</div>
+            <div class="testimonial-meta">
+              <strong>Jose Cruz</strong>
+              <span>Cebu, Philippines</span>
+            </div>
+          </div>
+          <div class="testimonial-stars">★★★★★</div>
+          <p>"Vision Sync changed my journaling. The calendar P&amp;L finally made me see my best and worst trading days at a glance."</p>
+        </div>
+        <div class="f-card testimonial" aria-hidden="true">
+          <div class="testimonial-head">
+            <div class="testimonial-avatar">DO</div>
+            <div class="testimonial-meta">
+              <strong>Daniel O'Connor</strong>
+              <span>London, UK</span>
+            </div>
+          </div>
+          <div class="testimonial-stars">★★★★★</div>
+          <p>"TP-verified track record is what separates them. Other groups self-grade their wins. These guys mark it like it actually happened."</p>
+        </div>
+        <div class="f-card testimonial" aria-hidden="true">
           <div class="testimonial-head">
             <div class="testimonial-avatar">SH</div>
             <div class="testimonial-meta">
