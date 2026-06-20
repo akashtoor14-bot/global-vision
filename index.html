@@ -872,17 +872,19 @@
       font-size:12px;font-weight:800;
       box-shadow:0 6px 14px rgba(122,224,255,.25);
     }
-    .checklist .new-pill{
-      display:inline-block;flex-shrink:0;
-      padding:.12rem .45rem;border-radius:4px;
-      background:rgba(122,224,255,.15);
-      border:1px solid rgba(122,224,255,.4);
-      color:var(--cyan);
-      font-size:9px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;
-      box-shadow:0 0 12px rgba(122,224,255,.25);
-      align-self:center;
-    }
     .checklist .feat-name{color:#fff;font-weight:700}
+    /* Section-level 'Coming Soon' badge — sits next to the eyebrow on
+       any product section that hasn't launched yet. */
+    .soon-badge{
+      display:inline-block;vertical-align:middle;
+      margin-left:.65rem;
+      padding:.28rem .7rem;border-radius:5px;
+      background:rgba(122,224,255,.12);
+      border:1px solid rgba(122,224,255,.35);
+      color:var(--cyan);
+      font-size:10px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;
+      box-shadow:0 0 14px rgba(122,224,255,.2);
+    }
 
     .dashboard{
       position:relative;border-radius:18px;padding:1.5rem;color:#fff;
@@ -2148,13 +2150,12 @@
     <div class="container">
       <div class="demo-grid">
         <div class="demo-copy reveal">
-          <span class="eyebrow"><span class="dot"></span>Vision Sync</span>
+          <span class="eyebrow"><span class="dot"></span>Vision Sync</span><span class="soon-badge">Coming Soon</span>
           <h2>Log it. <span class="grad-text">Replay it.</span> Compound it.</h2>
-          <p>A premium trading journal built for the Global Vision community. Log every trade, <b>replay every move</b>, and watch your edge compound — all free, hosted at <b>journal.globalv.me</b>.</p>
+          <p>A premium trading journal built for the Global Vision community. Log every trade, <b>replay every move</b>, and watch your edge compound — launching soon at <b>journal.globalv.me</b>.</p>
           <ul class="checklist">
             <li>
               <span class="check">✓</span>
-              <span class="new-pill">New</span>
               <span><span class="feat-name">Trade Replay</span> — relive every entry, stop, and target with full playback, scrub bar, and annotated trade notes</span>
             </li>
             <li><span class="check">✓</span><span><span class="feat-name">Calendar P&amp;L heatmap</span> — every winning day and every drawdown at a glance</span></li>
