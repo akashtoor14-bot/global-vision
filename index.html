@@ -872,6 +872,17 @@
       font-size:12px;font-weight:800;
       box-shadow:0 6px 14px rgba(122,224,255,.25);
     }
+    .checklist .new-pill{
+      display:inline-block;flex-shrink:0;
+      padding:.12rem .45rem;border-radius:4px;
+      background:rgba(122,224,255,.15);
+      border:1px solid rgba(122,224,255,.4);
+      color:var(--cyan);
+      font-size:9px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;
+      box-shadow:0 0 12px rgba(122,224,255,.25);
+      align-self:center;
+    }
+    .checklist .feat-name{color:#fff;font-weight:700}
 
     .dashboard{
       position:relative;border-radius:18px;padding:1.5rem;color:#fff;
@@ -2138,13 +2149,18 @@
       <div class="demo-grid">
         <div class="demo-copy reveal">
           <span class="eyebrow"><span class="dot"></span>Vision Sync</span>
-          <h2>Your <span class="grad-text">Trading Journal.</span> Free Forever.</h2>
-          <p>A premium trading journal built for the Global Vision community — log every trade, surface every mistake, and watch your edge compound. Hosted free at <b>journal.globalv.me</b>.</p>
+          <h2>Log it. <span class="grad-text">Replay it.</span> Compound it.</h2>
+          <p>A premium trading journal built for the Global Vision community. Log every trade, <b>replay every move</b>, and watch your edge compound — all free, hosted at <b>journal.globalv.me</b>.</p>
           <ul class="checklist">
-            <li><span class="check">✓</span>Calendar P&amp;L heatmap — every winning day and every drawdown at a glance</li>
-            <li><span class="check">✓</span>Auto-tag setups, mistakes, and recurring patterns as you log every trade</li>
-            <li><span class="check">✓</span>One-click CSV import from VT Markets, PU Prime, Vantage and any MT5 broker</li>
-            <li><span class="check">✓</span>Multi-account tracking, leaderboards, equity curves, and R-multiples</li>
+            <li>
+              <span class="check">✓</span>
+              <span class="new-pill">New</span>
+              <span><span class="feat-name">Trade Replay</span> — relive every entry, stop, and target with full playback, scrub bar, and annotated trade notes</span>
+            </li>
+            <li><span class="check">✓</span><span><span class="feat-name">Calendar P&amp;L heatmap</span> — every winning day and every drawdown at a glance</span></li>
+            <li><span class="check">✓</span><span><span class="feat-name">Hall of Gains</span> — see how you rank against the global Vision community</span></li>
+            <li><span class="check">✓</span>One-click CSV import from VT Markets, PU Prime, Vantage, and any MT5 broker</li>
+            <li><span class="check">✓</span>Multi-account tracking, equity curves, R-multiples, and session analytics</li>
           </ul>
           <a href="https://journal.globalv.me" target="_blank" rel="noopener noreferrer" class="btn btn-neon btn-lg">Open Journal <span class="arrow">→</span></a>
         </div>
