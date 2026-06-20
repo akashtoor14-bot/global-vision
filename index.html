@@ -1203,6 +1203,96 @@
       text-align:right;color:var(--mint);font-weight:700;font-size:11px;
     }
 
+    /* ---- Hall of Gains pane (community leaderboard) ---- */
+    .hog-filters{
+      display:flex;gap:.35rem;flex-wrap:wrap;
+      margin-bottom:.85rem;padding-bottom:.7rem;
+      border-bottom:1px solid rgba(190,222,245,.08);
+    }
+    .hog-filter{
+      padding:.32rem .7rem;cursor:pointer;font-family:inherit;
+      background:transparent;border:1px solid rgba(190,222,245,.14);border-radius:6px;
+      color:#9fb0cb;font-size:9.5px;font-weight:800;letter-spacing:.9px;text-transform:uppercase;
+      transition:color .15s,border-color .15s,background .15s;
+    }
+    .hog-filter:hover{color:#dfeaf6;border-color:rgba(122,224,255,.3)}
+    .hog-filter.active{
+      color:var(--cyan);background:rgba(122,224,255,.1);border-color:rgba(122,224,255,.4);
+    }
+    .hog-head{
+      display:grid;grid-template-columns: 36px 1fr 56px 60px 44px;gap:.7rem;
+      padding:0 .8rem .35rem;
+      font-size:9px;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;color:#7a8aa8;
+    }
+    .hog-head .r{text-align:right}
+    .hog-list{display:flex;flex-direction:column;gap:.35rem}
+    .hog-row{
+      display:grid;grid-template-columns: 36px 1fr 56px 60px 44px;gap:.7rem;
+      align-items:center;
+      padding:.55rem .8rem;
+      background:rgba(7,16,34,.45);
+      border:1px solid rgba(190,222,245,.08);
+      border-radius:9px;
+      font-size:12px;
+    }
+    .hog-row.top1{
+      background:linear-gradient(180deg,rgba(255,193,7,.09),rgba(255,193,7,.02));
+      border-color:rgba(255,193,7,.32);
+    }
+    .hog-row.top2{
+      background:linear-gradient(180deg,rgba(192,200,215,.1),rgba(192,200,215,.02));
+      border-color:rgba(192,200,215,.3);
+    }
+    .hog-row.top3{
+      background:linear-gradient(180deg,rgba(205,127,50,.09),rgba(205,127,50,.02));
+      border-color:rgba(205,127,50,.3);
+    }
+    .hog-rank{
+      width:28px;height:28px;border-radius:50%;
+      background:rgba(190,222,245,.06);
+      color:#9fb0cb;
+      font-family:'JetBrains Mono','SF Mono',ui-monospace,Menlo,monospace;
+      font-size:11.5px;font-weight:800;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .hog-row.top1 .hog-rank{
+      background:rgba(255,193,7,.15);color:#ffc107;
+      box-shadow:0 0 14px rgba(255,193,7,.35);
+    }
+    .hog-row.top2 .hog-rank{
+      background:rgba(192,200,215,.18);color:#dde3ec;
+      box-shadow:0 0 12px rgba(192,200,215,.3);
+    }
+    .hog-row.top3 .hog-rank{
+      background:rgba(205,127,50,.18);color:#e0a06b;
+      box-shadow:0 0 12px rgba(205,127,50,.3);
+    }
+    .hog-trader{display:flex;align-items:center;gap:.55rem;min-width:0}
+    .hog-trader .av{
+      width:28px;height:28px;border-radius:50%;flex-shrink:0;
+      background:linear-gradient(135deg,var(--cyan),var(--blue-soft));
+      color:var(--navy-900);font-weight:800;font-size:10.5px;
+      display:flex;align-items:center;justify-content:center;
+    }
+    .hog-trader .info{min-width:0;line-height:1.2}
+    .hog-trader .nm{
+      color:#fff;font-size:12px;font-weight:700;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    }
+    .hog-trader .loc{
+      color:#8fa3c5;font-size:9.5px;letter-spacing:.3px;margin-top:.18rem;
+    }
+    .hog-stat{
+      font-family:'JetBrains Mono','SF Mono',ui-monospace,Menlo,monospace;
+      font-size:11.5px;color:#dfeaf6;font-variant-numeric:tabular-nums;
+      text-align:right;font-weight:700;
+    }
+    .hog-stat.up{color:var(--mint)}
+    @media (max-width:560px){
+      .hog-head, .hog-row{grid-template-columns:30px 1fr 46px 56px;gap:.55rem}
+      .hog-head .c-trades, .hog-row .c-trades{display:none}
+    }
+
     /* ---- Trade Replay pane (price chart + scrubber + replay notes) ---- */
     .replay-meta{
       display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;
@@ -2063,7 +2153,7 @@
 
                 <div class="vs-nav-divider"></div>
 
-                <button class="vs-navitem locked" type="button" disabled><span class="ico">★</span>Hall of Gains<span class="vs-badge">Soon</span></button>
+                <button class="vs-navitem" type="button" data-tab="hallofgains" role="tab" aria-selected="false"><span class="ico">★</span>Hall of Gains</button>
                 <button class="vs-navitem locked" type="button" disabled><span class="ico">◷</span>Accounts</button>
               </nav>
 
@@ -2368,6 +2458,114 @@
               <div class="perf-bar"><span class="lbl">London</span><div class="bar"><div class="fill" style="width:81%"></div></div><span class="val">81%</span></div>
               <div class="perf-bar"><span class="lbl">New York</span><div class="bar"><div class="fill" style="width:74%"></div></div><span class="val">74%</span></div>
               <div class="perf-bar"><span class="lbl">Asia</span><div class="bar"><div class="fill" style="width:69%"></div></div><span class="val">69%</span></div>
+            </div>
+          </div>
+
+          <!-- Hall of Gains pane (community leaderboard) -->
+          <div class="db-pane" data-pane="hallofgains" role="tabpanel">
+            <div class="cal-bar">
+              <div class="month">Hall of Gains · Top Traders</div>
+              <div class="stats">
+                <span>Members <b>2.6K</b></span>
+                <span class="up">Updated <b>Live</b></span>
+              </div>
+            </div>
+
+            <div class="hog-filters">
+              <button class="hog-filter active" type="button">This Month</button>
+              <button class="hog-filter" type="button">Quarter</button>
+              <button class="hog-filter" type="button">All Time</button>
+            </div>
+
+            <div class="hog-head">
+              <span></span>
+              <span>Trader</span>
+              <span class="r">Win Rate</span>
+              <span class="r">Net R</span>
+              <span class="r c-trades">Trades</span>
+            </div>
+
+            <div class="hog-list">
+              <div class="hog-row top1">
+                <div class="hog-rank">1</div>
+                <div class="hog-trader">
+                  <div class="av">MS</div>
+                  <div class="info"><div class="nm">Marco Santos</div><div class="loc">Manila · PH</div></div>
+                </div>
+                <div class="hog-stat">84%</div>
+                <div class="hog-stat up">+21.4R</div>
+                <div class="hog-stat c-trades">52</div>
+              </div>
+              <div class="hog-row top2">
+                <div class="hog-rank">2</div>
+                <div class="hog-trader">
+                  <div class="av">AC</div>
+                  <div class="info"><div class="nm">Aldrin Cruz</div><div class="loc">Cebu · PH</div></div>
+                </div>
+                <div class="hog-stat">81%</div>
+                <div class="hog-stat up">+18.7R</div>
+                <div class="hog-stat c-trades">49</div>
+              </div>
+              <div class="hog-row top3">
+                <div class="hog-rank">3</div>
+                <div class="hog-trader">
+                  <div class="av">TR</div>
+                  <div class="info"><div class="nm">Tariq Rahman</div><div class="loc">Dubai · UAE</div></div>
+                </div>
+                <div class="hog-stat">79%</div>
+                <div class="hog-stat up">+16.2R</div>
+                <div class="hog-stat c-trades">45</div>
+              </div>
+              <div class="hog-row">
+                <div class="hog-rank">4</div>
+                <div class="hog-trader">
+                  <div class="av">JL</div>
+                  <div class="info"><div class="nm">Joshua Lin</div><div class="loc">Toronto · CA</div></div>
+                </div>
+                <div class="hog-stat">76%</div>
+                <div class="hog-stat up">+14.5R</div>
+                <div class="hog-stat c-trades">41</div>
+              </div>
+              <div class="hog-row">
+                <div class="hog-rank">5</div>
+                <div class="hog-trader">
+                  <div class="av">MC</div>
+                  <div class="info"><div class="nm">Maya Chen</div><div class="loc">Vancouver · CA</div></div>
+                </div>
+                <div class="hog-stat">74%</div>
+                <div class="hog-stat up">+12.8R</div>
+                <div class="hog-stat c-trades">38</div>
+              </div>
+              <div class="hog-row">
+                <div class="hog-rank">6</div>
+                <div class="hog-trader">
+                  <div class="av">BH</div>
+                  <div class="info"><div class="nm">Bilal Hassan</div><div class="loc">Abu Dhabi · UAE</div></div>
+                </div>
+                <div class="hog-stat">72%</div>
+                <div class="hog-stat up">+10.9R</div>
+                <div class="hog-stat c-trades">35</div>
+              </div>
+              <div class="hog-row">
+                <div class="hog-rank">7</div>
+                <div class="hog-trader">
+                  <div class="av">SR</div>
+                  <div class="info"><div class="nm">Sofia Reyes</div><div class="loc">Davao · PH</div></div>
+                </div>
+                <div class="hog-stat">70%</div>
+                <div class="hog-stat up">+9.4R</div>
+                <div class="hog-stat c-trades">32</div>
+              </div>
+              <div class="hog-row">
+                <div class="hog-rank">8</div>
+                <div class="hog-trader">
+                  <div class="av">IB</div>
+                  <div class="info"><div class="nm">Idris Bakhtiar</div><div class="loc">Kuala Lumpur · MY</div></div>
+                </div>
+                <div class="hog-stat">68%</div>
+                <div class="hog-stat up">+7.6R</div>
+                <div class="hog-stat c-trades">28</div>
+              </div>
             </div>
           </div>
             </main>
