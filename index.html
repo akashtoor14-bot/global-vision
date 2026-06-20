@@ -1013,6 +1013,103 @@
       border-color:var(--cyan);
     }
 
+    /* ---- Vision Sync tab system (clickable mockup) ---- */
+    .db-tabs{
+      display:flex;gap:.2rem;margin:0 0 1rem;padding-bottom:.65rem;
+      border-bottom:1px solid rgba(190,222,245,.1);
+    }
+    .db-tab{
+      background:transparent;border:none;cursor:pointer;font-family:inherit;
+      padding:.45rem .85rem;font-size:11.5px;font-weight:700;letter-spacing:.6px;
+      text-transform:uppercase;color:#8fa3c5;border-radius:7px;
+      transition:color .2s var(--ease),background .2s var(--ease);
+      position:relative;
+    }
+    .db-tab:hover{color:#dfeaf6;background:rgba(122,224,255,.05)}
+    .db-tab.active{
+      color:var(--cyan);background:rgba(122,224,255,.1);
+      box-shadow:inset 0 0 0 1px rgba(122,224,255,.25);
+    }
+    .db-tab .ico{margin-right:.4rem;font-size:12px;line-height:1}
+    .db-pane{display:none}
+    .db-pane.active{display:block;animation:db-fade .3s var(--ease-out)}
+    @keyframes db-fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+    /* ---- Trades pane (trade log table) ---- */
+    .trade-log{display:flex;flex-direction:column;gap:.5rem}
+    .trade-row{
+      display:grid;
+      grid-template-columns: 26px 1fr auto auto;
+      gap:.6rem;align-items:center;
+      padding:.6rem .75rem;
+      background:rgba(7,16,34,.4);
+      border:1px solid rgba(190,222,245,.08);
+      border-radius:10px;
+      font-size:12.5px;color:#c8d3e3;
+    }
+    .trade-row .tside{
+      width:24px;height:24px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+      font-size:10px;font-weight:800;letter-spacing:.3px;
+    }
+    .trade-row .tside.buy{background:rgba(108,243,180,.15);color:var(--mint);border:1px solid rgba(108,243,180,.35)}
+    .trade-row .tside.sell{background:rgba(255,122,155,.15);color:var(--rose);border:1px solid rgba(255,122,155,.35)}
+    .trade-row .tinfo{display:flex;flex-direction:column;gap:.18rem;min-width:0}
+    .trade-row .tsym{color:#fff;font-weight:700;font-size:12.5px}
+    .trade-row .tnote{
+      color:#8fa3c5;font-size:10.5px;letter-spacing:.3px;
+      white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+    }
+    .trade-row .tprice{
+      font-family:'JetBrains Mono','SF Mono',ui-monospace,Menlo,monospace;
+      font-size:11px;color:#9fb0cb;font-variant-numeric:tabular-nums;text-align:right;
+    }
+    .trade-row .tprice b{display:block;color:#dfeaf6;font-weight:700}
+    .trade-row .tr{
+      font-family:'JetBrains Mono','SF Mono',ui-monospace,Menlo,monospace;
+      font-weight:700;font-size:13px;font-variant-numeric:tabular-nums;text-align:right;
+      min-width:54px;
+    }
+    .trade-row .tr.up{color:var(--mint)}
+    .trade-row .tr.dn{color:var(--rose)}
+
+    /* ---- Analytics pane (perf bars + KPI grid) ---- */
+    .perf-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin-bottom:1.25rem}
+    .perf-kpi-tile{
+      padding:.85rem 1rem;border-radius:10px;
+      background:rgba(7,16,34,.5);
+      border:1px solid rgba(190,222,245,.1);
+    }
+    .perf-kpi-tile .pn{
+      font-family:'JetBrains Mono','SF Mono',ui-monospace,Menlo,monospace;
+      font-size:20px;font-weight:700;color:#fff;letter-spacing:-.3px;line-height:1.1;
+    }
+    .perf-kpi-tile .pn.mint{color:var(--mint)}
+    .perf-kpi-tile .pn.rose{color:var(--rose)}
+    .perf-kpi-tile .pl{
+      font-size:9.5px;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:#8fa3c5;
+      margin-top:.35rem;
+    }
+    .perf-block{margin-bottom:1.1rem}
+    .perf-block:last-child{margin-bottom:0}
+    .perf-block h5{
+      font-size:10px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#7a8aa8;
+      margin-bottom:.55rem;
+    }
+    .perf-bar{
+      display:grid;grid-template-columns: 70px 1fr 40px;gap:.6rem;align-items:center;
+      padding:.32rem 0;font-size:11.5px;
+    }
+    .perf-bar .lbl{color:#c8d3e3;font-weight:600}
+    .perf-bar .bar{height:6px;background:rgba(190,222,245,.08);border-radius:3px;overflow:hidden}
+    .perf-bar .fill{
+      height:100%;border-radius:3px;
+      background:linear-gradient(90deg, rgba(122,224,255,.7), var(--mint));
+    }
+    .perf-bar .val{
+      font-family:'JetBrains Mono','SF Mono',ui-monospace,Menlo,monospace;
+      text-align:right;color:var(--mint);font-weight:700;font-size:11px;
+    }
+
     /* ============================================================
        ACADEMY
        ============================================================ */
@@ -1739,90 +1836,227 @@
           <a href="https://journal.globalv.me" target="_blank" rel="noopener noreferrer" class="btn btn-neon btn-lg">Open Journal <span class="arrow">→</span></a>
         </div>
 
-        <!-- Vision Sync journal preview — calendar P&L heatmap mock -->
-        <div class="dashboard reveal">
+        <!-- Vision Sync journal preview — clickable interactive MOCKUP.
+             PLACEHOLDER content. Tabs swap between three faked views
+             (Calendar / Trades / Analytics) entirely in JS — no real
+             backend, no real journal exposed. Replace with a real
+             iframe embed once journal.globalv.me is publicly deployed
+             (Phase 8). -->
+        <div class="dashboard reveal" id="visionSyncMock">
           <div class="db-head">
             <div class="pair"><span class="emoji">●</span> Vision Sync · Journal</div>
-            <div class="pill"><span class="dot"></span>This Month</div>
+            <div class="pill"><span class="dot"></span>Demo · Click tabs</div>
           </div>
 
-          <div class="cal-bar">
-            <div class="month">May 2026</div>
-            <div class="stats">
-              <span>Days <b>17</b></span>
-              <span>Wins <b>13</b></span>
-              <span class="up">P&amp;L <b>+14.2%</b></span>
+          <!-- Tab nav -->
+          <div class="db-tabs" role="tablist" aria-label="Vision Sync demo">
+            <button class="db-tab active" type="button" data-tab="calendar" role="tab" aria-selected="true"><span class="ico">▦</span>Calendar</button>
+            <button class="db-tab"        type="button" data-tab="trades"   role="tab" aria-selected="false"><span class="ico">≡</span>Trades</button>
+            <button class="db-tab"        type="button" data-tab="analytics" role="tab" aria-selected="false"><span class="ico">◴</span>Analytics</button>
+          </div>
+
+          <!-- Calendar pane -->
+          <div class="db-pane active" data-pane="calendar" role="tabpanel">
+            <div class="cal-bar">
+              <div class="month">May 2026</div>
+              <div class="stats">
+                <span>Days <b>17</b></span>
+                <span>Wins <b>13</b></span>
+                <span class="up">P&amp;L <b>+14.2%</b></span>
+              </div>
+            </div>
+
+            <div class="cal">
+              <div class="cal-h">S</div><div class="cal-h">M</div><div class="cal-h">T</div><div class="cal-h">W</div><div class="cal-h">T</div><div class="cal-h">F</div><div class="cal-h">S</div>
+
+              <div class="cal-d empty"><div class="num">27</div></div>
+              <div class="cal-d empty"><div class="num">28</div></div>
+              <div class="cal-d empty"><div class="num">29</div></div>
+              <div class="cal-d empty"><div class="num">30</div></div>
+              <div class="cal-d win"><div class="num">1</div><div class="pnl">+1.2%</div></div>
+              <div class="cal-d win heavy"><div class="num">2</div><div class="pnl">+2.8%</div></div>
+              <div class="cal-d empty"><div class="num">3</div></div>
+
+              <div class="cal-d empty"><div class="num">4</div></div>
+              <div class="cal-d loss"><div class="num">5</div><div class="pnl">-0.6%</div></div>
+              <div class="cal-d win"><div class="num">6</div><div class="pnl">+0.8%</div></div>
+              <div class="cal-d win heavy"><div class="num">7</div><div class="pnl">+3.1%</div></div>
+              <div class="cal-d win"><div class="num">8</div><div class="pnl">+1.5%</div></div>
+              <div class="cal-d loss heavy"><div class="num">9</div><div class="pnl">-1.8%</div></div>
+              <div class="cal-d empty"><div class="num">10</div></div>
+
+              <div class="cal-d empty"><div class="num">11</div></div>
+              <div class="cal-d win"><div class="num">12</div><div class="pnl">+0.9%</div></div>
+              <div class="cal-d win"><div class="num">13</div><div class="pnl">+2.2%</div></div>
+              <div class="cal-d loss"><div class="num">14</div><div class="pnl">-0.4%</div></div>
+              <div class="cal-d win heavy"><div class="num">15</div><div class="pnl">+3.6%</div></div>
+              <div class="cal-d win"><div class="num">16</div><div class="pnl">+1.1%</div></div>
+              <div class="cal-d empty"><div class="num">17</div></div>
+
+              <div class="cal-d empty"><div class="num">18</div></div>
+              <div class="cal-d win"><div class="num">19</div><div class="pnl">+1.4%</div></div>
+              <div class="cal-d loss"><div class="num">20</div><div class="pnl">-0.9%</div></div>
+              <div class="cal-d today win heavy"><div class="num">21</div><div class="pnl">+4.2%</div></div>
+              <div class="cal-d"><div class="num">22</div></div>
+              <div class="cal-d"><div class="num">23</div></div>
+              <div class="cal-d empty"><div class="num">24</div></div>
+            </div>
+
+            <div class="db-meta">
+              <div class="m"><div class="n">76%</div><div class="l">Win Rate</div></div>
+              <div class="m"><div class="n">+4.2%</div><div class="l">Best Day</div></div>
+              <div class="m"><div class="n">+14.2%</div><div class="l">P&amp;L · MTD</div></div>
+              <div class="m"><div class="n">1 : 2.8</div><div class="l">Avg R</div></div>
+            </div>
+
+            <!-- Recent trades (Sentinel-tagged) -->
+            <div class="signals-list">
+              <div class="sig-row">
+                <div class="side buy">B</div>
+                <div class="sym">XAUUSD · London Open</div>
+                <div>15m</div>
+                <div class="pnl up">+1.4R</div>
+              </div>
+              <div class="sig-row">
+                <div class="side buy">B</div>
+                <div class="sym">BTCUSD · Trend Continuation</div>
+                <div>H1</div>
+                <div class="pnl up">+2.6R</div>
+              </div>
+              <div class="sig-row">
+                <div class="side sell">S</div>
+                <div class="sym">EURUSD · NY Reversal</div>
+                <div>M15</div>
+                <div class="pnl up">+0.9R</div>
+              </div>
+              <div class="sig-row">
+                <div class="side sell">S</div>
+                <div class="sym">US30 · Stopped — chased entry</div>
+                <div>M30</div>
+                <div class="pnl dn">-1.0R</div>
+              </div>
             </div>
           </div>
 
-          <div class="cal">
-            <div class="cal-h">S</div><div class="cal-h">M</div><div class="cal-h">T</div><div class="cal-h">W</div><div class="cal-h">T</div><div class="cal-h">F</div><div class="cal-h">S</div>
+          <!-- Trades pane -->
+          <div class="db-pane" data-pane="trades" role="tabpanel">
+            <div class="cal-bar">
+              <div class="month">Trade Log · Last 10</div>
+              <div class="stats">
+                <span>Wins <b>8</b></span>
+                <span>Losses <b>2</b></span>
+                <span class="up">Net <b>+9.6R</b></span>
+              </div>
+            </div>
 
-            <div class="cal-d empty"><div class="num">27</div></div>
-            <div class="cal-d empty"><div class="num">28</div></div>
-            <div class="cal-d empty"><div class="num">29</div></div>
-            <div class="cal-d empty"><div class="num">30</div></div>
-            <div class="cal-d win"><div class="num">1</div><div class="pnl">+1.2%</div></div>
-            <div class="cal-d win heavy"><div class="num">2</div><div class="pnl">+2.8%</div></div>
-            <div class="cal-d empty"><div class="num">3</div></div>
-
-            <div class="cal-d empty"><div class="num">4</div></div>
-            <div class="cal-d loss"><div class="num">5</div><div class="pnl">-0.6%</div></div>
-            <div class="cal-d win"><div class="num">6</div><div class="pnl">+0.8%</div></div>
-            <div class="cal-d win heavy"><div class="num">7</div><div class="pnl">+3.1%</div></div>
-            <div class="cal-d win"><div class="num">8</div><div class="pnl">+1.5%</div></div>
-            <div class="cal-d loss heavy"><div class="num">9</div><div class="pnl">-1.8%</div></div>
-            <div class="cal-d empty"><div class="num">10</div></div>
-
-            <div class="cal-d empty"><div class="num">11</div></div>
-            <div class="cal-d win"><div class="num">12</div><div class="pnl">+0.9%</div></div>
-            <div class="cal-d win"><div class="num">13</div><div class="pnl">+2.2%</div></div>
-            <div class="cal-d loss"><div class="num">14</div><div class="pnl">-0.4%</div></div>
-            <div class="cal-d win heavy"><div class="num">15</div><div class="pnl">+3.6%</div></div>
-            <div class="cal-d win"><div class="num">16</div><div class="pnl">+1.1%</div></div>
-            <div class="cal-d empty"><div class="num">17</div></div>
-
-            <div class="cal-d empty"><div class="num">18</div></div>
-            <div class="cal-d win"><div class="num">19</div><div class="pnl">+1.4%</div></div>
-            <div class="cal-d loss"><div class="num">20</div><div class="pnl">-0.9%</div></div>
-            <div class="cal-d today win heavy"><div class="num">21</div><div class="pnl">+4.2%</div></div>
-            <div class="cal-d"><div class="num">22</div></div>
-            <div class="cal-d"><div class="num">23</div></div>
-            <div class="cal-d empty"><div class="num">24</div></div>
+            <div class="trade-log">
+              <div class="trade-row">
+                <div class="tside buy">B</div>
+                <div class="tinfo"><div class="tsym">XAUUSD · London Open</div><div class="tnote">Sentinel: clean breakout</div></div>
+                <div class="tprice"><b>4685.20</b>→4710.00</div>
+                <div class="tr up">+1.4R</div>
+              </div>
+              <div class="trade-row">
+                <div class="tside buy">B</div>
+                <div class="tinfo"><div class="tsym">BTCUSD · Trend Continuation</div><div class="tnote">Sentinel: HTF aligned</div></div>
+                <div class="tprice"><b>82,100</b>→84,800</div>
+                <div class="tr up">+2.6R</div>
+              </div>
+              <div class="trade-row">
+                <div class="tside sell">S</div>
+                <div class="tinfo"><div class="tsym">EURUSD · NY Reversal</div><div class="tnote">Sentinel: liquidity sweep</div></div>
+                <div class="tprice"><b>1.08650</b>→1.08200</div>
+                <div class="tr up">+0.9R</div>
+              </div>
+              <div class="trade-row">
+                <div class="tside sell">S</div>
+                <div class="tinfo"><div class="tsym">US30 · Chased entry</div><div class="tnote">Sentinel flagged: late entry · stop hit</div></div>
+                <div class="tprice"><b>50,120</b>→50,260</div>
+                <div class="tr dn">−1.0R</div>
+              </div>
+              <div class="trade-row">
+                <div class="tside buy">B</div>
+                <div class="tinfo"><div class="tsym">GBPUSD · NY Open</div><div class="tnote">Sentinel: confluence at H4</div></div>
+                <div class="tprice"><b>1.27450</b>→1.28100</div>
+                <div class="tr up">+1.3R</div>
+              </div>
+              <div class="trade-row">
+                <div class="tside buy">B</div>
+                <div class="tinfo"><div class="tsym">XAUUSD · Asia Reload</div><div class="tnote">Sentinel: 2nd attempt</div></div>
+                <div class="tprice"><b>4658.00</b>→4685.00</div>
+                <div class="tr up">+0.5R</div>
+              </div>
+              <div class="trade-row">
+                <div class="tside sell">S</div>
+                <div class="tinfo"><div class="tsym">USDJPY · Asia Open</div><div class="tnote">Sentinel: range rejection</div></div>
+                <div class="tprice"><b>156.40</b>→155.50</div>
+                <div class="tr up">+1.8R</div>
+              </div>
+              <div class="trade-row">
+                <div class="tside buy">B</div>
+                <div class="tinfo"><div class="tsym">EURUSD · London Open</div><div class="tnote">Sentinel: liquidity grab</div></div>
+                <div class="tprice"><b>1.08150</b>→1.08600</div>
+                <div class="tr up">+0.9R</div>
+              </div>
+              <div class="trade-row">
+                <div class="tside sell">S</div>
+                <div class="tinfo"><div class="tsym">BTCUSD · Distribution</div><div class="tnote">Sentinel flagged: early exit</div></div>
+                <div class="tprice"><b>83,400</b>→82,800</div>
+                <div class="tr dn">−0.4R</div>
+              </div>
+              <div class="trade-row">
+                <div class="tside buy">B</div>
+                <div class="tinfo"><div class="tsym">XAUUSD · NY Sweep</div><div class="tnote">Sentinel: bias confirmed</div></div>
+                <div class="tprice"><b>4672.00</b>→4708.00</div>
+                <div class="tr up">+1.6R</div>
+              </div>
+            </div>
           </div>
 
-          <div class="db-meta">
-            <div class="m"><div class="n">76%</div><div class="l">Win Rate</div></div>
-            <div class="m"><div class="n">+4.2%</div><div class="l">Best Day</div></div>
-            <div class="m"><div class="n">+14.2%</div><div class="l">P&amp;L · MTD</div></div>
-            <div class="m"><div class="n">1 : 2.8</div><div class="l">Avg R</div></div>
-          </div>
+          <!-- Analytics pane -->
+          <div class="db-pane" data-pane="analytics" role="tabpanel">
+            <div class="cal-bar">
+              <div class="month">Performance · 30 Days</div>
+              <div class="stats">
+                <span>Trades <b>47</b></span>
+                <span class="up">PF <b>2.4</b></span>
+                <span class="up">P&amp;L <b>+14.2%</b></span>
+              </div>
+            </div>
 
-          <!-- Recent trades (Sentinel-tagged) -->
-          <div class="signals-list">
-            <div class="sig-row">
-              <div class="side buy">B</div>
-              <div class="sym">XAUUSD · London Open</div>
-              <div>15m</div>
-              <div class="pnl up">+1.4R</div>
+            <div class="perf-grid">
+              <div class="perf-kpi-tile">
+                <div class="pn mint">+1.42R</div>
+                <div class="pl">Avg Win</div>
+              </div>
+              <div class="perf-kpi-tile">
+                <div class="pn rose">−0.82R</div>
+                <div class="pl">Avg Loss</div>
+              </div>
+              <div class="perf-kpi-tile">
+                <div class="pn">2.4</div>
+                <div class="pl">Profit Factor</div>
+              </div>
+              <div class="perf-kpi-tile">
+                <div class="pn rose">−3.8%</div>
+                <div class="pl">Max Drawdown</div>
+              </div>
             </div>
-            <div class="sig-row">
-              <div class="side buy">B</div>
-              <div class="sym">BTCUSD · Trend Continuation</div>
-              <div>H1</div>
-              <div class="pnl up">+2.6R</div>
+
+            <div class="perf-block">
+              <h5>Win Rate by Pair</h5>
+              <div class="perf-bar"><span class="lbl">XAU/USD</span><div class="bar"><div class="fill" style="width:84%"></div></div><span class="val">84%</span></div>
+              <div class="perf-bar"><span class="lbl">BTC/USD</span><div class="bar"><div class="fill" style="width:78%"></div></div><span class="val">78%</span></div>
+              <div class="perf-bar"><span class="lbl">EUR/USD</span><div class="bar"><div class="fill" style="width:72%"></div></div><span class="val">72%</span></div>
+              <div class="perf-bar"><span class="lbl">GBP/USD</span><div class="bar"><div class="fill" style="width:68%"></div></div><span class="val">68%</span></div>
+              <div class="perf-bar"><span class="lbl">US30</span><div class="bar"><div class="fill" style="width:62%"></div></div><span class="val">62%</span></div>
             </div>
-            <div class="sig-row">
-              <div class="side sell">S</div>
-              <div class="sym">EURUSD · NY Reversal</div>
-              <div>M15</div>
-              <div class="pnl up">+0.9R</div>
-            </div>
-            <div class="sig-row">
-              <div class="side sell">S</div>
-              <div class="sym">US30 · Stopped — chased entry</div>
-              <div>M30</div>
-              <div class="pnl dn">-1.0R</div>
+
+            <div class="perf-block">
+              <h5>Win Rate by Session</h5>
+              <div class="perf-bar"><span class="lbl">London</span><div class="bar"><div class="fill" style="width:81%"></div></div><span class="val">81%</span></div>
+              <div class="perf-bar"><span class="lbl">New York</span><div class="bar"><div class="fill" style="width:74%"></div></div><span class="val">74%</span></div>
+              <div class="perf-bar"><span class="lbl">Asia</span><div class="bar"><div class="fill" style="width:69%"></div></div><span class="val">69%</span></div>
             </div>
           </div>
         </div>
@@ -2880,6 +3114,27 @@
     mobileMenu.querySelectorAll('a').forEach(a=>{
       a.addEventListener('click', ()=>setMobileMenu(false));
     });
+
+    /* ---------- Vision Sync demo tabs (calendar / trades / analytics) ---------- */
+    (function(){
+      const mock = document.getElementById('visionSyncMock');
+      if(!mock) return;
+      const tabs  = mock.querySelectorAll('.db-tab');
+      const panes = mock.querySelectorAll('.db-pane');
+      tabs.forEach(tab=>{
+        tab.addEventListener('click', ()=>{
+          const target = tab.dataset.tab;
+          tabs.forEach(t=>{
+            const on = t === tab;
+            t.classList.toggle('active', on);
+            t.setAttribute('aria-selected', on ? 'true' : 'false');
+          });
+          panes.forEach(p=>{
+            p.classList.toggle('active', p.dataset.pane === target);
+          });
+        });
+      });
+    })();
 
     /* ---------- Join Modal ---------- */
     const joinModal   = document.getElementById('joinModal');
