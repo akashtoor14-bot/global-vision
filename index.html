@@ -873,17 +873,24 @@
       box-shadow:0 6px 14px rgba(122,224,255,.25);
     }
     .checklist .feat-name{color:#fff;font-weight:700}
-    /* Section-level 'Coming Soon' badge — sits next to the eyebrow on
-       any product section that hasn't launched yet. */
+    /* Eyebrow row — wraps the section eyebrow and any status pill
+       (e.g. Coming Soon) so they sit on the same baseline at the
+       same height instead of relying on vertical-align hacks. */
+    .eyebrow-row{
+      display:inline-flex;align-items:center;gap:.65rem;
+      margin-bottom:1.1rem;flex-wrap:wrap;
+    }
+    .eyebrow-row .eyebrow{margin-bottom:0}
+    /* Section-level 'Coming Soon' badge — matched to the eyebrow pill
+       shape so the two read as a paired status row. */
     .soon-badge{
-      display:inline-block;vertical-align:middle;
-      margin-left:.65rem;
-      padding:.28rem .7rem;border-radius:5px;
+      display:inline-flex;align-items:center;
+      padding:.4rem .9rem;border-radius:999px;
       background:rgba(122,224,255,.12);
-      border:1px solid rgba(122,224,255,.35);
+      border:1px solid rgba(122,224,255,.42);
       color:var(--cyan);
-      font-size:10px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;
-      box-shadow:0 0 14px rgba(122,224,255,.2);
+      font-size:11px;font-weight:800;letter-spacing:2.8px;text-transform:uppercase;
+      box-shadow:0 0 16px rgba(122,224,255,.22);
     }
 
     .dashboard{
@@ -2150,7 +2157,10 @@
     <div class="container">
       <div class="demo-grid">
         <div class="demo-copy reveal">
-          <span class="eyebrow"><span class="dot"></span>Vision Sync</span><span class="soon-badge">Coming Soon</span>
+          <div class="eyebrow-row">
+            <span class="eyebrow"><span class="dot"></span>Vision Sync</span>
+            <span class="soon-badge">Coming Soon</span>
+          </div>
           <h2>Log it. <span class="grad-text">Replay it.</span> Compound it.</h2>
           <p>A premium trading journal built for the Global Vision community. Log every trade, <b>replay every move</b>, and watch your edge compound — launching soon at <b>journal.globalv.me</b>.</p>
           <ul class="checklist">
