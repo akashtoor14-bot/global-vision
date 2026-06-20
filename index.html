@@ -1013,27 +1013,120 @@
       border-color:var(--cyan);
     }
 
-    /* ---- Vision Sync tab system (clickable mockup) ---- */
-    .db-tabs{
-      display:flex;gap:.2rem;margin:0 0 1rem;padding-bottom:.65rem;
-      border-bottom:1px solid rgba(190,222,245,.1);
+    /* ---- Vision Sync interactive mockup — sidebar + main app layout
+            Mirrors the actual TradeNote-derived journal layout: branded
+            left sidebar with nav items, top bar with account + sync
+            status, main content that swaps on nav click. ---- */
+    .vs-app{
+      display:grid;grid-template-columns:200px 1fr;gap:0;
+      background:rgba(4,10,22,.55);
+      border:1px solid rgba(190,222,245,.12);
+      border-radius:14px;overflow:hidden;
+      min-height:580px;
     }
-    .db-tab{
-      background:transparent;border:none;cursor:pointer;font-family:inherit;
-      padding:.45rem .85rem;font-size:11.5px;font-weight:700;letter-spacing:.6px;
-      text-transform:uppercase;color:#8fa3c5;border-radius:7px;
-      transition:color .2s var(--ease),background .2s var(--ease);
+    .vs-sidebar{
+      padding:1.1rem .7rem;
+      background:rgba(2,6,14,.6);
+      border-right:1px solid rgba(190,222,245,.08);
+      display:flex;flex-direction:column;
+    }
+    .vs-brand{
+      display:flex;align-items:center;gap:.6rem;
+      padding:0 .5rem .85rem;
+      border-bottom:1px solid rgba(190,222,245,.08);
+      margin-bottom:.85rem;
+    }
+    .vs-logo{
+      width:28px;height:28px;border-radius:8px;flex-shrink:0;
+      background:linear-gradient(135deg,var(--cyan),var(--blue-soft));
+      color:var(--navy-900);
+      display:flex;align-items:center;justify-content:center;
+      font-weight:800;font-size:13px;
+      box-shadow:0 0 14px rgba(122,224,255,.35);
+    }
+    .vs-brand-name{font-size:12px;font-weight:700;color:#fff;line-height:1}
+    .vs-brand-sub{font-size:9.5px;color:#8fa3c5;letter-spacing:1.4px;text-transform:uppercase;margin-top:.18rem}
+    .vs-nav{display:flex;flex-direction:column;gap:.15rem}
+    .vs-navitem{
+      display:flex;align-items:center;gap:.6rem;
+      padding:.55rem .6rem;
+      background:transparent;border:none;border-radius:7px;
+      color:#9fb0cb;font-size:12px;font-weight:600;cursor:pointer;
+      text-align:left;font-family:inherit;width:100%;
       position:relative;
+      transition:color .15s,background .15s;
     }
-    .db-tab:hover{color:#dfeaf6;background:rgba(122,224,255,.05)}
-    .db-tab.active{
+    .vs-navitem:hover{color:#dfeaf6;background:rgba(122,224,255,.05)}
+    .vs-navitem.active{
       color:var(--cyan);background:rgba(122,224,255,.1);
-      box-shadow:inset 0 0 0 1px rgba(122,224,255,.25);
+      box-shadow:inset 2px 0 0 var(--cyan);
     }
-    .db-tab .ico{margin-right:.4rem;font-size:12px;line-height:1}
+    .vs-navitem.locked{opacity:.55;cursor:not-allowed}
+    .vs-navitem.locked:hover{background:transparent;color:#9fb0cb}
+    .vs-navitem .ico{
+      width:16px;font-size:13px;text-align:center;flex-shrink:0;line-height:1;
+    }
+    .vs-badge{
+      margin-left:auto;padding:.12rem .4rem;border-radius:4px;
+      background:rgba(122,224,255,.12);color:var(--cyan);
+      font-size:8px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;
+    }
+    .vs-nav-divider{
+      height:1px;background:rgba(190,222,245,.08);
+      margin:.5rem .35rem;
+    }
+    .vs-sidefoot{
+      margin-top:auto;padding-top:.85rem;
+      border-top:1px solid rgba(190,222,245,.08);
+      display:flex;align-items:center;gap:.55rem;
+      padding-left:.5rem;
+    }
+    .vs-sidefoot .av{
+      width:24px;height:24px;border-radius:50%;
+      background:linear-gradient(135deg,var(--cyan),var(--blue-soft));
+      color:var(--navy-900);font-weight:800;font-size:10px;
+      display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    }
+    .vs-sidefoot .nm{font-size:10.5px;color:#c8d3e3;font-weight:700;line-height:1}
+    .vs-sidefoot .em{font-size:9px;color:#7a8aa8;letter-spacing:.2px;margin-top:.15rem}
+
+    .vs-main{padding:.95rem 1.1rem 1.1rem;min-width:0;display:flex;flex-direction:column}
+    .vs-topbar{
+      display:flex;justify-content:space-between;align-items:center;gap:1rem;
+      padding:0 0 .8rem;margin-bottom:.85rem;
+      border-bottom:1px solid rgba(190,222,245,.08);
+    }
+    .vs-account{
+      display:flex;align-items:center;gap:.5rem;
+      color:#c8d3e3;font-size:11.5px;font-weight:700;
+    }
+    .vs-account::before{
+      content:"";width:7px;height:7px;border-radius:50%;
+      background:var(--mint);box-shadow:0 0 8px var(--mint);
+    }
+    .vs-status{
+      color:#8fa3c5;font-size:10px;letter-spacing:.4px;text-transform:uppercase;font-weight:700;
+    }
     .db-pane{display:none}
     .db-pane.active{display:block;animation:db-fade .3s var(--ease-out)}
     @keyframes db-fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+    /* Mobile: collapse sidebar to a horizontal scroll strip of nav items,
+       hide brand + locked + footer. */
+    @media (max-width:820px){
+      .vs-app{grid-template-columns:1fr;min-height:0}
+      .vs-sidebar{
+        border-right:none;border-bottom:1px solid rgba(190,222,245,.08);
+        padding:.55rem .65rem;flex-direction:row;align-items:center;
+        overflow-x:auto;-webkit-overflow-scrolling:touch;
+      }
+      .vs-brand,.vs-sidefoot,.vs-nav-divider{display:none}
+      .vs-navitem.locked{display:none}
+      .vs-nav{flex-direction:row;gap:.2rem;flex-shrink:0}
+      .vs-navitem{flex-shrink:0;padding:.5rem .75rem;font-size:11.5px}
+      .vs-navitem.active{box-shadow:inset 0 -2px 0 var(--cyan);background:transparent}
+      .vs-main{padding:.85rem .9rem 1rem}
+    }
 
     /* ---- Trades pane (trade log table) ---- */
     .trade-log{display:flex;flex-direction:column;gap:.5rem}
@@ -1843,17 +1936,44 @@
              iframe embed once journal.globalv.me is publicly deployed
              (Phase 8). -->
         <div class="dashboard reveal" id="visionSyncMock">
-          <div class="db-head">
-            <div class="pair"><span class="emoji">●</span> Vision Sync · Journal</div>
-            <div class="pill"><span class="dot"></span>Demo · Click tabs</div>
-          </div>
+          <div class="vs-app">
+            <!-- Sidebar (mimics the actual Vision Sync left nav) -->
+            <aside class="vs-sidebar">
+              <div class="vs-brand">
+                <div class="vs-logo">V</div>
+                <div>
+                  <div class="vs-brand-name">Vision Sync</div>
+                  <div class="vs-brand-sub">Journal</div>
+                </div>
+              </div>
 
-          <!-- Tab nav -->
-          <div class="db-tabs" role="tablist" aria-label="Vision Sync demo">
-            <button class="db-tab active" type="button" data-tab="calendar" role="tab" aria-selected="true"><span class="ico">▦</span>Calendar</button>
-            <button class="db-tab"        type="button" data-tab="trades"   role="tab" aria-selected="false"><span class="ico">≡</span>Trades</button>
-            <button class="db-tab"        type="button" data-tab="analytics" role="tab" aria-selected="false"><span class="ico">◴</span>Analytics</button>
-          </div>
+              <nav class="vs-nav" role="tablist" aria-label="Vision Sync demo">
+                <button class="vs-navitem active" type="button" data-tab="calendar" role="tab" aria-selected="true"><span class="ico">▦</span>Calendar</button>
+                <button class="vs-navitem"        type="button" data-tab="trades"   role="tab" aria-selected="false"><span class="ico">≡</span>Trades</button>
+                <button class="vs-navitem"        type="button" data-tab="analytics" role="tab" aria-selected="false"><span class="ico">◴</span>Analytics</button>
+
+                <div class="vs-nav-divider"></div>
+
+                <button class="vs-navitem locked" type="button" disabled><span class="ico">✦</span>Vision Intel<span class="vs-badge">Beta</span></button>
+                <button class="vs-navitem locked" type="button" disabled><span class="ico">★</span>Leaderboard<span class="vs-badge">Soon</span></button>
+                <button class="vs-navitem locked" type="button" disabled><span class="ico">◷</span>Accounts</button>
+              </nav>
+
+              <div class="vs-sidefoot">
+                <div class="av">DM</div>
+                <div>
+                  <div class="nm">Demo Member</div>
+                  <div class="em">VT Markets · Live</div>
+                </div>
+              </div>
+            </aside>
+
+            <!-- Main content (panes swap on sidebar click) -->
+            <main class="vs-main">
+              <div class="vs-topbar">
+                <div class="vs-account">VT Markets · Live #14823</div>
+                <div class="vs-status">Synced · 2m ago</div>
+              </div>
 
           <!-- Calendar pane -->
           <div class="db-pane active" data-pane="calendar" role="tabpanel">
@@ -2058,6 +2178,8 @@
               <div class="perf-bar"><span class="lbl">New York</span><div class="bar"><div class="fill" style="width:74%"></div></div><span class="val">74%</span></div>
               <div class="perf-bar"><span class="lbl">Asia</span><div class="bar"><div class="fill" style="width:69%"></div></div><span class="val">69%</span></div>
             </div>
+          </div>
+            </main>
           </div>
         </div>
       </div>
@@ -3115,11 +3237,11 @@
       a.addEventListener('click', ()=>setMobileMenu(false));
     });
 
-    /* ---------- Vision Sync demo tabs (calendar / trades / analytics) ---------- */
+    /* ---------- Vision Sync demo sidebar nav (calendar / trades / analytics) ---------- */
     (function(){
       const mock = document.getElementById('visionSyncMock');
       if(!mock) return;
-      const tabs  = mock.querySelectorAll('.db-tab');
+      const tabs  = mock.querySelectorAll('.vs-navitem:not(.locked)');
       const panes = mock.querySelectorAll('.db-pane');
       tabs.forEach(tab=>{
         tab.addEventListener('click', ()=>{
