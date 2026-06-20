@@ -1203,7 +1203,7 @@
       text-align:right;color:var(--mint);font-weight:700;font-size:11px;
     }
 
-    /* ---- Trade Replay pane (price chart + scrubber + Sentinel notes) ---- */
+    /* ---- Trade Replay pane (price chart + scrubber + replay notes) ---- */
     .replay-meta{
       display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;
       padding:.7rem .65rem;margin-bottom:.7rem;
@@ -2030,7 +2030,7 @@
           <p>A premium trading journal built for the Global Vision community — log every trade, surface every mistake, and watch your edge compound. Hosted free at <b>journal.globalv.me</b>.</p>
           <ul class="checklist">
             <li><span class="check">✓</span>Calendar P&amp;L heatmap — every winning day and every drawdown at a glance</li>
-            <li><span class="check">✓</span>Sentinel AI auto-tags psychological errors and repeat setup failures</li>
+            <li><span class="check">✓</span>Auto-tag setups, mistakes, and recurring patterns as you log every trade</li>
             <li><span class="check">✓</span>One-click CSV import from VT Markets, PU Prime, Vantage and any MT5 broker</li>
             <li><span class="check">✓</span>Multi-account tracking, leaderboards, equity curves, and R-multiples</li>
           </ul>
@@ -2137,7 +2137,7 @@
               <div class="m"><div class="n">1 : 2.8</div><div class="l">Avg R</div></div>
             </div>
 
-            <!-- Recent trades (Sentinel-tagged) -->
+            <!-- Recent trades -->
             <div class="signals-list">
               <div class="sig-row">
                 <div class="side buy">B</div>
@@ -2180,61 +2180,61 @@
             <div class="trade-log">
               <div class="trade-row">
                 <div class="tside buy">B</div>
-                <div class="tinfo"><div class="tsym">XAUUSD · London Open</div><div class="tnote">Sentinel: clean breakout</div></div>
+                <div class="tinfo"><div class="tsym">XAUUSD · London Open</div><div class="tnote">Setup: clean breakout</div></div>
                 <div class="tprice"><b>4685.20</b>→4710.00</div>
                 <div class="tr up">+1.4R</div>
               </div>
               <div class="trade-row">
                 <div class="tside buy">B</div>
-                <div class="tinfo"><div class="tsym">BTCUSD · Trend Continuation</div><div class="tnote">Sentinel: HTF aligned</div></div>
+                <div class="tinfo"><div class="tsym">BTCUSD · Trend Continuation</div><div class="tnote">Setup: HTF aligned</div></div>
                 <div class="tprice"><b>82,100</b>→84,800</div>
                 <div class="tr up">+2.6R</div>
               </div>
               <div class="trade-row">
                 <div class="tside sell">S</div>
-                <div class="tinfo"><div class="tsym">EURUSD · NY Reversal</div><div class="tnote">Sentinel: liquidity sweep</div></div>
+                <div class="tinfo"><div class="tsym">EURUSD · NY Reversal</div><div class="tnote">Setup: liquidity sweep</div></div>
                 <div class="tprice"><b>1.08650</b>→1.08200</div>
                 <div class="tr up">+0.9R</div>
               </div>
               <div class="trade-row">
                 <div class="tside sell">S</div>
-                <div class="tinfo"><div class="tsym">US30 · Chased entry</div><div class="tnote">Sentinel flagged: late entry · stop hit</div></div>
+                <div class="tinfo"><div class="tsym">US30 · Chased entry</div><div class="tnote">Note: late entry · stop hit</div></div>
                 <div class="tprice"><b>50,120</b>→50,260</div>
                 <div class="tr dn">−1.0R</div>
               </div>
               <div class="trade-row">
                 <div class="tside buy">B</div>
-                <div class="tinfo"><div class="tsym">GBPUSD · NY Open</div><div class="tnote">Sentinel: confluence at H4</div></div>
+                <div class="tinfo"><div class="tsym">GBPUSD · NY Open</div><div class="tnote">Setup: confluence at H4</div></div>
                 <div class="tprice"><b>1.27450</b>→1.28100</div>
                 <div class="tr up">+1.3R</div>
               </div>
               <div class="trade-row">
                 <div class="tside buy">B</div>
-                <div class="tinfo"><div class="tsym">XAUUSD · Asia Reload</div><div class="tnote">Sentinel: 2nd attempt</div></div>
+                <div class="tinfo"><div class="tsym">XAUUSD · Asia Reload</div><div class="tnote">Setup: 2nd attempt</div></div>
                 <div class="tprice"><b>4658.00</b>→4685.00</div>
                 <div class="tr up">+0.5R</div>
               </div>
               <div class="trade-row">
                 <div class="tside sell">S</div>
-                <div class="tinfo"><div class="tsym">USDJPY · Asia Open</div><div class="tnote">Sentinel: range rejection</div></div>
+                <div class="tinfo"><div class="tsym">USDJPY · Asia Open</div><div class="tnote">Setup: range rejection</div></div>
                 <div class="tprice"><b>156.40</b>→155.50</div>
                 <div class="tr up">+1.8R</div>
               </div>
               <div class="trade-row">
                 <div class="tside buy">B</div>
-                <div class="tinfo"><div class="tsym">EURUSD · London Open</div><div class="tnote">Sentinel: liquidity grab</div></div>
+                <div class="tinfo"><div class="tsym">EURUSD · London Open</div><div class="tnote">Setup: liquidity grab</div></div>
                 <div class="tprice"><b>1.08150</b>→1.08600</div>
                 <div class="tr up">+0.9R</div>
               </div>
               <div class="trade-row">
                 <div class="tside sell">S</div>
-                <div class="tinfo"><div class="tsym">BTCUSD · Distribution</div><div class="tnote">Sentinel flagged: early exit</div></div>
+                <div class="tinfo"><div class="tsym">BTCUSD · Distribution</div><div class="tnote">Note: early exit</div></div>
                 <div class="tprice"><b>83,400</b>→82,800</div>
                 <div class="tr dn">−0.4R</div>
               </div>
               <div class="trade-row">
                 <div class="tside buy">B</div>
-                <div class="tinfo"><div class="tsym">XAUUSD · NY Sweep</div><div class="tnote">Sentinel: bias confirmed</div></div>
+                <div class="tinfo"><div class="tsym">XAUUSD · NY Sweep</div><div class="tnote">Setup: bias confirmed</div></div>
                 <div class="tprice"><b>4672.00</b>→4708.00</div>
                 <div class="tr up">+1.6R</div>
               </div>
@@ -2304,7 +2304,7 @@
             </div>
 
             <div class="replay-notes">
-              <h5>Sentinel Annotations</h5>
+              <h5>Trade Notes</h5>
               <div class="replay-note">
                 <div class="ts">09:45</div>
                 <div><span class="tag">Entry</span>Break + retest of London VAH. Clean structure.</div>
