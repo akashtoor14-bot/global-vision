@@ -1098,6 +1098,14 @@
       filter:drop-shadow(0 0 5px rgba(122,224,255,.5));
     }
     @keyframes indPulseDraw{to{stroke-dashoffset:0}}
+    .anim-indicators .pulse-fill{
+      opacity:0;
+      animation:indFillIn 1.2s ease-out 2.2s forwards;
+    }
+    @keyframes indFillIn{
+      0%  {opacity:0}
+      100%{opacity:1}
+    }
     .anim-indicators .spike-guide{
       opacity:0;
       animation:indSpikeGuideIn .4s ease-out 3.9s forwards;
@@ -1137,7 +1145,7 @@
     }
     @media (prefers-reduced-motion: reduce){
       .anim-indicators .frame,.anim-indicators .frame-glow,
-      .anim-indicators .status-dot,.anim-indicators .pulse-line,
+      .anim-indicators .status-dot,.anim-indicators .pulse-line,.anim-indicators .pulse-fill,
       .anim-indicators .spike-guide,.anim-indicators .spike-dot,.anim-indicators .spike-pulse,
       .anim-indicators .alert{
         animation:none;opacity:1;transform:none;stroke-dashoffset:0;
@@ -2910,6 +2918,10 @@
                   <stop offset="0" stop-color="rgba(122,224,255,.08)"/>
                   <stop offset="1" stop-color="rgba(122,224,255,0)"/>
                 </radialGradient>
+                <linearGradient id="indChartFill" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="rgba(122,224,255,.28)"/>
+                  <stop offset="1" stop-color="rgba(122,224,255,0)"/>
+                </linearGradient>
               </defs>
 
               <!-- Ambient backdrop glow -->
@@ -2939,9 +2951,14 @@
                 <text x="42" y="31" fill="#6cf3b4" font-family="Inter,sans-serif" font-size="6" font-weight="800" letter-spacing="1.5">PULSE · ACTIVE</text>
                 <text x="288" y="31" text-anchor="end" fill="rgba(190,222,245,.6)" font-family="JetBrains Mono,monospace" font-size="5.5" font-weight="600">SCANNING 24/7</text>
 
-                <!-- Pulse waveform line — real chart-like zigzag with a dramatic spike mid-screen -->
+                <!-- Mountain-chart area fill underneath the price line -->
+                <path class="pulse-fill"
+                      d="M30,118 L40,108 L50,114 L60,98 L70,108 L82,92 L92,100 L104,114 L114,106 L122,110 L132,96 L142,102 L150,88 L158,94 L164,80 L168,70 L172,42 L178,56 L186,50 L196,62 L206,54 L216,68 L226,60 L236,72 L246,64 L256,76 L266,68 L276,80 L290,72 L290,146 L30,146 Z"
+                      fill="url(#indChartFill)"/>
+
+                <!-- Pulse / price line — chart-like zigzag with proper swings + a dramatic breakout spike -->
                 <path class="pulse-line" pathLength="100"
-                      d="M30,108 L40,100 L50,106 L60,94 L70,102 L80,90 L90,96 L100,86 L110,92 L120,88 L130,96 L140,84 L150,92 L160,86 L168,88 L170,84 L172,42 L174,84 L176,88 L186,80 L196,86 L206,76 L216,82 L226,74 L236,80 L246,72 L256,78 L266,70 L276,76 L290,72"
+                      d="M30,118 L40,108 L50,114 L60,98 L70,108 L82,92 L92,100 L104,114 L114,106 L122,110 L132,96 L142,102 L150,88 L158,94 L164,80 L168,70 L172,42 L178,56 L186,50 L196,62 L206,54 L216,68 L226,60 L236,72 L246,64 L256,76 L266,68 L276,80 L290,72"
                       fill="none" stroke="#7ae0ff" stroke-width="1.6"
                       stroke-linecap="round" stroke-linejoin="round"/>
 
