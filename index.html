@@ -1152,121 +1152,100 @@
       }
     }
 
-    /* ---- 4. Global Vision Academy — premium open book / library ----
-       Ambient cyan glow underneath. Background library spines on
-       both sides fade in for depth. Hero open book fades + scales
-       in then idle-floats. Left page reveals a chapter heading +
-       paragraph lines that "write themselves" left-to-right. Right
-       page reveals a breakout-pattern diagram (S/R levels + 5 mini
-       candles rising sequentially + green breakout arrow). Ribbon
-       bookmark sways. Knowledge sparkles twinkle above the book. */
-    .anim-academy .book-glow{
+    /* ---- 4. Global Vision Academy — premium skill-tree map ----
+       Central hexagonal GV crest with 6 discipline nodes radiating
+       outward (Market Structure, Order Flow, Risk Mgmt, Psychology,
+       Strategy, Technical Analysis). Crest fades in, glowing cyan
+       spokes draw outward one by one, nodes pop in following each
+       spoke, labels fade in, then an outer hex ring traces around
+       to connect the whole curriculum. Crest pulses continuously. */
+    .anim-academy .map-glow{
       transform-origin:center;transform-box:fill-box;
-      animation:acGlow 4s ease-in-out infinite;
+      animation:acMapGlow 5s ease-in-out infinite;
     }
-    @keyframes acGlow{
-      0%,100%{opacity:.45;transform:scaleX(1)}
-      50%    {opacity:.75;transform:scaleX(1.06)}
+    @keyframes acMapGlow{
+      0%,100%{opacity:.55;transform:scale(1)}
+      50%    {opacity:.9; transform:scale(1.05)}
     }
-    .anim-academy .bookstack{
-      opacity:0;
-      animation:acStackIn .6s ease-out .8s forwards;
-    }
-    @keyframes acStackIn{0%{opacity:0}100%{opacity:1}}
-    .anim-academy .book{
+    .anim-academy .crest{
       transform-origin:center;transform-box:fill-box;
       opacity:0;
-      animation:acBookIn 1s cubic-bezier(.22,1,.36,1) .15s forwards,
-                acBookFloat 6s ease-in-out infinite 1.2s;
+      animation:acCrestIn .8s cubic-bezier(.22,1,.36,1) .15s forwards;
     }
-    @keyframes acBookIn{
-      0%  {opacity:0;transform:translateY(8px) scale(.95)}
-      100%{opacity:1;transform:translateY(0)   scale(1)}
+    @keyframes acCrestIn{
+      0%  {opacity:0;transform:scale(.55)}
+      100%{opacity:1;transform:scale(1)}
     }
-    @keyframes acBookFloat{
-      0%,100%{transform:translateY(0)}
-      50%    {transform:translateY(-2.5px)}
-    }
-    .anim-academy .left-content{
-      opacity:0;
-      animation:acContentIn .5s ease-out 1.2s forwards;
-    }
-    .anim-academy .right-content{
-      opacity:0;
-      animation:acContentIn .5s ease-out 1.4s forwards;
-    }
-    @keyframes acContentIn{0%{opacity:0}100%{opacity:1}}
-    .anim-academy .page-line{
-      transform-origin:left center;transform-box:fill-box;
-      animation:acLineDraw .5s cubic-bezier(.22,1,.36,1) backwards;
-    }
-    .anim-academy .page-line.pl1{animation-delay:1.6s}
-    .anim-academy .page-line.pl2{animation-delay:1.75s}
-    .anim-academy .page-line.pl3{animation-delay:1.9s}
-    .anim-academy .page-line.pl4{animation-delay:2.05s}
-    .anim-academy .page-line.pl5{animation-delay:2.2s}
-    .anim-academy .page-line.pl6{animation-delay:2.35s}
-    @keyframes acLineDraw{
-      0%  {transform:scaleX(0)}
-      100%{transform:scaleX(1)}
-    }
-    .anim-academy .chart-line{
-      transform-origin:left center;transform-box:fill-box;
-      animation:acLineDraw .6s cubic-bezier(.22,1,.36,1) backwards;
-    }
-    .anim-academy .chart-line.cr1{animation-delay:1.8s}
-    .anim-academy .chart-line.cr2{animation-delay:2.0s}
-    .anim-academy .cdl{
-      transform-origin:bottom center;transform-box:fill-box;
-      animation:acCdlRise .5s cubic-bezier(.22,1,.36,1) backwards;
-    }
-    .anim-academy .cdl.mc1{animation-delay:2.2s}
-    .anim-academy .cdl.mc2{animation-delay:2.35s}
-    .anim-academy .cdl.mc3{animation-delay:2.5s}
-    .anim-academy .cdl.mc4{animation-delay:2.65s}
-    .anim-academy .cdl.mc5{animation-delay:2.8s}
-    @keyframes acCdlRise{
-      0%  {transform:scaleY(0);opacity:0}
-      100%{transform:scaleY(1);opacity:1}
-    }
-    .anim-academy .chart-arrow{
-      opacity:0;
-      animation:acArrowIn .4s cubic-bezier(.34,1.4,.5,1) 3.0s forwards;
-      filter:drop-shadow(0 0 4px rgba(108,243,180,.5));
-    }
-    @keyframes acArrowIn{
-      0%  {opacity:0;transform:translateY(4px) scale(.7)}
-      100%{opacity:1;transform:translateY(0)   scale(1)}
-    }
-    .anim-academy .bookmark{
-      transform-origin:160px 40px;
-      animation:acBookmarkSway 5s ease-in-out infinite 1.6s;
-    }
-    @keyframes acBookmarkSway{
-      0%,100%{transform:rotate(0deg)}
-      50%    {transform:rotate(-2.5deg)}
-    }
-    .anim-academy .prt{
+    .anim-academy .crest-pulse{
       transform-origin:center;transform-box:fill-box;
-      animation:acPrtTwinkle 3s ease-in-out infinite;
-      filter:drop-shadow(0 0 3px rgba(122,224,255,.7));
+      opacity:0;
+      animation:acCrestPulse 2.6s ease-out infinite 1.4s;
     }
-    .anim-academy .prt.p1{animation-delay:2.8s}
-    .anim-academy .prt.p2{animation-delay:3.2s}
-    .anim-academy .prt.p3{animation-delay:3.6s}
-    .anim-academy .prt.p4{animation-delay:4.0s}
-    .anim-academy .prt.p5{animation-delay:4.4s}
-    @keyframes acPrtTwinkle{
-      0%,100%{opacity:0;transform:scale(.5)}
-      30%    {opacity:1;transform:scale(1.3)}
-      60%    {opacity:.4;transform:scale(.9)}
+    .anim-academy .crest-pulse.cp2{animation-delay:2.7s}
+    @keyframes acCrestPulse{
+      0%  {transform:scale(.65);opacity:.85}
+      100%{transform:scale(2.2);opacity:0}
     }
+    .anim-academy .crest-hex{
+      animation:acCrestHexGlow 3s ease-in-out infinite 2.5s;
+    }
+    @keyframes acCrestHexGlow{
+      0%,100%{filter:drop-shadow(0 0 4px rgba(122,224,255,.4))}
+      50%    {filter:drop-shadow(0 0 9px rgba(122,224,255,.75))}
+    }
+    .anim-academy .spoke{
+      stroke-dasharray:1;
+      stroke-dashoffset:1;
+      animation:acSpokeDraw .55s cubic-bezier(.4,0,.2,1) backwards;
+    }
+    .anim-academy .spoke.sk1{animation-delay:.85s}
+    .anim-academy .spoke.sk2{animation-delay:1.00s}
+    .anim-academy .spoke.sk3{animation-delay:1.15s}
+    .anim-academy .spoke.sk4{animation-delay:1.30s}
+    .anim-academy .spoke.sk5{animation-delay:1.45s}
+    .anim-academy .spoke.sk6{animation-delay:1.60s}
+    @keyframes acSpokeDraw{to{stroke-dashoffset:0}}
+    .anim-academy .node{
+      transform-origin:center;transform-box:fill-box;
+      opacity:0;
+      animation:acNodeIn .45s cubic-bezier(.34,1.4,.5,1) backwards;
+      filter:drop-shadow(0 0 4px rgba(122,224,255,.45));
+    }
+    .anim-academy .node.nd1{animation-delay:1.25s}
+    .anim-academy .node.nd2{animation-delay:1.40s}
+    .anim-academy .node.nd3{animation-delay:1.55s}
+    .anim-academy .node.nd4{animation-delay:1.70s}
+    .anim-academy .node.nd5{animation-delay:1.85s}
+    .anim-academy .node.nd6{animation-delay:2.00s}
+    @keyframes acNodeIn{
+      0%  {opacity:0;transform:scale(0)}
+      100%{opacity:1;transform:scale(1)}
+    }
+    .anim-academy .label{
+      opacity:0;
+      animation:acLabelIn .4s ease-out backwards;
+    }
+    .anim-academy .label.lb1{animation-delay:1.55s}
+    .anim-academy .label.lb2{animation-delay:1.70s}
+    .anim-academy .label.lb3{animation-delay:1.85s}
+    .anim-academy .label.lb4{animation-delay:2.00s}
+    .anim-academy .label.lb5{animation-delay:2.15s}
+    .anim-academy .label.lb6{animation-delay:2.30s}
+    @keyframes acLabelIn{
+      0%  {opacity:0;transform:translateY(2px)}
+      100%{opacity:1;transform:translateY(0)}
+    }
+    .anim-academy .ring{
+      stroke-dasharray:1;
+      stroke-dashoffset:1;
+      animation:acRingDraw 1.6s cubic-bezier(.4,0,.2,1) 2.4s forwards;
+    }
+    @keyframes acRingDraw{to{stroke-dashoffset:0}}
     @media (prefers-reduced-motion: reduce){
-      .anim-academy .book-glow,.anim-academy .bookstack,
-      .anim-academy .book,.anim-academy .left-content,.anim-academy .right-content,
-      .anim-academy .page-line,.anim-academy .chart-line,.anim-academy .cdl,
-      .anim-academy .chart-arrow,.anim-academy .bookmark,.anim-academy .prt{
-        animation:none;opacity:1;transform:none;
+      .anim-academy .map-glow,.anim-academy .crest,
+      .anim-academy .crest-pulse,.anim-academy .crest-hex,
+      .anim-academy .spoke,.anim-academy .node,.anim-academy .label,.anim-academy .ring{
+        animation:none;opacity:1;transform:none;stroke-dashoffset:0;
       }
     }
 
@@ -3074,110 +3053,76 @@
           <div class="card-banner">
             <svg class="anim-svg anim-academy" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
               <defs>
-                <linearGradient id="acPageGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="rgba(245,237,220,.95)"/>
-                  <stop offset="1" stop-color="rgba(218,200,165,.9)"/>
-                </linearGradient>
+                <radialGradient id="acMapGlow" cx="0.5" cy="0.5" r="0.5">
+                  <stop offset="0" stop-color="rgba(122,224,255,.22)"/>
+                  <stop offset="1" stop-color="rgba(122,224,255,0)"/>
+                </radialGradient>
               </defs>
 
-              <!-- Ambient glow under book -->
-              <ellipse class="book-glow" cx="160" cy="162" rx="100" ry="5" fill="rgba(122,224,255,.22)"/>
+              <!-- Ambient backdrop glow -->
+              <circle class="map-glow" cx="160" cy="90" r="90" fill="url(#acMapGlow)"/>
 
-              <!-- Background library spines (subtle context) -->
-              <g class="bookstack">
-                <rect x="30" y="42" width="8" height="106" rx="1" fill="rgba(122,224,255,.18)" stroke="rgba(122,224,255,.40)" stroke-width=".5"/>
-                <rect x="42" y="48" width="6" height="98"  rx="1" fill="rgba(108,243,180,.16)" stroke="rgba(108,243,180,.35)" stroke-width=".5"/>
-                <rect x="52" y="40" width="10" height="110" rx="1" fill="rgba(190,222,245,.18)" stroke="rgba(190,222,245,.35)" stroke-width=".5"/>
-                <rect x="258" y="40" width="10" height="110" rx="1" fill="rgba(255,200,122,.16)" stroke="rgba(255,200,122,.35)" stroke-width=".5"/>
-                <rect x="272" y="48" width="6"  height="98"  rx="1" fill="rgba(108,243,180,.16)" stroke="rgba(108,243,180,.35)" stroke-width=".5"/>
-                <rect x="282" y="42" width="8"  height="106" rx="1" fill="rgba(122,224,255,.18)" stroke="rgba(122,224,255,.40)" stroke-width=".5"/>
+              <!-- Outer hex ring tracing the discipline perimeter -->
+              <path class="ring" pathLength="1"
+                    d="M115,64 L160,38 L205,64 L205,116 L160,142 L115,116 Z"
+                    fill="none" stroke="rgba(122,224,255,.30)" stroke-width=".8"/>
+
+              <!-- Radial spokes (center → each node) -->
+              <g class="spokes">
+                <path class="spoke sk1" pathLength="1" d="M160,90 L160,38"  fill="none" stroke="rgba(122,224,255,.60)" stroke-width=".9"/>
+                <path class="spoke sk2" pathLength="1" d="M160,90 L205,64"  fill="none" stroke="rgba(122,224,255,.60)" stroke-width=".9"/>
+                <path class="spoke sk3" pathLength="1" d="M160,90 L205,116" fill="none" stroke="rgba(122,224,255,.60)" stroke-width=".9"/>
+                <path class="spoke sk4" pathLength="1" d="M160,90 L160,142" fill="none" stroke="rgba(122,224,255,.60)" stroke-width=".9"/>
+                <path class="spoke sk5" pathLength="1" d="M160,90 L115,116" fill="none" stroke="rgba(122,224,255,.60)" stroke-width=".9"/>
+                <path class="spoke sk6" pathLength="1" d="M160,90 L115,64"  fill="none" stroke="rgba(122,224,255,.60)" stroke-width=".9"/>
               </g>
 
-              <!-- Main open book -->
-              <g class="book">
-                <!-- Cover/back (visible at edges) -->
-                <rect x="64" y="38" width="192" height="112" rx="3" fill="rgba(11,28,52,.95)" stroke="rgba(122,224,255,.55)" stroke-width=".9"/>
-
-                <!-- Left page with curled outer edge -->
-                <path class="left-page"
-                      d="M68,42 L158,40 L158,148 L68,150 Q62,95 68,42 Z"
-                      fill="url(#acPageGrad)" stroke="rgba(122,224,255,.4)" stroke-width=".4"/>
-
-                <!-- Right page with curled outer edge -->
-                <path class="right-page"
-                      d="M162,40 L252,42 Q258,95 252,150 L162,148 Z"
-                      fill="url(#acPageGrad)" stroke="rgba(122,224,255,.4)" stroke-width=".4"/>
-
-                <!-- Spine / gutter shadow -->
-                <line x1="160" y1="40" x2="160" y2="148" stroke="rgba(0,0,0,.4)" stroke-width="1"/>
-
-                <!-- Left page: chapter title + paragraph lines -->
-                <g class="left-content">
-                  <text x="76" y="58" fill="rgba(7,21,43,.85)" font-family="Inter,sans-serif" font-size="6" font-weight="800" letter-spacing="1.5">CHAPTER 04</text>
-                  <text x="76" y="68" fill="rgba(7,21,43,.7)"  font-family="Inter,sans-serif" font-size="5.5" font-weight="600">Market Structure</text>
-
-                  <line class="page-line pl1" x1="76" y1="82"  x2="148" y2="82"  stroke="rgba(7,21,43,.5)" stroke-width=".5"/>
-                  <line class="page-line pl2" x1="76" y1="90"  x2="152" y2="90"  stroke="rgba(7,21,43,.5)" stroke-width=".5"/>
-                  <line class="page-line pl3" x1="76" y1="98"  x2="142" y2="98"  stroke="rgba(7,21,43,.5)" stroke-width=".5"/>
-                  <line class="page-line pl4" x1="76" y1="106" x2="150" y2="106" stroke="rgba(7,21,43,.5)" stroke-width=".5"/>
-                  <line class="page-line pl5" x1="76" y1="114" x2="146" y2="114" stroke="rgba(7,21,43,.5)" stroke-width=".5"/>
-                  <line class="page-line pl6" x1="76" y1="122" x2="138" y2="122" stroke="rgba(7,21,43,.5)" stroke-width=".5"/>
-
-                  <text x="110" y="142" fill="rgba(7,21,43,.5)" font-family="Inter,sans-serif" font-size="4">— 47 —</text>
+              <!-- Discipline nodes (just the circles — labels are separate so they animate independently) -->
+              <g class="nodes">
+                <g class="node nd1">
+                  <circle cx="160" cy="38" r="6.5" fill="rgba(11,28,52,.95)" stroke="#7ae0ff" stroke-width="1.2"/>
+                  <circle cx="160" cy="38" r="2.5" fill="#7ae0ff"/>
                 </g>
-
-                <!-- Right page: breakout-pattern diagram -->
-                <g class="right-content">
-                  <text x="170" y="58" fill="rgba(7,21,43,.85)" font-family="Inter,sans-serif" font-size="5.5" font-weight="700">Fig 4.2 · Breakout</text>
-
-                  <!-- Resistance / Support reference lines -->
-                  <line class="chart-line cr1" x1="170" y1="82"  x2="240" y2="82"  stroke="rgba(220,80,100,.7)" stroke-width=".7" stroke-dasharray="2 2"/>
-                  <text x="170" y="78.5" fill="rgba(220,80,100,.85)" font-family="JetBrains Mono,monospace" font-size="3.5" font-weight="700">R</text>
-                  <line class="chart-line cr2" x1="170" y1="116" x2="240" y2="116" stroke="rgba(50,140,70,.7)"  stroke-width=".7" stroke-dasharray="2 2"/>
-                  <text x="170" y="124" fill="rgba(50,140,70,.85)" font-family="JetBrains Mono,monospace" font-size="3.5" font-weight="700">S</text>
-
-                  <!-- 5 mini candles forming the breakout -->
-                  <g class="cdl mc1">
-                    <line x1="180" y1="96"  x2="180" y2="112" stroke="rgba(50,140,70,.7)" stroke-width=".5"/>
-                    <rect x="178" y="100" width="4" height="8"  fill="rgba(50,140,70,.7)"  stroke="rgba(50,140,70,.9)"  stroke-width=".3"/>
-                  </g>
-                  <g class="cdl mc2">
-                    <line x1="190" y1="94"  x2="190" y2="108" stroke="rgba(220,80,100,.7)" stroke-width=".5"/>
-                    <rect x="188" y="96" width="4" height="10" fill="rgba(220,80,100,.5)" stroke="rgba(220,80,100,.85)" stroke-width=".3"/>
-                  </g>
-                  <g class="cdl mc3">
-                    <line x1="200" y1="92"  x2="200" y2="106" stroke="rgba(50,140,70,.7)" stroke-width=".5"/>
-                    <rect x="198" y="94" width="4" height="10" fill="rgba(50,140,70,.7)"  stroke="rgba(50,140,70,.9)"  stroke-width=".3"/>
-                  </g>
-                  <g class="cdl mc4">
-                    <line x1="210" y1="84"  x2="210" y2="98"  stroke="rgba(50,140,70,.7)" stroke-width=".5"/>
-                    <rect x="208" y="86" width="4" height="10" fill="rgba(50,140,70,.7)"  stroke="rgba(50,140,70,.9)"  stroke-width=".3"/>
-                  </g>
-                  <g class="cdl mc5">
-                    <line x1="220" y1="74"  x2="220" y2="92"  stroke="rgba(50,140,70,.7)" stroke-width=".5"/>
-                    <rect x="218" y="76" width="4" height="12" fill="rgba(50,140,70,.7)"  stroke="rgba(50,140,70,.9)"  stroke-width=".3"/>
-                  </g>
-
-                  <!-- Breakout up-arrow above resistance -->
-                  <path class="chart-arrow" d="M230,84 L230,72 M226,76 L230,72 L234,76"
-                        fill="none" stroke="rgba(7,90,52,.9)" stroke-width="1"
-                        stroke-linecap="round" stroke-linejoin="round"/>
-
-                  <text x="200" y="142" fill="rgba(7,21,43,.5)" font-family="Inter,sans-serif" font-size="4">— 48 —</text>
+                <g class="node nd2">
+                  <circle cx="205" cy="64" r="6.5" fill="rgba(11,28,52,.95)" stroke="#7ae0ff" stroke-width="1.2"/>
+                  <circle cx="205" cy="64" r="2.5" fill="#7ae0ff"/>
                 </g>
-
-                <!-- Ribbon bookmark hanging from the spine -->
-                <path class="bookmark" d="M156,40 L156,164 L160,156 L164,164 L164,40 Z"
-                      fill="rgba(255,140,110,.75)" stroke="rgba(255,120,90,.85)" stroke-width=".3"/>
+                <g class="node nd3">
+                  <circle cx="205" cy="116" r="6.5" fill="rgba(11,28,52,.95)" stroke="#7ae0ff" stroke-width="1.2"/>
+                  <circle cx="205" cy="116" r="2.5" fill="#7ae0ff"/>
+                </g>
+                <g class="node nd4">
+                  <circle cx="160" cy="142" r="6.5" fill="rgba(11,28,52,.95)" stroke="#7ae0ff" stroke-width="1.2"/>
+                  <circle cx="160" cy="142" r="2.5" fill="#7ae0ff"/>
+                </g>
+                <g class="node nd5">
+                  <circle cx="115" cy="116" r="6.5" fill="rgba(11,28,52,.95)" stroke="#7ae0ff" stroke-width="1.2"/>
+                  <circle cx="115" cy="116" r="2.5" fill="#7ae0ff"/>
+                </g>
+                <g class="node nd6">
+                  <circle cx="115" cy="64" r="6.5" fill="rgba(11,28,52,.95)" stroke="#7ae0ff" stroke-width="1.2"/>
+                  <circle cx="115" cy="64" r="2.5" fill="#7ae0ff"/>
+                </g>
               </g>
 
-              <!-- Knowledge sparkles above the book -->
-              <g class="particles">
-                <circle class="prt p1" cx="100" cy="24" r="1.2" fill="#7ae0ff"/>
-                <circle class="prt p2" cx="135" cy="18" r="1"   fill="#7ae0ff"/>
-                <circle class="prt p3" cx="160" cy="14" r="1.3" fill="#dffaff"/>
-                <circle class="prt p4" cx="185" cy="18" r="1"   fill="#7ae0ff"/>
-                <circle class="prt p5" cx="220" cy="24" r="1.2" fill="#7ae0ff"/>
+              <!-- Discipline labels -->
+              <g class="labels">
+                <text class="label lb1" x="160" y="22"  text-anchor="middle" fill="rgba(190,222,245,.92)" font-family="Inter,sans-serif" font-size="6" font-weight="700">Market Structure</text>
+                <text class="label lb2" x="218" y="58"                       fill="rgba(190,222,245,.92)" font-family="Inter,sans-serif" font-size="6" font-weight="700">Order Flow</text>
+                <text class="label lb3" x="218" y="124"                      fill="rgba(190,222,245,.92)" font-family="Inter,sans-serif" font-size="6" font-weight="700">Risk Management</text>
+                <text class="label lb4" x="160" y="162" text-anchor="middle" fill="rgba(190,222,245,.92)" font-family="Inter,sans-serif" font-size="6" font-weight="700">Psychology</text>
+                <text class="label lb5" x="102" y="124" text-anchor="end"    fill="rgba(190,222,245,.92)" font-family="Inter,sans-serif" font-size="6" font-weight="700">Strategy</text>
+                <text class="label lb6" x="102" y="58"  text-anchor="end"    fill="rgba(190,222,245,.92)" font-family="Inter,sans-serif" font-size="6" font-weight="700">Technical Analysis</text>
+              </g>
+
+              <!-- Central GV crest (rendered last so it sits on top of the spokes) -->
+              <g class="crest">
+                <circle class="crest-pulse cp1" cx="160" cy="90" r="16" fill="none" stroke="#7ae0ff" stroke-width="1"/>
+                <circle class="crest-pulse cp2" cx="160" cy="90" r="16" fill="none" stroke="#7ae0ff" stroke-width="1"/>
+                <path class="crest-hex"
+                      d="M160,72 L175,80 L175,100 L160,108 L145,100 L145,80 Z"
+                      fill="rgba(11,28,52,.98)" stroke="#7ae0ff" stroke-width="1.4"/>
+                <text x="160" y="94" text-anchor="middle" fill="#7ae0ff" font-family="Inter,sans-serif" font-size="9" font-weight="800" letter-spacing="1">GV</text>
               </g>
             </svg>
           </div>
@@ -3186,7 +3131,7 @@
             <span class="meta-pill">Free Forever</span>
           </div>
           <h3>Global Vision Academy</h3>
-          <p>Structured curriculum from beginner to confident operator — built and taught by the same desk you trade with.</p>
+          <p>A full curriculum of trading disciplines — market structure, order flow, risk, psychology and more — built and taught by the same desk you trade with.</p>
           <span class="card-link">Explore <span class="arr">→</span></span>
         </a>
 
