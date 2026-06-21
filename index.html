@@ -845,15 +845,14 @@
       animation:signalNewGlow 3s ease-in-out infinite 2.8s;
     }
     @keyframes signalNewGlow{
-      0%,100%{filter:drop-shadow(0 0 0 rgba(108,243,180,0))}
-      50%    {filter:drop-shadow(0 0 6px rgba(108,243,180,.7))}
+      0%,100%{stroke-opacity:.55}
+      50%    {stroke-opacity:1}
     }
     .anim-signal .new-dot{
       transform-origin:center;transform-box:fill-box;
       opacity:0;
       animation:signalDotIn .35s cubic-bezier(.22,1,.36,1) 2.7s forwards,
                 signalDotPulse 1.6s ease-in-out infinite 3.2s;
-      filter:drop-shadow(0 0 3px rgba(108,243,180,.8));
     }
     @keyframes signalDotIn{
       0%  {opacity:0;transform:scale(0)}
@@ -1085,7 +1084,6 @@
     .anim-indicators .status-dot{
       transform-origin:center;transform-box:fill-box;
       animation:indStatusPulse 1.6s ease-in-out infinite .8s;
-      filter:drop-shadow(0 0 4px rgba(108,243,180,.75));
     }
     @keyframes indStatusPulse{
       0%,100%{opacity:1; transform:scale(1)}
@@ -1095,7 +1093,6 @@
       stroke-dasharray:100;
       stroke-dashoffset:100;
       animation:indPulseDraw 3s cubic-bezier(.4,0,.2,1) .8s forwards;
-      filter:drop-shadow(0 0 5px rgba(122,224,255,.5));
     }
     @keyframes indPulseDraw{to{stroke-dashoffset:0}}
     .anim-indicators .pulse-fill{
@@ -1115,7 +1112,6 @@
       transform-origin:center;transform-box:fill-box;
       opacity:0;
       animation:indSpikeDotIn .4s cubic-bezier(.34,1.4,.5,1) 4.0s forwards;
-      filter:drop-shadow(0 0 6px rgba(255,122,155,.85));
     }
     @keyframes indSpikeDotIn{
       0%  {opacity:0;transform:scale(0)}
@@ -1132,16 +1128,11 @@
     }
     .anim-indicators .alert{
       opacity:0;
-      animation:indAlertIn .55s cubic-bezier(.22,1,.36,1) 4.2s forwards,
-                indAlertGlow 3s ease-in-out infinite 5s;
+      animation:indAlertIn .55s cubic-bezier(.22,1,.36,1) 4.2s forwards;
     }
     @keyframes indAlertIn{
       0%  {opacity:0;transform:translateY(4px) scale(.95)}
       100%{opacity:1;transform:translateY(0)   scale(1)}
-    }
-    @keyframes indAlertGlow{
-      0%,100%{filter:drop-shadow(0 0 0 rgba(255,122,155,0))}
-      50%    {filter:drop-shadow(0 0 6px rgba(255,122,155,.55))}
     }
     @media (prefers-reduced-motion: reduce){
       .anim-indicators .frame,.anim-indicators .frame-glow,
@@ -1190,8 +1181,8 @@
       animation:acCrestHexGlow 3s ease-in-out infinite 2.5s;
     }
     @keyframes acCrestHexGlow{
-      0%,100%{filter:drop-shadow(0 0 4px rgba(122,224,255,.4))}
-      50%    {filter:drop-shadow(0 0 9px rgba(122,224,255,.75))}
+      0%,100%{stroke-opacity:.7}
+      50%    {stroke-opacity:1}
     }
     .anim-academy .spoke{
       stroke-dasharray:1;
@@ -1209,7 +1200,6 @@
       transform-origin:center;transform-box:fill-box;
       opacity:0;
       animation:acNodeIn .45s cubic-bezier(.34,1.4,.5,1) backwards;
-      filter:drop-shadow(0 0 4px rgba(122,224,255,.45));
     }
     .anim-academy .node.nd1{animation-delay:1.25s}
     .anim-academy .node.nd2{animation-delay:1.40s}
