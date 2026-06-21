@@ -796,6 +796,324 @@
       .anim-cal .event,.anim-cal .today-ring{animation:none}
     }
 
+    /* ============================================================
+       PRODUCTS-GRID ILLUSTRATIONS — motion graphics for each Trading
+       card. Each lives on a scoped .anim-<key> root and only animates
+       elements inside that root.
+       ============================================================ */
+
+    /* ---- 1. VIP Signal Desk ----
+       Candles grow from baseline with stagger; trend line draws;
+       BUY tag drops in with bounce + idle float. */
+    .anim-signal .candle{
+      transform-origin:bottom center;transform-box:fill-box;
+      animation:signalCandleRise 1.1s cubic-bezier(.22,1,.36,1) backwards,
+                signalCandleBreathe 3.2s ease-in-out infinite 1.6s;
+    }
+    .anim-signal .candle.c1{animation-delay:.10s, 1.60s}
+    .anim-signal .candle.c2{animation-delay:.22s, 1.80s}
+    .anim-signal .candle.c3{animation-delay:.34s, 2.00s}
+    .anim-signal .candle.c4{animation-delay:.46s, 2.20s}
+    .anim-signal .candle.c5{animation-delay:.58s, 2.40s}
+    .anim-signal .candle.c6{animation-delay:.70s, 2.60s}
+    @keyframes signalCandleRise{
+      0%  {transform:scaleY(0); opacity:0}
+      100%{transform:scaleY(1); opacity:1}
+    }
+    @keyframes signalCandleBreathe{
+      0%,100%{transform:scaleY(1)}
+      50%    {transform:scaleY(1.05)}
+    }
+    .anim-signal .trend{
+      stroke-dasharray:240; stroke-dashoffset:240;
+      animation:signalTrendDraw 1.6s cubic-bezier(.22,1,.36,1) .4s forwards;
+    }
+    @keyframes signalTrendDraw{to{stroke-dashoffset:0}}
+    .anim-signal .buy-tag{
+      transform-origin:center;transform-box:fill-box;
+      opacity:0;
+      animation:signalBuyDrop .65s cubic-bezier(.34,1.4,.5,1) 1.7s forwards,
+                signalBuyFloat 3s ease-in-out infinite 2.4s;
+      filter:drop-shadow(0 0 6px rgba(108,243,180,.5));
+    }
+    @keyframes signalBuyDrop{
+      0%  {opacity:0; transform:translateY(-14px) scale(.7)}
+      100%{opacity:1; transform:translateY(0) scale(1)}
+    }
+    @keyframes signalBuyFloat{
+      0%,100%{transform:translateY(0)}
+      50%    {transform:translateY(-3px)}
+    }
+    @media (prefers-reduced-motion: reduce){
+      .anim-signal .candle,.anim-signal .trend,.anim-signal .buy-tag{
+        animation:none;opacity:1;transform:none;stroke-dashoffset:0;
+      }
+    }
+
+    /* ---- 2. Live Trading Floor ----
+       Waveform bars pulse vertically (8 bars, EQ-style varied rhythm);
+       LIVE dot has expanding ripple; mic capsule glows. */
+    .anim-live .bar{
+      transform-origin:center;transform-box:fill-box;
+      animation:liveBarPulse 1.1s ease-in-out infinite;
+      filter:drop-shadow(0 0 4px rgba(122,224,255,.55));
+    }
+    .anim-live .bar.b1{animation-duration:1.30s; animation-delay:-.10s}
+    .anim-live .bar.b2{animation-duration:0.95s; animation-delay:-.45s}
+    .anim-live .bar.b3{animation-duration:1.50s; animation-delay:-.20s}
+    .anim-live .bar.b4{animation-duration:1.05s; animation-delay:-.65s}
+    .anim-live .bar.b5{animation-duration:1.20s; animation-delay:-.30s}
+    .anim-live .bar.b6{animation-duration:0.90s; animation-delay:-.55s}
+    .anim-live .bar.b7{animation-duration:1.40s; animation-delay:-.15s}
+    .anim-live .bar.b8{animation-duration:1.10s; animation-delay:-.70s}
+    @keyframes liveBarPulse{
+      0%,100%{transform:scaleY(.30)}
+      50%    {transform:scaleY(1.25)}
+    }
+    .anim-live .live-dot{
+      transform-origin:center;transform-box:fill-box;
+      animation:liveDotPulse 1.4s ease-in-out infinite;
+    }
+    @keyframes liveDotPulse{
+      0%,100%{transform:scale(1);  opacity:1}
+      50%    {transform:scale(1.25);opacity:.7}
+    }
+    .anim-live .live-ring{
+      transform-origin:center;transform-box:fill-box;
+      animation:liveRingExpand 1.8s ease-out infinite;
+    }
+    @keyframes liveRingExpand{
+      0%   {transform:scale(.6); opacity:1}
+      100% {transform:scale(2.4);opacity:0}
+    }
+    .anim-live .mic-glow{
+      transform-origin:center;transform-box:fill-box;
+      animation:liveMicGlow 2s ease-in-out infinite;
+    }
+    @keyframes liveMicGlow{
+      0%,100%{transform:scale(1);  opacity:.85}
+      50%    {transform:scale(1.5);opacity:1}
+    }
+    @media (prefers-reduced-motion: reduce){
+      .anim-live .bar,.anim-live .live-dot,.anim-live .live-ring,.anim-live .mic-glow{
+        animation:none;
+      }
+    }
+
+    /* ---- 3. Vision Edge · Pulse (Indicators) ----
+       Price line continuously draws left-to-right and resets;
+       trigger dot pulses outward; zone bands subtly breathe. */
+    .anim-indicators .price-line{
+      stroke-dasharray:360; stroke-dashoffset:360;
+      animation:indicatorsPriceDraw 4s ease-in-out infinite;
+    }
+    @keyframes indicatorsPriceDraw{
+      0%  {stroke-dashoffset:360}
+      45% {stroke-dashoffset:0}
+      85% {stroke-dashoffset:0; opacity:1}
+      100%{stroke-dashoffset:0; opacity:0}
+    }
+    .anim-indicators .trigger{
+      transform-origin:center;transform-box:fill-box;
+      animation:indicatorsTrigger 4s ease-in-out infinite;
+      filter:drop-shadow(0 0 6px rgba(122,224,255,.8));
+    }
+    @keyframes indicatorsTrigger{
+      0%,28%  {transform:scale(0); opacity:0}
+      32%     {transform:scale(1.6); opacity:1}
+      40%     {transform:scale(1);   opacity:1}
+      90%     {transform:scale(1);   opacity:1}
+      100%    {transform:scale(1);   opacity:0}
+    }
+    .anim-indicators .zone-demand,.anim-indicators .zone-supply{
+      animation:indicatorsZoneBreathe 3s ease-in-out infinite;
+    }
+    .anim-indicators .zone-supply{animation-delay:-1.5s}
+    @keyframes indicatorsZoneBreathe{
+      0%,100%{opacity:.6}
+      50%    {opacity:1}
+    }
+    @media (prefers-reduced-motion: reduce){
+      .anim-indicators .price-line,.anim-indicators .trigger,
+      .anim-indicators .zone-demand,.anim-indicators .zone-supply{
+        animation:none; stroke-dashoffset:0; opacity:1;
+      }
+    }
+
+    /* ---- 4. Global Vision Academy ----
+       Curriculum bars fill in sequentially (Beginner → Advanced → Elite);
+       mortarboard subtly floats; tassel swings. */
+    .anim-academy .cap{
+      transform-origin:center;transform-box:fill-box;
+      animation:academyCapFloat 4s ease-in-out infinite;
+    }
+    @keyframes academyCapFloat{
+      0%,100%{transform:translateY(0)}
+      50%    {transform:translateY(-3px)}
+    }
+    .anim-academy .tassel{
+      transform-origin:38px 2px;
+      animation:academyTassel 3s ease-in-out infinite;
+    }
+    @keyframes academyTassel{
+      0%,100%{transform:rotate(-6deg)}
+      50%    {transform:rotate(8deg)}
+    }
+    .anim-academy .bar{
+      transform-origin:left center;transform-box:fill-box;
+      animation:academyBarFill 1s cubic-bezier(.22,1,.36,1) backwards;
+    }
+    .anim-academy .bar.b1{animation-delay:.4s}
+    .anim-academy .bar.b2{animation-delay:1.0s}
+    .anim-academy .bar.b3{animation-delay:1.6s}
+    @keyframes academyBarFill{
+      0%  {transform:scaleX(0); opacity:0}
+      100%{transform:scaleX(1); opacity:1}
+    }
+    .anim-academy .lbl{
+      opacity:0;
+      animation:academyLblIn .6s ease-out backwards;
+    }
+    .anim-academy .lbl.l1{animation-delay:.7s}
+    .anim-academy .lbl.l2{animation-delay:1.3s}
+    .anim-academy .lbl.l3{animation-delay:1.9s}
+    @keyframes academyLblIn{
+      0%  {opacity:0;transform:translateY(2px)}
+      100%{opacity:1;transform:translateY(0)}
+    }
+    @media (prefers-reduced-motion: reduce){
+      .anim-academy .cap,.anim-academy .tassel,
+      .anim-academy .bar,.anim-academy .lbl{
+        animation:none;transform:none;opacity:1;
+      }
+    }
+
+    /* ---- 5. Vision Sync (Trade Journal) ----
+       Heatmap cells light up with a diagonal sweep shimmer;
+       P&L bar grows from 0 to ~70% width; subtle journal float. */
+    .anim-journal .journal{
+      transform-origin:center;transform-box:fill-box;
+      animation:journalFloat 5s ease-in-out infinite;
+    }
+    @keyframes journalFloat{
+      0%,100%{transform:translateY(0)}
+      50%    {transform:translateY(-3px)}
+    }
+    .anim-journal .cell{
+      transform-origin:center;transform-box:fill-box;
+      animation:journalCellShimmer 3.6s ease-in-out infinite;
+    }
+    /* Diagonal stagger — each cell delayed by (row+col)*0.08s */
+    .anim-journal .cell[data-d="0"]{animation-delay:0s}
+    .anim-journal .cell[data-d="1"]{animation-delay:.10s}
+    .anim-journal .cell[data-d="2"]{animation-delay:.20s}
+    .anim-journal .cell[data-d="3"]{animation-delay:.30s}
+    .anim-journal .cell[data-d="4"]{animation-delay:.40s}
+    .anim-journal .cell[data-d="5"]{animation-delay:.50s}
+    .anim-journal .cell[data-d="6"]{animation-delay:.60s}
+    .anim-journal .cell[data-d="7"]{animation-delay:.70s}
+    .anim-journal .cell[data-d="8"]{animation-delay:.80s}
+    .anim-journal .cell[data-d="9"]{animation-delay:.90s}
+    @keyframes journalCellShimmer{
+      0%,100%{transform:scale(1);   filter:brightness(1)}
+      50%    {transform:scale(1.08);filter:brightness(1.6)}
+    }
+    .anim-journal .pnl-bar-fill{
+      transform-origin:left center;transform-box:fill-box;
+      animation:journalPnlGrow 2.4s cubic-bezier(.22,1,.36,1) .4s backwards,
+                journalPnlPulse 3s ease-in-out infinite 2.8s;
+    }
+    @keyframes journalPnlGrow{
+      0%  {transform:scaleX(0)}
+      100%{transform:scaleX(1)}
+    }
+    @keyframes journalPnlPulse{
+      0%,100%{filter:brightness(1)}
+      50%    {filter:brightness(1.35)}
+    }
+    @media (prefers-reduced-motion: reduce){
+      .anim-journal .journal,.anim-journal .cell,.anim-journal .pnl-bar-fill{
+        animation:none;transform:none;
+      }
+    }
+
+    /* ---- 6. Global Network (Community) ----
+       Connection arcs draw + pellets flow along each curve;
+       globe lines breathe; featured member node has expanding pulse rings;
+       background member dots twinkle. */
+    .anim-network .globe{
+      transform-origin:center;transform-box:fill-box;
+      animation:networkGlobeBreathe 6s ease-in-out infinite;
+    }
+    @keyframes networkGlobeBreathe{
+      0%,100%{transform:scale(1)}
+      50%    {transform:scale(1.025)}
+    }
+    .anim-network .meridian,.anim-network .equator{
+      animation:networkMeridianShimmer 4s ease-in-out infinite;
+    }
+    .anim-network .meridian.m2{animation-delay:-1s}
+    .anim-network .equator{animation-delay:-2s}
+    @keyframes networkMeridianShimmer{
+      0%,100%{opacity:.5}
+      50%    {opacity:1}
+    }
+    .anim-network .arc{
+      stroke-dasharray:6 4;
+      animation:networkArcFlow 2.2s linear infinite;
+    }
+    @keyframes networkArcFlow{
+      0%  {stroke-dashoffset:0}
+      100%{stroke-dashoffset:-20}
+    }
+    .anim-network .pellet{
+      offset-rotate:0deg;
+      filter:drop-shadow(0 0 5px #7ae0ff);
+      animation:networkPellet 2.4s linear infinite;
+    }
+    .anim-network .pellet.p1{offset-path:path("M-32,-22 Q -6,-30 18,-30")}
+    .anim-network .pellet.p2{offset-path:path("M-12,-8 Q 14,2 34,-4");  animation-delay:-.8s}
+    .anim-network .pellet.p3{offset-path:path("M-20,20 Q 0,30 28,30");  animation-delay:-1.6s}
+    .anim-network .pellet.p4{offset-path:path("M-38,6 Q -22,-2 -12,-8");animation-delay:-.4s}
+    @keyframes networkPellet{
+      0%  {offset-distance:0%;   opacity:0}
+      12% {opacity:1}
+      88% {opacity:1}
+      100%{offset-distance:100%; opacity:0}
+    }
+    .anim-network .featured-ring{
+      transform-origin:center;transform-box:fill-box;
+      animation:networkRing 2.4s ease-out infinite;
+    }
+    .anim-network .featured-ring.r2{animation-delay:.8s}
+    @keyframes networkRing{
+      0%  {transform:scale(.4); opacity:1}
+      100%{transform:scale(2.6); opacity:0}
+    }
+    .anim-network .member{
+      transform-origin:center;transform-box:fill-box;
+      animation:networkMemberTwinkle 2.4s ease-in-out infinite;
+    }
+    .anim-network .member.n1{animation-delay:-.2s}
+    .anim-network .member.n2{animation-delay:-.5s}
+    .anim-network .member.n3{animation-delay:-.9s}
+    .anim-network .member.n4{animation-delay:-1.3s}
+    .anim-network .member.n5{animation-delay:-1.7s}
+    .anim-network .member.n6{animation-delay:-.7s}
+    .anim-network .member.n7{animation-delay:-1.1s}
+    .anim-network .member.n8{animation-delay:-2.0s}
+    @keyframes networkMemberTwinkle{
+      0%,100%{transform:scale(1);   opacity:.75}
+      50%    {transform:scale(1.25);opacity:1}
+    }
+    @media (prefers-reduced-motion: reduce){
+      .anim-network .globe,.anim-network .meridian,.anim-network .equator,
+      .anim-network .arc,.anim-network .pellet,
+      .anim-network .featured-ring,.anim-network .member{
+        animation:none; opacity:1; transform:none; stroke-dashoffset:0;
+      }
+    }
+
     /* Light feature card (light sections) */
     .l-card{
       position:relative;background:#fff;border:1px solid var(--line);
@@ -2130,26 +2448,38 @@
         <!-- 1. VIP Signal Desk (lead with the flagship) -->
         <a href="#" data-open-modal class="f-card has-banner has-anim products-card reveal" style="--bg-a:140deg;--bg-c1:rgba(122,224,255,.10);--bg-c2:rgba(7,21,43,.65);text-decoration:none;color:inherit">
           <div class="card-banner">
-            <svg class="anim-svg" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <svg class="anim-svg anim-signal" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
               <!-- Up-trend candle chart -->
               <g>
-                <polyline points="62,128 90,118 118,108 146,96 174,86 202,76 230,62 258,52"
-                          fill="none" stroke="rgba(108,243,180,.6)" stroke-width="1.4" stroke-linejoin="round"/>
+                <polyline class="trend" points="62,128 90,118 118,108 146,96 174,86 202,76 230,62 258,52"
+                          fill="none" stroke="rgba(108,243,180,.6)" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
                 <g fill="rgba(108,243,180,.55)" stroke="rgba(108,243,180,.9)" stroke-width=".8">
-                  <line x1="74"  y1="118" x2="74"  y2="138" stroke="rgba(108,243,180,.7)"/>
-                  <rect x="70"  y="122" width="8" height="12"/>
-                  <line x1="102" y1="108" x2="102" y2="130" stroke="rgba(108,243,180,.7)"/>
-                  <rect x="98"  y="114" width="8" height="12"/>
-                  <line x1="130" y1="98"  x2="130" y2="118" stroke="rgba(108,243,180,.7)"/>
-                  <rect x="126" y="102" width="8" height="12"/>
-                  <line x1="158" y1="88"  x2="158" y2="108" stroke="rgba(108,243,180,.7)"/>
-                  <rect x="154" y="92"  width="8" height="12"/>
-                  <line x1="186" y1="78"  x2="186" y2="96" stroke="rgba(108,243,180,.7)"/>
-                  <rect x="182" y="82"  width="8" height="12"/>
-                  <line x1="214" y1="64"  x2="214" y2="86" stroke="rgba(108,243,180,.7)"/>
-                  <rect x="210" y="68"  width="8" height="14"/>
+                  <g class="candle c1">
+                    <line x1="74"  y1="118" x2="74"  y2="138" stroke="rgba(108,243,180,.7)"/>
+                    <rect x="70"  y="122" width="8" height="12"/>
+                  </g>
+                  <g class="candle c2">
+                    <line x1="102" y1="108" x2="102" y2="130" stroke="rgba(108,243,180,.7)"/>
+                    <rect x="98"  y="114" width="8" height="12"/>
+                  </g>
+                  <g class="candle c3">
+                    <line x1="130" y1="98"  x2="130" y2="118" stroke="rgba(108,243,180,.7)"/>
+                    <rect x="126" y="102" width="8" height="12"/>
+                  </g>
+                  <g class="candle c4">
+                    <line x1="158" y1="88"  x2="158" y2="108" stroke="rgba(108,243,180,.7)"/>
+                    <rect x="154" y="92"  width="8" height="12"/>
+                  </g>
+                  <g class="candle c5">
+                    <line x1="186" y1="78"  x2="186" y2="96" stroke="rgba(108,243,180,.7)"/>
+                    <rect x="182" y="82"  width="8" height="12"/>
+                  </g>
+                  <g class="candle c6">
+                    <line x1="214" y1="64"  x2="214" y2="86" stroke="rgba(108,243,180,.7)"/>
+                    <rect x="210" y="68"  width="8" height="14"/>
+                  </g>
                 </g>
-                <g transform="translate(228 42)">
+                <g class="buy-tag" transform="translate(228 42)">
                   <rect x="-2" y="-10" width="36" height="16" rx="3" fill="rgba(108,243,180,.18)" stroke="#6cf3b4" stroke-width="1"/>
                   <text x="16" y="1" text-anchor="middle" fill="#6cf3b4" font-family="Inter,sans-serif" font-size="9" font-weight="800" letter-spacing="2">BUY</text>
                   <path d="M16,8 L16,18" stroke="#6cf3b4" stroke-width="1.2"/>
@@ -2170,23 +2500,23 @@
         <!-- 2. Live Trading Floor -->
         <a href="#community" class="f-card has-banner has-anim products-card reveal" style="--bg-a:120deg;--bg-c1:rgba(108,243,180,.10);--bg-c2:rgba(7,21,43,.65);text-decoration:none;color:inherit">
           <div class="card-banner">
-            <svg class="anim-svg" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <svg class="anim-svg anim-live" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
               <g transform="translate(238 36)">
-                <circle r="5" fill="#ff7a9b"/>
-                <circle r="9" fill="none" stroke="rgba(255,122,155,.45)" stroke-width="1"/>
+                <circle class="live-dot" r="5" fill="#ff7a9b"/>
+                <circle class="live-ring" r="9" fill="none" stroke="rgba(255,122,155,.7)" stroke-width="1"/>
                 <text x="14" y="3" fill="#ff7a9b" font-family="Inter,sans-serif" font-size="9" font-weight="800" letter-spacing="2">LIVE</text>
               </g>
               <g fill="#7ae0ff">
-                <rect x="60"  y="88" width="3" height="22" rx="1.5"/>
-                <rect x="72"  y="78" width="3" height="42" rx="1.5"/>
-                <rect x="84"  y="84" width="3" height="30" rx="1.5"/>
-                <rect x="96"  y="74" width="3" height="50" rx="1.5"/>
-                <rect x="108" y="82" width="3" height="34" rx="1.5"/>
-                <rect x="200" y="82" width="3" height="34" rx="1.5"/>
-                <rect x="212" y="74" width="3" height="50" rx="1.5"/>
-                <rect x="224" y="84" width="3" height="30" rx="1.5"/>
-                <rect x="236" y="78" width="3" height="42" rx="1.5"/>
-                <rect x="248" y="88" width="3" height="22" rx="1.5"/>
+                <rect class="bar b1" x="60"  y="88" width="3" height="22" rx="1.5"/>
+                <rect class="bar b2" x="72"  y="78" width="3" height="42" rx="1.5"/>
+                <rect class="bar b3" x="84"  y="84" width="3" height="30" rx="1.5"/>
+                <rect class="bar b4" x="96"  y="74" width="3" height="50" rx="1.5"/>
+                <rect class="bar b5" x="108" y="82" width="3" height="34" rx="1.5"/>
+                <rect class="bar b5" x="200" y="82" width="3" height="34" rx="1.5"/>
+                <rect class="bar b4" x="212" y="74" width="3" height="50" rx="1.5"/>
+                <rect class="bar b3" x="224" y="84" width="3" height="30" rx="1.5"/>
+                <rect class="bar b2" x="236" y="78" width="3" height="42" rx="1.5"/>
+                <rect class="bar b1" x="248" y="88" width="3" height="22" rx="1.5"/>
               </g>
               <g stroke="#7ae0ff" stroke-width="1.6" stroke-linecap="round" fill="none">
                 <rect x="148" y="62" width="24" height="44" rx="12" fill="rgba(122,224,255,.18)"/>
@@ -2194,7 +2524,7 @@
                 <line x1="160" y1="122" x2="160" y2="138"/>
                 <line x1="142" y1="138" x2="178" y2="138"/>
               </g>
-              <circle cx="160" cy="80" r="2.4" fill="#dffaff"/>
+              <circle class="mic-glow" cx="160" cy="80" r="2.4" fill="#dffaff"/>
             </svg>
           </div>
           <div class="card-meta">
@@ -2209,12 +2539,12 @@
         <!-- 3. Vision Edge + Pulse (Indicators) -->
         <a href="#tools" class="f-card has-banner has-anim products-card reveal" style="--bg-a:150deg;--bg-c1:rgba(190,222,245,.10);--bg-c2:rgba(7,21,43,.65);text-decoration:none;color:inherit">
           <div class="card-banner">
-            <svg class="anim-svg" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-              <rect x="60" y="98" width="200" height="22" fill="rgba(108,243,180,.10)" stroke="rgba(108,243,180,.45)" stroke-width=".8" stroke-dasharray="3 3"/>
-              <rect x="60" y="56" width="200" height="22" fill="rgba(255,122,155,.08)" stroke="rgba(255,122,155,.40)" stroke-width=".8" stroke-dasharray="3 3"/>
-              <polyline points="62,112 80,98 96,108 116,86 132,72 152,90 168,76 188,108 208,118 228,104 248,84 262,68"
+            <svg class="anim-svg anim-indicators" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <rect class="zone-demand" x="60" y="98" width="200" height="22" fill="rgba(108,243,180,.10)" stroke="rgba(108,243,180,.45)" stroke-width=".8" stroke-dasharray="3 3"/>
+              <rect class="zone-supply" x="60" y="56" width="200" height="22" fill="rgba(255,122,155,.08)" stroke="rgba(255,122,155,.40)" stroke-width=".8" stroke-dasharray="3 3"/>
+              <polyline class="price-line" points="62,112 80,98 96,108 116,86 132,72 152,90 168,76 188,108 208,118 228,104 248,84 262,68"
                         fill="none" stroke="#7ae0ff" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/>
-              <circle cx="152" cy="90" r="3.4" fill="#dffaff" stroke="#7ae0ff" stroke-width="1.2"/>
+              <circle class="trigger" cx="152" cy="90" r="3.4" fill="#dffaff" stroke="#7ae0ff" stroke-width="1.2"/>
               <text x="62"  y="148" fill="rgba(190,222,245,.6)" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1.8">EDGE</text>
               <text x="100" y="148" fill="rgba(190,222,245,.45)" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1.8">·</text>
               <text x="112" y="148" fill="rgba(190,222,245,.6)" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1.8">PULSE</text>
@@ -2232,20 +2562,22 @@
         <!-- 4. Global Vision Academy -->
         <a href="#academy" class="f-card has-banner has-anim products-card reveal" style="--bg-a:135deg;--bg-c1:rgba(122,224,255,.10);--bg-c2:rgba(7,21,43,.65);text-decoration:none;color:inherit">
           <div class="card-banner">
-            <svg class="anim-svg" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-              <g transform="translate(160 64)">
+            <svg class="anim-svg anim-academy" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <g class="cap" transform="translate(160 64)">
                 <path d="M-44,0 L0,-18 L44,0 L0,18 Z" fill="rgba(122,224,255,.18)" stroke="#7ae0ff" stroke-width="1.4" stroke-linejoin="round"/>
                 <path d="M-26,7 L-26,22 a26,12 0 0 0 52,0 L26,7" fill="rgba(7,21,43,.7)" stroke="#7ae0ff" stroke-width="1.4" stroke-linejoin="round"/>
-                <line x1="38" y1="2" x2="46" y2="34" stroke="#7ae0ff" stroke-width="1.4" stroke-linecap="round"/>
-                <circle cx="46" cy="36" r="3" fill="#7ae0ff"/>
+                <g class="tassel">
+                  <line x1="38" y1="2" x2="46" y2="34" stroke="#7ae0ff" stroke-width="1.4" stroke-linecap="round"/>
+                  <circle cx="46" cy="36" r="3" fill="#7ae0ff"/>
+                </g>
               </g>
               <g>
-                <rect x="80"  y="118" width="50" height="4" rx="2" fill="rgba(122,224,255,.6)"/>
-                <rect x="135" y="118" width="50" height="4" rx="2" fill="rgba(190,222,245,.35)"/>
-                <rect x="190" y="118" width="50" height="4" rx="2" fill="rgba(190,222,245,.18)"/>
-                <text x="80"  y="138" fill="rgba(190,222,245,.55)" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1.5">BEGINNER</text>
-                <text x="135" y="138" fill="rgba(190,222,245,.55)" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1.5">ADVANCED</text>
-                <text x="194" y="138" fill="rgba(190,222,245,.55)" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1.5">ELITE</text>
+                <rect class="bar b1" x="80"  y="118" width="50" height="4" rx="2" fill="rgba(122,224,255,.7)"/>
+                <rect class="bar b2" x="135" y="118" width="50" height="4" rx="2" fill="rgba(122,224,255,.5)"/>
+                <rect class="bar b3" x="190" y="118" width="50" height="4" rx="2" fill="rgba(122,224,255,.35)"/>
+                <text class="lbl l1" x="80"  y="138" fill="rgba(190,222,245,.55)" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1.5">BEGINNER</text>
+                <text class="lbl l2" x="135" y="138" fill="rgba(190,222,245,.55)" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1.5">ADVANCED</text>
+                <text class="lbl l3" x="194" y="138" fill="rgba(190,222,245,.55)" font-family="JetBrains Mono,monospace" font-size="8" letter-spacing="1.5">ELITE</text>
               </g>
             </svg>
           </div>
@@ -2261,50 +2593,52 @@
         <!-- 5. Vision Sync (Trade Journal) -->
         <a href="#dashboard" class="f-card has-banner has-anim products-card reveal" style="--bg-a:130deg;--bg-c1:rgba(255,200,122,.10);--bg-c2:rgba(7,21,43,.65);text-decoration:none;color:inherit">
           <div class="card-banner">
-            <svg class="anim-svg" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-              <!-- Journal page -->
-              <rect x="92" y="32" width="136" height="116" rx="8" fill="rgba(7,21,43,.7)" stroke="rgba(122,224,255,.45)" stroke-width="1.2"/>
-              <!-- Header bar -->
-              <rect x="92" y="32" width="136" height="14" fill="rgba(122,224,255,.10)"/>
-              <rect x="100" y="36" width="36" height="3" rx="1.5" fill="rgba(190,222,245,.65)"/>
-              <!-- Calendar heatmap grid 5x6 -->
-              <g>
-                <!-- Row 1 -->
-                <rect x="102" y="56"  width="14" height="14" rx="2" fill="rgba(108,243,180,.45)"/>
-                <rect x="120" y="56"  width="14" height="14" rx="2" fill="rgba(108,243,180,.18)"/>
-                <rect x="138" y="56"  width="14" height="14" rx="2" fill="rgba(255,122,155,.30)"/>
-                <rect x="156" y="56"  width="14" height="14" rx="2" fill="rgba(108,243,180,.65)"/>
-                <rect x="174" y="56"  width="14" height="14" rx="2" fill="rgba(190,222,245,.10)"/>
-                <rect x="192" y="56"  width="14" height="14" rx="2" fill="rgba(108,243,180,.30)"/>
-                <rect x="210" y="56"  width="14" height="14" rx="2" fill="rgba(190,222,245,.10)"/>
-                <!-- Row 2 -->
-                <rect x="102" y="74"  width="14" height="14" rx="2" fill="rgba(108,243,180,.30)"/>
-                <rect x="120" y="74"  width="14" height="14" rx="2" fill="rgba(108,243,180,.55)"/>
-                <rect x="138" y="74"  width="14" height="14" rx="2" fill="rgba(108,243,180,.18)"/>
-                <rect x="156" y="74"  width="14" height="14" rx="2" fill="rgba(255,122,155,.45)"/>
-                <rect x="174" y="74"  width="14" height="14" rx="2" fill="rgba(108,243,180,.65)"/>
-                <rect x="192" y="74"  width="14" height="14" rx="2" fill="rgba(108,243,180,.30)"/>
-                <rect x="210" y="74"  width="14" height="14" rx="2" fill="rgba(108,243,180,.18)"/>
-                <!-- Row 3 -->
-                <rect x="102" y="92"  width="14" height="14" rx="2" fill="rgba(190,222,245,.10)"/>
-                <rect x="120" y="92"  width="14" height="14" rx="2" fill="rgba(108,243,180,.30)"/>
-                <rect x="138" y="92"  width="14" height="14" rx="2" fill="rgba(108,243,180,.65)"/>
-                <rect x="156" y="92"  width="14" height="14" rx="2" fill="rgba(108,243,180,.45)"/>
-                <rect x="174" y="92"  width="14" height="14" rx="2" fill="rgba(255,122,155,.30)"/>
-                <rect x="192" y="92"  width="14" height="14" rx="2" fill="rgba(108,243,180,.18)"/>
-                <rect x="210" y="92"  width="14" height="14" rx="2" fill="rgba(108,243,180,.55)"/>
-                <!-- Row 4 -->
-                <rect x="102" y="110" width="14" height="14" rx="2" fill="rgba(108,243,180,.18)"/>
-                <rect x="120" y="110" width="14" height="14" rx="2" fill="rgba(108,243,180,.45)"/>
-                <rect x="138" y="110" width="14" height="14" rx="2" fill="rgba(108,243,180,.65)"/>
-                <rect x="156" y="110" width="14" height="14" rx="2" fill="rgba(108,243,180,.30)"/>
-                <rect x="174" y="110" width="14" height="14" rx="2" fill="rgba(108,243,180,.18)"/>
-                <rect x="192" y="110" width="14" height="14" rx="2" fill="rgba(190,222,245,.10)"/>
-                <rect x="210" y="110" width="14" height="14" rx="2" fill="rgba(108,243,180,.45)"/>
+            <svg class="anim-svg anim-journal" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+              <g class="journal">
+                <!-- Journal page -->
+                <rect x="92" y="32" width="136" height="116" rx="8" fill="rgba(7,21,43,.7)" stroke="rgba(122,224,255,.45)" stroke-width="1.2"/>
+                <!-- Header bar -->
+                <rect x="92" y="32" width="136" height="14" fill="rgba(122,224,255,.10)"/>
+                <rect x="100" y="36" width="36" height="3" rx="1.5" fill="rgba(190,222,245,.65)"/>
+                <!-- Calendar heatmap grid 4x7. data-d = row+col for diagonal-sweep stagger -->
+                <g>
+                  <!-- Row 1 (row=0) -->
+                  <rect class="cell" data-d="0" x="102" y="56"  width="14" height="14" rx="2" fill="rgba(108,243,180,.45)"/>
+                  <rect class="cell" data-d="1" x="120" y="56"  width="14" height="14" rx="2" fill="rgba(108,243,180,.18)"/>
+                  <rect class="cell" data-d="2" x="138" y="56"  width="14" height="14" rx="2" fill="rgba(255,122,155,.30)"/>
+                  <rect class="cell" data-d="3" x="156" y="56"  width="14" height="14" rx="2" fill="rgba(108,243,180,.65)"/>
+                  <rect class="cell" data-d="4" x="174" y="56"  width="14" height="14" rx="2" fill="rgba(190,222,245,.10)"/>
+                  <rect class="cell" data-d="5" x="192" y="56"  width="14" height="14" rx="2" fill="rgba(108,243,180,.30)"/>
+                  <rect class="cell" data-d="6" x="210" y="56"  width="14" height="14" rx="2" fill="rgba(190,222,245,.10)"/>
+                  <!-- Row 2 (row=1) -->
+                  <rect class="cell" data-d="1" x="102" y="74"  width="14" height="14" rx="2" fill="rgba(108,243,180,.30)"/>
+                  <rect class="cell" data-d="2" x="120" y="74"  width="14" height="14" rx="2" fill="rgba(108,243,180,.55)"/>
+                  <rect class="cell" data-d="3" x="138" y="74"  width="14" height="14" rx="2" fill="rgba(108,243,180,.18)"/>
+                  <rect class="cell" data-d="4" x="156" y="74"  width="14" height="14" rx="2" fill="rgba(255,122,155,.45)"/>
+                  <rect class="cell" data-d="5" x="174" y="74"  width="14" height="14" rx="2" fill="rgba(108,243,180,.65)"/>
+                  <rect class="cell" data-d="6" x="192" y="74"  width="14" height="14" rx="2" fill="rgba(108,243,180,.30)"/>
+                  <rect class="cell" data-d="7" x="210" y="74"  width="14" height="14" rx="2" fill="rgba(108,243,180,.18)"/>
+                  <!-- Row 3 (row=2) -->
+                  <rect class="cell" data-d="2" x="102" y="92"  width="14" height="14" rx="2" fill="rgba(190,222,245,.10)"/>
+                  <rect class="cell" data-d="3" x="120" y="92"  width="14" height="14" rx="2" fill="rgba(108,243,180,.30)"/>
+                  <rect class="cell" data-d="4" x="138" y="92"  width="14" height="14" rx="2" fill="rgba(108,243,180,.65)"/>
+                  <rect class="cell" data-d="5" x="156" y="92"  width="14" height="14" rx="2" fill="rgba(108,243,180,.45)"/>
+                  <rect class="cell" data-d="6" x="174" y="92"  width="14" height="14" rx="2" fill="rgba(255,122,155,.30)"/>
+                  <rect class="cell" data-d="7" x="192" y="92"  width="14" height="14" rx="2" fill="rgba(108,243,180,.18)"/>
+                  <rect class="cell" data-d="8" x="210" y="92"  width="14" height="14" rx="2" fill="rgba(108,243,180,.55)"/>
+                  <!-- Row 4 (row=3) -->
+                  <rect class="cell" data-d="3" x="102" y="110" width="14" height="14" rx="2" fill="rgba(108,243,180,.18)"/>
+                  <rect class="cell" data-d="4" x="120" y="110" width="14" height="14" rx="2" fill="rgba(108,243,180,.45)"/>
+                  <rect class="cell" data-d="5" x="138" y="110" width="14" height="14" rx="2" fill="rgba(108,243,180,.65)"/>
+                  <rect class="cell" data-d="6" x="156" y="110" width="14" height="14" rx="2" fill="rgba(108,243,180,.30)"/>
+                  <rect class="cell" data-d="7" x="174" y="110" width="14" height="14" rx="2" fill="rgba(108,243,180,.18)"/>
+                  <rect class="cell" data-d="8" x="192" y="110" width="14" height="14" rx="2" fill="rgba(190,222,245,.10)"/>
+                  <rect class="cell" data-d="9" x="210" y="110" width="14" height="14" rx="2" fill="rgba(108,243,180,.45)"/>
+                </g>
+                <!-- Footer P&L bar -->
+                <rect x="102" y="132" width="62" height="8" rx="4" fill="rgba(108,243,180,.18)"/>
+                <rect class="pnl-bar-fill" x="102" y="132" width="44" height="8" rx="4" fill="#6cf3b4"/>
               </g>
-              <!-- Footer P&L bar -->
-              <rect x="102" y="132" width="62" height="8" rx="4" fill="rgba(108,243,180,.18)"/>
-              <rect x="102" y="132" width="44" height="8" rx="4" fill="#6cf3b4"/>
             </svg>
           </div>
           <div class="card-meta">
@@ -2319,37 +2653,42 @@
         <!-- 6. Global Vision Community (worldwide network closer) -->
         <a href="#community" class="f-card has-banner has-anim products-card reveal" style="--bg-a:160deg;--bg-c1:rgba(122,224,255,.10);--bg-c2:rgba(7,21,43,.65);text-decoration:none;color:inherit">
           <div class="card-banner">
-            <svg class="anim-svg" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+            <svg class="anim-svg anim-network" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
               <!-- Globe outline + meridian/equator lines -->
-              <g transform="translate(160 90)">
+              <g class="globe" transform="translate(160 90)">
                 <circle r="56" fill="rgba(122,224,255,.05)" stroke="rgba(122,224,255,.5)" stroke-width="1.2"/>
                 <!-- Equator -->
-                <ellipse cx="0" cy="0" rx="56" ry="14" fill="none" stroke="rgba(190,222,245,.35)" stroke-width=".8"/>
+                <ellipse class="equator" cx="0" cy="0" rx="56" ry="14" fill="none" stroke="rgba(190,222,245,.45)" stroke-width=".8"/>
                 <!-- Meridians -->
-                <ellipse cx="0" cy="0" rx="18" ry="56" fill="none" stroke="rgba(190,222,245,.28)" stroke-width=".8"/>
-                <ellipse cx="0" cy="0" rx="38" ry="56" fill="none" stroke="rgba(190,222,245,.18)" stroke-width=".8"/>
-                <line x1="0" y1="-56" x2="0" y2="56" stroke="rgba(190,222,245,.22)" stroke-width=".8"/>
+                <ellipse class="meridian m1" cx="0" cy="0" rx="18" ry="56" fill="none" stroke="rgba(190,222,245,.4)" stroke-width=".8"/>
+                <ellipse class="meridian m2" cx="0" cy="0" rx="38" ry="56" fill="none" stroke="rgba(190,222,245,.3)" stroke-width=".8"/>
+                <line x1="0" y1="-56" x2="0" y2="56" stroke="rgba(190,222,245,.3)" stroke-width=".8"/>
+                <!-- Connection arcs (a few hub-and-spoke links) — dashes flow -->
+                <g stroke="rgba(122,224,255,.55)" stroke-width=".9" fill="none" stroke-linecap="round">
+                  <path class="arc" d="M-32,-22 Q -6,-30 18,-30"/>
+                  <path class="arc" d="M-12,-8 Q 14,2 34,-4"/>
+                  <path class="arc" d="M-20,20 Q 0,30 28,30"/>
+                  <path class="arc" d="M-38,6 Q -22,-2 -12,-8"/>
+                </g>
+                <!-- Pellets travel along each arc -->
+                <circle class="pellet p1" r="2.4" fill="#dffaff"/>
+                <circle class="pellet p2" r="2.4" fill="#dffaff"/>
+                <circle class="pellet p3" r="2.4" fill="#dffaff"/>
+                <circle class="pellet p4" r="2.4" fill="#dffaff"/>
                 <!-- Member dots distributed across the globe -->
                 <g fill="#7ae0ff">
-                  <circle cx="-32" cy="-22" r="2.4"/>
-                  <circle cx="-12" cy="-8"  r="2.4"/>
-                  <circle cx="18"  cy="-30" r="2.4"/>
-                  <circle cx="34"  cy="-4"  r="2.4"/>
-                  <circle cx="-20" cy="20"  r="2.4"/>
-                  <circle cx="6"   cy="14"  r="2.4"/>
-                  <circle cx="28"  cy="30"  r="2.4"/>
-                  <circle cx="-38" cy="6"   r="2.4"/>
+                  <circle class="member n1" cx="-32" cy="-22" r="2.4"/>
+                  <circle class="member n2" cx="-12" cy="-8"  r="2.4"/>
+                  <circle class="member n3" cx="18"  cy="-30" r="2.4"/>
+                  <circle class="member n4" cx="34"  cy="-4"  r="2.4"/>
+                  <circle class="member n5" cx="-20" cy="20"  r="2.4"/>
+                  <circle class="member n6" cx="6"   cy="14"  r="2.4"/>
+                  <circle class="member n7" cx="28"  cy="30"  r="2.4"/>
+                  <circle class="member n8" cx="-38" cy="6"   r="2.4"/>
                 </g>
-                <!-- Glowing pulse on one member -->
-                <circle cx="6" cy="14" r="6" fill="none" stroke="rgba(122,224,255,.55)" stroke-width="1"/>
-                <circle cx="6" cy="14" r="10" fill="none" stroke="rgba(122,224,255,.25)" stroke-width="1"/>
-                <!-- Connection arcs (a few hub-and-spoke links) -->
-                <g stroke="rgba(122,224,255,.5)" stroke-width=".8" fill="none" stroke-linecap="round">
-                  <path d="M-32,-22 Q -6,-30 18,-30"/>
-                  <path d="M-12,-8 Q 14,2 34,-4"/>
-                  <path d="M-20,20 Q 0,30 28,30"/>
-                  <path d="M-38,6 Q -22,-2 -12,-8"/>
-                </g>
+                <!-- Featured-member expanding pulse rings -->
+                <circle class="featured-ring r1" cx="6" cy="14" r="4" fill="none" stroke="#7ae0ff" stroke-width="1.2"/>
+                <circle class="featured-ring r2" cx="6" cy="14" r="4" fill="none" stroke="#7ae0ff" stroke-width="1.2"/>
               </g>
             </svg>
           </div>
