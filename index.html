@@ -802,51 +802,89 @@
        elements inside that root.
        ============================================================ */
 
-    /* ---- 1. VIP Signal Desk ----
-       Candles grow from baseline with stagger; trend line draws;
-       BUY tag drops in with bounce + idle float. */
-    .anim-signal .candle{
-      transform-origin:bottom center;transform-box:fill-box;
-      animation:signalCandleRise 1.1s cubic-bezier(.22,1,.36,1) backwards,
-                signalCandleBreathe 3.2s ease-in-out infinite 1.6s;
-    }
-    .anim-signal .candle.c1{animation-delay:.10s, 1.60s}
-    .anim-signal .candle.c2{animation-delay:.22s, 1.80s}
-    .anim-signal .candle.c3{animation-delay:.34s, 2.00s}
-    .anim-signal .candle.c4{animation-delay:.46s, 2.20s}
-    .anim-signal .candle.c5{animation-delay:.58s, 2.40s}
-    .anim-signal .candle.c6{animation-delay:.70s, 2.60s}
-    @keyframes signalCandleRise{
-      0%  {transform:scaleY(0); opacity:0}
-      100%{transform:scaleY(1); opacity:1}
-    }
-    @keyframes signalCandleBreathe{
-      0%,100%{transform:scaleY(1)}
-      50%    {transform:scaleY(1.05)}
-    }
-    .anim-signal .trend{
-      stroke-dasharray:240; stroke-dashoffset:240;
-      animation:signalTrendDraw 1.6s cubic-bezier(.22,1,.36,1) .4s forwards;
-    }
-    @keyframes signalTrendDraw{to{stroke-dashoffset:0}}
-    .anim-signal .buy-tag{
+    /* ---- 1. VIP Signal Desk — premium phone messaging ----
+       Phone fades in + subtle scale, ambient glow pulses, then trade
+       messages drop in sequentially (BUY XAU → SELL EUR → BUY BTC).
+       Newest message holds a green border glow with a pulsing "new"
+       dot, typing indicator hints more coming, phone idles 6s float. */
+    .anim-signal .phone{
       transform-origin:center;transform-box:fill-box;
       opacity:0;
-      animation:signalBuyDrop .65s cubic-bezier(.34,1.4,.5,1) 1.7s forwards,
-                signalBuyFloat 3s ease-in-out infinite 2.4s;
-      filter:drop-shadow(0 0 6px rgba(108,243,180,.5));
+      animation:signalPhoneIn 1s cubic-bezier(.22,1,.36,1) .2s forwards,
+                signalPhoneFloat 6s ease-in-out infinite 1.2s;
     }
-    @keyframes signalBuyDrop{
-      0%  {opacity:0; transform:translateY(-14px) scale(.7)}
-      100%{opacity:1; transform:translateY(0) scale(1)}
+    @keyframes signalPhoneIn{
+      0%  {opacity:0;transform:translateY(8px) scale(.97)}
+      100%{opacity:1;transform:translateY(0)   scale(1)}
     }
-    @keyframes signalBuyFloat{
+    @keyframes signalPhoneFloat{
       0%,100%{transform:translateY(0)}
-      50%    {transform:translateY(-3px)}
+      50%    {transform:translateY(-2.5px)}
+    }
+    .anim-signal .phone-glow{
+      transform-origin:center;transform-box:fill-box;
+      animation:signalGlowPulse 4s ease-in-out infinite;
+    }
+    @keyframes signalGlowPulse{
+      0%,100%{opacity:.45;transform:scaleX(1)}
+      50%    {opacity:.75;transform:scaleX(1.08)}
+    }
+    .anim-signal .msg{
+      transform-origin:center;transform-box:fill-box;
+      opacity:0;
+      animation:signalMsgIn .65s cubic-bezier(.22,1,.36,1) forwards;
+    }
+    .anim-signal .msg.m1{animation-delay:1.0s}
+    .anim-signal .msg.m2{animation-delay:1.7s}
+    .anim-signal .msg.m3{animation-delay:2.4s}
+    @keyframes signalMsgIn{
+      0%  {opacity:0;transform:translateY(6px) scale(.97)}
+      100%{opacity:1;transform:translateY(0)   scale(1)}
+    }
+    .anim-signal .msg-bg-new{
+      animation:signalNewGlow 3s ease-in-out infinite 2.8s;
+    }
+    @keyframes signalNewGlow{
+      0%,100%{filter:drop-shadow(0 0 0 rgba(108,243,180,0))}
+      50%    {filter:drop-shadow(0 0 6px rgba(108,243,180,.7))}
+    }
+    .anim-signal .new-dot{
+      transform-origin:center;transform-box:fill-box;
+      opacity:0;
+      animation:signalDotIn .35s cubic-bezier(.22,1,.36,1) 2.7s forwards,
+                signalDotPulse 1.6s ease-in-out infinite 3.2s;
+      filter:drop-shadow(0 0 3px rgba(108,243,180,.8));
+    }
+    @keyframes signalDotIn{
+      0%  {opacity:0;transform:scale(0)}
+      100%{opacity:1;transform:scale(1)}
+    }
+    @keyframes signalDotPulse{
+      0%,100%{opacity:1; transform:scale(1)}
+      50%    {opacity:.65;transform:scale(1.5)}
+    }
+    .anim-signal .typing{
+      opacity:0;
+      animation:signalTypingIn .4s ease-out 3.2s forwards;
+    }
+    @keyframes signalTypingIn{
+      0%{opacity:0} 100%{opacity:1}
+    }
+    .anim-signal .td{
+      transform-origin:center;transform-box:fill-box;
+      animation:signalTypingDot 1.2s ease-in-out infinite 3.5s;
+    }
+    .anim-signal .td.td2{animation-delay:3.65s}
+    .anim-signal .td.td3{animation-delay:3.80s}
+    @keyframes signalTypingDot{
+      0%,100%{opacity:.30; transform:translateY(0)}
+      50%    {opacity:1;   transform:translateY(-1px)}
     }
     @media (prefers-reduced-motion: reduce){
-      .anim-signal .candle,.anim-signal .trend,.anim-signal .buy-tag{
-        animation:none;opacity:1;transform:none;stroke-dashoffset:0;
+      .anim-signal .phone,.anim-signal .phone-glow,
+      .anim-signal .msg,.anim-signal .msg-bg-new,
+      .anim-signal .new-dot,.anim-signal .typing,.anim-signal .td{
+        animation:none;opacity:1;transform:none;
       }
     }
 
@@ -2449,44 +2487,108 @@
         <a href="#" data-open-modal class="f-card has-banner has-anim products-card reveal" style="--bg-a:140deg;--bg-c1:rgba(122,224,255,.10);--bg-c2:rgba(7,21,43,.65);text-decoration:none;color:inherit">
           <div class="card-banner">
             <svg class="anim-svg anim-signal" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-              <!-- Up-trend candle chart -->
-              <g>
-                <polyline class="trend" points="62,128 90,118 118,108 146,96 174,86 202,76 230,62 258,52"
-                          fill="none" stroke="rgba(108,243,180,.6)" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
-                <g fill="rgba(108,243,180,.55)" stroke="rgba(108,243,180,.9)" stroke-width=".8">
-                  <g class="candle c1">
-                    <line x1="74"  y1="118" x2="74"  y2="138" stroke="rgba(108,243,180,.7)"/>
-                    <rect x="70"  y="122" width="8" height="12"/>
-                  </g>
-                  <g class="candle c2">
-                    <line x1="102" y1="108" x2="102" y2="130" stroke="rgba(108,243,180,.7)"/>
-                    <rect x="98"  y="114" width="8" height="12"/>
-                  </g>
-                  <g class="candle c3">
-                    <line x1="130" y1="98"  x2="130" y2="118" stroke="rgba(108,243,180,.7)"/>
-                    <rect x="126" y="102" width="8" height="12"/>
-                  </g>
-                  <g class="candle c4">
-                    <line x1="158" y1="88"  x2="158" y2="108" stroke="rgba(108,243,180,.7)"/>
-                    <rect x="154" y="92"  width="8" height="12"/>
-                  </g>
-                  <g class="candle c5">
-                    <line x1="186" y1="78"  x2="186" y2="96" stroke="rgba(108,243,180,.7)"/>
-                    <rect x="182" y="82"  width="8" height="12"/>
-                  </g>
-                  <g class="candle c6">
-                    <line x1="214" y1="64"  x2="214" y2="86" stroke="rgba(108,243,180,.7)"/>
-                    <rect x="210" y="68"  width="8" height="14"/>
-                  </g>
+              <defs>
+                <linearGradient id="signalPhoneBody" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="rgba(20,38,68,.96)"/>
+                  <stop offset="1" stop-color="rgba(7,21,43,.98)"/>
+                </linearGradient>
+                <radialGradient id="signalScreenGlow" cx="0.5" cy="0.18" r="0.8">
+                  <stop offset="0" stop-color="rgba(122,224,255,.12)"/>
+                  <stop offset="1" stop-color="rgba(122,224,255,0)"/>
+                </radialGradient>
+              </defs>
+
+              <!-- Soft ambient glow under the phone -->
+              <ellipse class="phone-glow" cx="160" cy="172" rx="60" ry="6" fill="rgba(122,224,255,.22)"/>
+
+              <!-- Phone (fades in + idle float as a whole) -->
+              <g class="phone">
+                <!-- Phone body -->
+                <rect x="112" y="8" width="96" height="164" rx="14"
+                      fill="url(#signalPhoneBody)"
+                      stroke="rgba(122,224,255,.55)" stroke-width="1.2"/>
+                <!-- Side buttons -->
+                <rect x="110.5" y="46" width="1.8" height="12" rx=".6" fill="rgba(122,224,255,.40)"/>
+                <rect x="110.5" y="66" width="1.8" height="22" rx=".6" fill="rgba(122,224,255,.40)"/>
+                <rect x="207.7" y="56" width="1.8" height="30" rx=".6" fill="rgba(122,224,255,.40)"/>
+
+                <!-- Screen base + ambient inner glow -->
+                <rect x="116" y="12" width="88" height="156" rx="10" fill="rgba(4,12,28,.98)"/>
+                <rect x="116" y="12" width="88" height="156" rx="10" fill="url(#signalScreenGlow)"/>
+
+                <!-- Notch -->
+                <rect x="146" y="13" width="28" height="4.5" rx="2.2" fill="rgba(0,0,0,.95)"/>
+                <circle cx="170" cy="15.2" r="1" fill="rgba(122,224,255,.55)"/>
+
+                <!-- Status bar: time + wifi + battery -->
+                <text x="124" y="27" fill="rgba(190,222,245,.75)" font-family="Inter,sans-serif" font-size="5.5" font-weight="700">9:41</text>
+                <path d="M178,25 a3.5,3.5 0 0 1 6,0" fill="none" stroke="rgba(190,222,245,.65)" stroke-width=".55" stroke-linecap="round"/>
+                <path d="M179,26.5 a2.4,2.4 0 0 1 4,0" fill="none" stroke="rgba(190,222,245,.65)" stroke-width=".55" stroke-linecap="round"/>
+                <circle cx="181" cy="27.5" r=".7" fill="rgba(190,222,245,.7)"/>
+                <rect x="188" y="23.5" width="10" height="5" rx="1" fill="none" stroke="rgba(190,222,245,.65)" stroke-width=".5"/>
+                <rect x="189" y="24.5" width="7" height="3" rx=".3" fill="#6cf3b4"/>
+                <rect x="198.4" y="25" width="1" height="2" rx=".5" fill="rgba(190,222,245,.65)"/>
+
+                <!-- Channel header: GV avatar + name + verified + live -->
+                <circle cx="129" cy="40" r="5.2" fill="rgba(122,224,255,.18)" stroke="rgba(122,224,255,.55)" stroke-width=".7"/>
+                <text x="129" y="42" text-anchor="middle" fill="#7ae0ff" font-family="Inter,sans-serif" font-size="4.8" font-weight="800">GV</text>
+                <text x="137" y="39" fill="#eaf6ff" font-family="Inter,sans-serif" font-size="5.8" font-weight="700">Signal Desk</text>
+                <circle cx="172" cy="37" r="2" fill="#7ae0ff"/>
+                <path d="M170.6,37 L171.6,38 L173.4,36" fill="none" stroke="#01040d" stroke-width=".75" stroke-linecap="round" stroke-linejoin="round"/>
+                <circle cx="139" cy="44.5" r=".9" fill="#6cf3b4"/>
+                <text x="142" y="46" fill="rgba(108,243,180,.85)" font-family="Inter,sans-serif" font-size="3.8" font-weight="600">VIP · Live now</text>
+
+                <!-- Separator + date divider -->
+                <line x1="120" y1="52" x2="200" y2="52" stroke="rgba(122,224,255,.12)" stroke-width=".4"/>
+                <text x="160" y="58.5" text-anchor="middle" fill="rgba(190,222,245,.40)" font-family="Inter,sans-serif" font-size="3.6" font-weight="700" letter-spacing="1">TODAY</text>
+
+                <!-- Message 1: BUY XAU (oldest) -->
+                <g class="msg m1">
+                  <rect x="120" y="63" width="80" height="22" rx="5"
+                        fill="rgba(11,28,52,.85)" stroke="rgba(108,243,180,.38)" stroke-width=".55"/>
+                  <rect x="120" y="63" width="2.2" height="22" rx="1.1" fill="#6cf3b4"/>
+                  <rect x="125" y="66.5" width="14" height="6.5" rx="1.5" fill="rgba(108,243,180,.30)"/>
+                  <text x="132" y="71.2" text-anchor="middle" fill="#6cf3b4" font-family="Inter,sans-serif" font-size="4.5" font-weight="800" letter-spacing=".3">BUY</text>
+                  <text x="142" y="71.5" fill="#eaf6ff" font-family="Inter,sans-serif" font-size="5.5" font-weight="700">XAUUSD</text>
+                  <text x="195" y="68.5" text-anchor="end" fill="rgba(190,222,245,.45)" font-family="Inter,sans-serif" font-size="3.6">9:23</text>
+                  <text x="125" y="80.5" fill="rgba(190,222,245,.7)" font-family="JetBrains Mono,monospace" font-size="4.2">@ 2384.50 · TP 2398</text>
                 </g>
-                <g transform="translate(228 42)">
-                  <g class="buy-tag">
-                    <rect x="-2" y="-10" width="36" height="16" rx="3" fill="rgba(108,243,180,.18)" stroke="#6cf3b4" stroke-width="1"/>
-                    <text x="16" y="1" text-anchor="middle" fill="#6cf3b4" font-family="Inter,sans-serif" font-size="9" font-weight="800" letter-spacing="2">BUY</text>
-                    <path d="M16,8 L16,18" stroke="#6cf3b4" stroke-width="1.2"/>
-                    <path d="M12,15 L16,19 L20,15" fill="none" stroke="#6cf3b4" stroke-width="1.2" stroke-linecap="round"/>
-                  </g>
+
+                <!-- Message 2: SELL EUR -->
+                <g class="msg m2">
+                  <rect x="120" y="89" width="80" height="22" rx="5"
+                        fill="rgba(11,28,52,.85)" stroke="rgba(255,122,155,.38)" stroke-width=".55"/>
+                  <rect x="120" y="89" width="2.2" height="22" rx="1.1" fill="#ff7a9b"/>
+                  <rect x="125" y="92.5" width="14" height="6.5" rx="1.5" fill="rgba(255,122,155,.30)"/>
+                  <text x="132" y="97.2" text-anchor="middle" fill="#ff7a9b" font-family="Inter,sans-serif" font-size="4.5" font-weight="800" letter-spacing=".3">SELL</text>
+                  <text x="142" y="97.5" fill="#eaf6ff" font-family="Inter,sans-serif" font-size="5.5" font-weight="700">EURUSD</text>
+                  <text x="195" y="94.5" text-anchor="end" fill="rgba(190,222,245,.45)" font-family="Inter,sans-serif" font-size="3.6">9:34</text>
+                  <text x="125" y="106.5" fill="rgba(190,222,245,.7)" font-family="JetBrains Mono,monospace" font-size="4.2">@ 1.0852 · TP 1.0790</text>
                 </g>
+
+                <!-- Message 3: BUY BTC (newest, bordered + glows) -->
+                <g class="msg m3">
+                  <rect class="msg-bg-new" x="120" y="115" width="80" height="22" rx="5"
+                        fill="rgba(11,28,52,.92)" stroke="#6cf3b4" stroke-width=".8"/>
+                  <rect x="120" y="115" width="2.2" height="22" rx="1.1" fill="#6cf3b4"/>
+                  <rect x="125" y="118.5" width="14" height="6.5" rx="1.5" fill="rgba(108,243,180,.35)"/>
+                  <text x="132" y="123.2" text-anchor="middle" fill="#6cf3b4" font-family="Inter,sans-serif" font-size="4.5" font-weight="800" letter-spacing=".3">BUY</text>
+                  <text x="142" y="123.5" fill="#eaf6ff" font-family="Inter,sans-serif" font-size="5.5" font-weight="700">BTCUSD</text>
+                  <text x="195" y="120.5" text-anchor="end" fill="rgba(190,222,245,.55)" font-family="Inter,sans-serif" font-size="3.6">now</text>
+                  <text x="125" y="132.5" fill="rgba(190,222,245,.85)" font-family="JetBrains Mono,monospace" font-size="4.2">@ 61,250 · TP 63,800</text>
+                  <circle class="new-dot" cx="186" cy="120" r="1.6" fill="#6cf3b4"/>
+                </g>
+
+                <!-- Typing indicator (more coming) -->
+                <g class="typing">
+                  <rect x="120" y="142" width="22" height="8" rx="4" fill="rgba(122,224,255,.10)" stroke="rgba(122,224,255,.22)" stroke-width=".4"/>
+                  <circle class="td td1" cx="125" cy="146" r=".95" fill="#7ae0ff"/>
+                  <circle class="td td2" cx="131" cy="146" r=".95" fill="#7ae0ff"/>
+                  <circle class="td td3" cx="137" cy="146" r=".95" fill="#7ae0ff"/>
+                </g>
+
+                <!-- Home indicator -->
+                <rect x="148" y="162" width="24" height="2" rx="1" fill="rgba(190,222,245,.35)"/>
               </g>
             </svg>
           </div>
