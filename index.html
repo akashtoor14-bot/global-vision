@@ -966,21 +966,21 @@
       100%{transform:scaleY(1);opacity:1}
     }
     .anim-live .trend-line{
-      stroke-dasharray:220;stroke-dashoffset:220;
-      animation:liveTrendDraw 1.2s cubic-bezier(.4,0,.2,1) 2.2s forwards;
+      stroke-dasharray:165;stroke-dashoffset:165;
+      animation:liveTrendDraw 1.4s cubic-bezier(.4,0,.2,1) 2.2s forwards;
     }
     @keyframes liveTrendDraw{
-      0%  {stroke-dashoffset:220}
+      0%  {stroke-dashoffset:165}
       100%{stroke-dashoffset:0}
     }
     .anim-live .cursor{
-      offset-path:path("M88,118 Q160,100 232,68");
+      offset-path:path("M86,108 L108,116 L130,100 L152,116 L174,92 L196,82 L218,70");
       offset-rotate:0deg;
       opacity:0;
       filter:drop-shadow(0 0 4px rgba(122,224,255,.8));
       animation:liveCursorIn .2s ease-out 2.2s forwards,
-                liveCursorMove 1.2s cubic-bezier(.4,0,.2,1) 2.2s forwards,
-                liveCursorOut .3s ease-in 3.5s forwards;
+                liveCursorMove 1.4s cubic-bezier(.4,0,.2,1) 2.2s forwards,
+                liveCursorOut .3s ease-in 3.7s forwards;
     }
     @keyframes liveCursorIn{0%{opacity:0}100%{opacity:1}}
     @keyframes liveCursorMove{
@@ -2801,18 +2801,18 @@
                   </g>
                 </g>
 
-                <!-- Educator's hand-drawn uptrend line -->
-                <path class="trend-line" d="M88,118 Q160,100 232,68"
-                      fill="none" stroke="#7ae0ff" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="3 3"/>
+                <!-- Educator's live price line — zigzag through candle closes -->
+                <path class="trend-line" d="M86,108 L108,116 L130,100 L152,116 L174,92 L196,82 L218,70"
+                      fill="none" stroke="#7ae0ff" stroke-width="1.4" stroke-linejoin="round" stroke-linecap="round"/>
 
-                <!-- Cursor follows the trend line as it draws -->
+                <!-- Cursor follows the price line as it draws -->
                 <circle class="cursor" cx="0" cy="0" r="2.5" fill="#dffaff" stroke="#7ae0ff" stroke-width="1"/>
 
                 <!-- ENTRY annotation on the breakout candle (c5) -->
                 <g class="annotation">
-                  <circle class="ann-ring" cx="174" cy="98" r="5.5" fill="none" stroke="#ff7a9b" stroke-width="1.2"/>
-                  <circle class="ann-pulse" cx="174" cy="98" r="5.5" fill="none" stroke="#ff7a9b" stroke-width="1"/>
-                  <text class="ann-label" x="183" y="92" fill="#ff7a9b" font-family="JetBrains Mono,monospace" font-size="5" font-weight="800" letter-spacing="1">ENTRY</text>
+                  <circle class="ann-ring" cx="174" cy="92" r="5.5" fill="none" stroke="#ff7a9b" stroke-width="1.2"/>
+                  <circle class="ann-pulse" cx="174" cy="92" r="5.5" fill="none" stroke="#ff7a9b" stroke-width="1"/>
+                  <text class="ann-label" x="183" y="86" fill="#ff7a9b" font-family="JetBrains Mono,monospace" font-size="5" font-weight="800" letter-spacing="1">ENTRY</text>
                 </g>
 
                 <!-- Bottom strip: educator webcam thumbnail + host info -->
@@ -2827,9 +2827,9 @@
                   <path d="M48,150 a8,7 0 0 1 16,0 L64,152 L48,152 Z" fill="rgba(122,224,255,.5)"/>
                 </g>
 
-                <!-- Host name + session title -->
+                <!-- Host label + session title -->
                 <g class="host">
-                  <text x="74" y="138" fill="#eaf6ff" font-family="Inter,sans-serif" font-size="6" font-weight="700">Gio · Live</text>
+                  <text x="74" y="138" fill="#eaf6ff" font-family="Inter,sans-serif" font-size="6" font-weight="700">GV Educator</text>
                   <text x="74" y="148" fill="rgba(190,222,245,.6)" font-family="Inter,sans-serif" font-size="4.5" font-weight="500">XAUUSD · London Open Breakdown</text>
                 </g>
               </g>
