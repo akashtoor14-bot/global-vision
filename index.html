@@ -1051,108 +1051,95 @@
       }
     }
 
-    /* ---- 3. Vision Edge · Pulse — premium market scanner radar ----
-       Radar fades in with concentric rings + sweep arm rotating
-       continuously through ticker labels positioned around the
-       compass. Small pings twinkle as if Pulse is detecting
-       activity. A featured lock-on signal acquires XAUUSD with
-       crosshair brackets + expanding pulse rings, and a SETUP
-       FOUND alert card slides up at the bottom. */
-    .anim-indicators .radar{
-      transform-origin:160px 78px;
+    /* ---- 3. Vision Edge · Pulse — Pulse Monitor (oscilloscope) ----
+       Trading-terminal monitor frame with subtle grid. A live cyan
+       pulse waveform draws across the screen showing gentle market
+       activity, then spikes dramatically near the center — that's
+       a setup detected. A red guide line drops from the spike, the
+       spike dot illuminates and pulses, and a SETUP FOUND alert
+       card pops up next to it. Status bar at top reads
+       PULSE · ACTIVE with a pulsing green dot; bottom strip lists
+       the pairs being scanned. */
+    .anim-indicators .frame{
+      transform-origin:center;transform-box:fill-box;
       opacity:0;
-      animation:indRadarIn 1s cubic-bezier(.22,1,.36,1) .2s forwards,
-                indRadarFloat 6s ease-in-out infinite 1.2s;
+      animation:indFrameIn 1s cubic-bezier(.22,1,.36,1) .15s forwards,
+                indFrameFloat 6s ease-in-out infinite 1.2s;
     }
-    @keyframes indRadarIn{
-      0%  {opacity:0;transform:scale(.95)}
-      100%{opacity:1;transform:scale(1)}
+    @keyframes indFrameIn{
+      0%  {opacity:0;transform:translateY(8px) scale(.97)}
+      100%{opacity:1;transform:translateY(0)   scale(1)}
     }
-    @keyframes indRadarFloat{
+    @keyframes indFrameFloat{
       0%,100%{transform:translateY(0)}
       50%    {transform:translateY(-2px)}
     }
-    .anim-indicators .radar-glow{
+    .anim-indicators .frame-glow{
       transform-origin:center;transform-box:fill-box;
       animation:indGlowPulse 4s ease-in-out infinite;
     }
     @keyframes indGlowPulse{
-      0%,100%{opacity:.4; transform:scaleX(1)}
-      50%    {opacity:.7; transform:scaleX(1.05)}
+      0%,100%{opacity:.45;transform:scaleX(1)}
+      50%    {opacity:.75;transform:scaleX(1.05)}
     }
-    .anim-indicators .sweep-arm{
-      transform-origin:160px 78px;
-      animation:indSweep 4s linear infinite .6s;
-    }
-    @keyframes indSweep{
-      from{transform:rotate(0deg)}
-      to  {transform:rotate(360deg)}
-    }
-    .anim-indicators .ticker{
-      opacity:0;
-      animation:indTickerIn .4s ease-out backwards;
-    }
-    .anim-indicators .ticker.t1{animation-delay:.9s}
-    .anim-indicators .ticker.t2{animation-delay:1.0s}
-    .anim-indicators .ticker.t3{animation-delay:1.1s}
-    .anim-indicators .ticker.t4{animation-delay:1.2s}
-    .anim-indicators .ticker.t5{animation-delay:1.3s}
-    .anim-indicators .ticker.t6{animation-delay:1.4s}
-    @keyframes indTickerIn{0%{opacity:0}100%{opacity:1}}
-    .anim-indicators .ping{
+    .anim-indicators .status-dot{
       transform-origin:center;transform-box:fill-box;
-      animation:indPingTwinkle 4s ease-in-out infinite;
-      filter:drop-shadow(0 0 4px rgba(108,243,180,.8));
+      animation:indStatusPulse 1.6s ease-in-out infinite .8s;
+      filter:drop-shadow(0 0 4px rgba(108,243,180,.75));
     }
-    .anim-indicators .ping.pg1{animation-delay:1.8s}
-    .anim-indicators .ping.pg2{animation-delay:2.6s}
-    .anim-indicators .ping.pg3{animation-delay:3.4s}
-    @keyframes indPingTwinkle{
-      0%,100%{opacity:.15;transform:scale(.6)}
-      15%    {opacity:1;  transform:scale(1.3)}
-      35%    {opacity:.5; transform:scale(1)}
+    @keyframes indStatusPulse{
+      0%,100%{opacity:1; transform:scale(1)}
+      50%    {opacity:.55;transform:scale(1.4)}
     }
-    .anim-indicators .lock{
+    .anim-indicators .pulse-line{
+      stroke-dasharray:100;
+      stroke-dashoffset:100;
+      animation:indPulseDraw 3s cubic-bezier(.4,0,.2,1) .8s forwards;
+      filter:drop-shadow(0 0 5px rgba(122,224,255,.5));
+    }
+    @keyframes indPulseDraw{to{stroke-dashoffset:0}}
+    .anim-indicators .spike-guide{
       opacity:0;
-      animation:indLockIn .5s cubic-bezier(.34,1.4,.5,1) 3.4s forwards;
+      animation:indSpikeGuideIn .4s ease-out 3.9s forwards;
     }
-    @keyframes indLockIn{0%{opacity:0}100%{opacity:1}}
-    .anim-indicators .lock-ring{
+    @keyframes indSpikeGuideIn{0%{opacity:0}100%{opacity:1}}
+    .anim-indicators .spike-dot{
       transform-origin:center;transform-box:fill-box;
       opacity:0;
-      animation:indLockPulse 2s ease-out infinite 3.8s;
+      animation:indSpikeDotIn .4s cubic-bezier(.34,1.4,.5,1) 4.0s forwards;
+      filter:drop-shadow(0 0 6px rgba(255,122,155,.85));
     }
-    .anim-indicators .lock-ring.lr2{animation-delay:4.8s}
-    @keyframes indLockPulse{
+    @keyframes indSpikeDotIn{
+      0%  {opacity:0;transform:scale(0)}
+      100%{opacity:1;transform:scale(1)}
+    }
+    .anim-indicators .spike-pulse{
+      transform-origin:center;transform-box:fill-box;
+      opacity:0;
+      animation:indSpikePulse 2.2s ease-out infinite 4.4s;
+    }
+    @keyframes indSpikePulse{
       0%  {transform:scale(1);  opacity:.9}
-      100%{transform:scale(3);  opacity:0}
+      100%{transform:scale(4.5);opacity:0}
     }
     .anim-indicators .alert{
       opacity:0;
-      animation:indAlertIn .55s cubic-bezier(.22,1,.36,1) 3.8s forwards,
-                indAlertGlow 3s ease-in-out infinite 4.8s;
+      animation:indAlertIn .55s cubic-bezier(.22,1,.36,1) 4.2s forwards,
+                indAlertGlow 3s ease-in-out infinite 5s;
     }
     @keyframes indAlertIn{
-      0%  {opacity:0;transform:translateY(8px)}
-      100%{opacity:1;transform:translateY(0)}
+      0%  {opacity:0;transform:translateY(4px) scale(.95)}
+      100%{opacity:1;transform:translateY(0)   scale(1)}
     }
     @keyframes indAlertGlow{
-      0%,100%{filter:drop-shadow(0 0 0 rgba(108,243,180,0))}
-      50%    {filter:drop-shadow(0 0 6px rgba(108,243,180,.5))}
-    }
-    .anim-indicators .alert-dot{
-      transform-origin:center;transform-box:fill-box;
-      animation:indAlertDotPulse 1.6s ease-in-out infinite 4.4s;
-    }
-    @keyframes indAlertDotPulse{
-      0%,100%{opacity:1; transform:scale(1)}
-      50%    {opacity:.6;transform:scale(1.4)}
+      0%,100%{filter:drop-shadow(0 0 0 rgba(255,122,155,0))}
+      50%    {filter:drop-shadow(0 0 6px rgba(255,122,155,.55))}
     }
     @media (prefers-reduced-motion: reduce){
-      .anim-indicators .radar,.anim-indicators .radar-glow,
-      .anim-indicators .sweep-arm,.anim-indicators .ticker,
-      .anim-indicators .ping,.anim-indicators .lock,.anim-indicators .lock-ring,
-      .anim-indicators .alert,.anim-indicators .alert-dot{
+      .anim-indicators .frame,.anim-indicators .frame-glow,
+      .anim-indicators .status-dot,.anim-indicators .pulse-line,
+      .anim-indicators .spike-guide,.anim-indicators .spike-dot,.anim-indicators .spike-pulse,
+      .anim-indicators .alert{
         animation:none;opacity:1;transform:none;stroke-dashoffset:0;
       }
     }
@@ -2915,82 +2902,74 @@
           <div class="card-banner">
             <svg class="anim-svg anim-indicators" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
               <defs>
-                <radialGradient id="indSweepGrad" cx="160" cy="78" r="50" gradientUnits="userSpaceOnUse">
-                  <stop offset="0" stop-color="rgba(122,224,255,.65)"/>
-                  <stop offset="0.7" stop-color="rgba(122,224,255,.15)"/>
-                  <stop offset="1" stop-color="rgba(122,224,255,0)"/>
-                </radialGradient>
-                <radialGradient id="indRadarBg" cx="0.5" cy="0.5" r="0.5">
-                  <stop offset="0" stop-color="rgba(122,224,255,.06)"/>
-                  <stop offset="0.9" stop-color="rgba(122,224,255,.01)"/>
+                <linearGradient id="indFrameBody" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="rgba(11,28,52,.98)"/>
+                  <stop offset="1" stop-color="rgba(4,12,28,.98)"/>
+                </linearGradient>
+                <radialGradient id="indScreenGlow" cx="0.5" cy="0.5" r="0.7">
+                  <stop offset="0" stop-color="rgba(122,224,255,.08)"/>
                   <stop offset="1" stop-color="rgba(122,224,255,0)"/>
                 </radialGradient>
               </defs>
 
-              <!-- Ambient backdrop glow under radar -->
-              <ellipse class="radar-glow" cx="160" cy="172" rx="100" ry="6" fill="rgba(122,224,255,.18)"/>
+              <!-- Ambient backdrop glow -->
+              <ellipse class="frame-glow" cx="160" cy="168" rx="120" ry="6" fill="rgba(122,224,255,.18)"/>
 
-              <!-- Radar (fades in + idle float) -->
-              <g class="radar">
-                <!-- Background fill inside outer ring -->
-                <circle cx="160" cy="78" r="52" fill="url(#indRadarBg)"/>
+              <!-- Monitor frame (fades in + idle float) -->
+              <g class="frame">
+                <rect x="22" y="14" width="276" height="152" rx="10"
+                      fill="url(#indFrameBody)" stroke="rgba(122,224,255,.45)" stroke-width="1.2"/>
+                <rect x="22" y="14" width="276" height="152" rx="10" fill="url(#indScreenGlow)"/>
 
-                <!-- Concentric range rings -->
-                <circle cx="160" cy="78" r="17" fill="none" stroke="rgba(122,224,255,.22)" stroke-width=".5"/>
-                <circle cx="160" cy="78" r="33" fill="none" stroke="rgba(122,224,255,.22)" stroke-width=".5"/>
-                <circle cx="160" cy="78" r="50" fill="none" stroke="rgba(122,224,255,.45)" stroke-width=".8"/>
-
-                <!-- Crosshair lines -->
-                <line x1="105" y1="78" x2="215" y2="78" stroke="rgba(122,224,255,.12)" stroke-width=".4" stroke-dasharray="2 3"/>
-                <line x1="160" y1="23" x2="160" y2="133" stroke="rgba(122,224,255,.12)" stroke-width=".4" stroke-dasharray="2 3"/>
-
-                <!-- Sweep arm — rotates continuously around (160,78) -->
-                <g class="sweep-arm">
-                  <path d="M160,78 L210,78 A50,50 0 0 0 203.3,53 Z" fill="url(#indSweepGrad)"/>
-                  <line x1="160" y1="78" x2="210" y2="78" stroke="#7ae0ff" stroke-width="1.2"/>
+                <!-- Subtle oscilloscope-style grid -->
+                <g stroke="rgba(122,224,255,.07)" stroke-width=".4">
+                  <line x1="60"  y1="42" x2="60"  y2="146"/>
+                  <line x1="100" y1="42" x2="100" y2="146"/>
+                  <line x1="140" y1="42" x2="140" y2="146"/>
+                  <line x1="180" y1="42" x2="180" y2="146"/>
+                  <line x1="220" y1="42" x2="220" y2="146"/>
+                  <line x1="260" y1="42" x2="260" y2="146"/>
+                  <line x1="22" y1="60"  x2="298" y2="60"/>
+                  <line x1="22" y1="100" x2="298" y2="100"/>
+                  <line x1="22" y1="130" x2="298" y2="130"/>
                 </g>
 
-                <!-- Center dot -->
-                <circle cx="160" cy="78" r="2" fill="#7ae0ff"/>
-                <circle cx="160" cy="78" r="4" fill="none" stroke="#7ae0ff" stroke-width=".5" opacity=".4"/>
+                <!-- Status bar -->
+                <circle class="status-dot" cx="36" cy="28" r="2" fill="#6cf3b4"/>
+                <text x="42" y="31" fill="#6cf3b4" font-family="Inter,sans-serif" font-size="6" font-weight="800" letter-spacing="1.5">PULSE · ACTIVE</text>
+                <text x="288" y="31" text-anchor="end" fill="rgba(190,222,245,.6)" font-family="JetBrains Mono,monospace" font-size="5.5" font-weight="600">SCANNING 24/7</text>
 
-                <!-- Ticker labels around the radar -->
-                <text class="ticker t1" x="160" y="14" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" font-weight="700" fill="rgba(190,222,245,.9)">XAUUSD</text>
-                <text class="ticker t2" x="212" y="48" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" font-weight="700" fill="rgba(190,222,245,.85)">BTCUSD</text>
-                <text class="ticker t3" x="212" y="112" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" font-weight="700" fill="rgba(190,222,245,.85)">NAS100</text>
-                <text class="ticker t4" x="160" y="142" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" font-weight="700" fill="rgba(190,222,245,.7)">GBPJPY</text>
-                <text class="ticker t5" x="108" y="112" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" font-weight="700" fill="rgba(190,222,245,.85)">US30</text>
-                <text class="ticker t6" x="108" y="48" text-anchor="middle" font-family="JetBrains Mono,monospace" font-size="6" font-weight="700" fill="rgba(190,222,245,.85)">USDJPY</text>
+                <!-- Pulse waveform line -->
+                <path class="pulse-line" pathLength="100"
+                      d="M30,100 L50,100 Q60,96 70,100 Q80,104 90,100 L120,100 L125,100 L128,88 L131,80 L134,88 L137,100 L160,100 L168,100 L170,86 L172,42 L174,86 L176,100 L210,100 Q220,103 230,100 L260,100 Q268,97 276,100 L290,100"
+                      fill="none" stroke="#7ae0ff" stroke-width="1.6"
+                      stroke-linecap="round" stroke-linejoin="round"/>
 
-                <!-- Background pings twinkle as the scan finds activity -->
-                <circle class="ping pg1" cx="186" cy="52" r="1.5" fill="#6cf3b4"/>
-                <circle class="ping pg2" cx="135" cy="98" r="1.5" fill="#6cf3b4"/>
-                <circle class="ping pg3" cx="190" cy="103" r="1.5" fill="#6cf3b4"/>
+                <!-- Spike vertical guide line (dotted, dropping from spike apex) -->
+                <line class="spike-guide" x1="172" y1="42" x2="172" y2="100"
+                      stroke="#ff7a9b" stroke-width=".7" stroke-dasharray="2 2"/>
 
-                <!-- Featured lock-on: setup found on XAUUSD (north position) -->
-                <g class="lock">
-                  <!-- Crosshair brackets around the lock dot -->
-                  <path d="M150,30 L146,30 L146,34 M170,30 L174,30 L174,34 M150,46 L146,46 L146,42 M170,46 L174,46 L174,42"
-                        stroke="#ff7a9b" stroke-width="1.2" fill="none" stroke-linecap="round"/>
-                  <!-- Lock dot -->
-                  <circle cx="160" cy="38" r="2.5" fill="#ff7a9b"/>
-                  <!-- Lock pulse rings -->
-                  <circle class="lock-ring lr1" cx="160" cy="38" r="4" fill="none" stroke="#ff7a9b" stroke-width="1"/>
-                  <circle class="lock-ring lr2" cx="160" cy="38" r="4" fill="none" stroke="#ff7a9b" stroke-width="1"/>
+                <!-- Spike pulse rings (expand outward) -->
+                <circle class="spike-pulse" cx="172" cy="42" r="3" fill="none" stroke="#ff7a9b" stroke-width="1"/>
+
+                <!-- Spike apex dot -->
+                <circle class="spike-dot" cx="172" cy="42" r="3" fill="#ff7a9b"/>
+
+                <!-- Ticker status bar (bottom) -->
+                <rect x="22" y="148" width="276" height="14" fill="rgba(7,21,43,.7)"/>
+                <text x="32" y="158" fill="rgba(190,222,245,.7)" font-family="JetBrains Mono,monospace" font-size="5" font-weight="600">SCANNING: XAUUSD · BTCUSD · EURUSD · NAS100 · GBPJPY · US30</text>
+
+                <!-- Signal alert card (pops up to the right of the spike) -->
+                <g class="alert">
+                  <!-- Connector from spike to alert -->
+                  <line x1="175" y1="42" x2="200" y2="56" stroke="rgba(255,122,155,.55)" stroke-width=".5" stroke-dasharray="2 2"/>
+                  <rect x="200" y="50" width="94" height="34" rx="4"
+                        fill="rgba(11,28,52,.95)" stroke="#ff7a9b" stroke-width=".7"/>
+                  <rect x="200" y="50" width="2.5" height="34" rx="1.2" fill="#ff7a9b"/>
+                  <text x="208" y="60" fill="#ff7a9b" font-family="Inter,sans-serif" font-size="5.5" font-weight="800" letter-spacing="1.2">SETUP FOUND</text>
+                  <text x="208" y="70" fill="#eaf6ff" font-family="JetBrains Mono,monospace" font-size="6" font-weight="700">XAUUSD · LONG</text>
+                  <text x="208" y="79" fill="rgba(190,222,245,.65)" font-family="JetBrains Mono,monospace" font-size="4.5">87% · ENTRY ZONE</text>
                 </g>
-              </g>
-
-              <!-- Alert card slides up from below -->
-              <g class="alert">
-                <rect x="50" y="148" width="220" height="24" rx="4"
-                      fill="rgba(11,28,52,.95)" stroke="#6cf3b4" stroke-width=".7"/>
-                <rect x="50" y="148" width="2.5" height="24" rx="1.2" fill="#6cf3b4"/>
-                <circle class="alert-dot" cx="60" cy="160" r="2" fill="#6cf3b4"/>
-                <text x="68" y="158" fill="#6cf3b4" font-family="Inter,sans-serif" font-size="5.5" font-weight="800" letter-spacing="1.2">SETUP FOUND</text>
-                <text x="68" y="167" fill="rgba(190,222,245,.85)" font-family="JetBrains Mono,monospace" font-size="4.5" font-weight="600">XAUUSD · LONG · 87% confidence</text>
-                <!-- LONG pill on the right -->
-                <rect x="232" y="153" width="32" height="14" rx="3" fill="rgba(108,243,180,.2)" stroke="rgba(108,243,180,.6)" stroke-width=".6"/>
-                <text x="248" y="163" text-anchor="middle" fill="#6cf3b4" font-family="Inter,sans-serif" font-size="5.5" font-weight="800" letter-spacing="1">LONG</text>
               </g>
             </svg>
           </div>
@@ -2999,7 +2978,7 @@
             <span class="meta-pill">TradingView</span>
           </div>
           <h3>Vision Edge · Pulse</h3>
-          <p>Two flagship TradingView indicators — Edge maps order flow and high-probability zones, Pulse scans every pair 24/7 and alerts you the second a setup forms.</p>
+          <p>Two flagship indicators — Edge maps order flow and high-probability zones, Pulse watches the markets 24/7 and alerts you the second a setup forms.</p>
           <span class="card-link">Explore <span class="arr">→</span></span>
         </a>
 
