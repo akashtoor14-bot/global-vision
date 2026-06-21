@@ -888,53 +888,166 @@
       }
     }
 
-    /* ---- 2. Live Trading Floor ----
-       Waveform bars pulse vertically (8 bars, EQ-style varied rhythm);
-       LIVE dot has expanding ripple; mic capsule glows. */
-    .anim-live .bar{
+    /* ---- 2. Live Trading Floor — premium live video broadcast ----
+       Broadcast frame fades in. LIVE badge pulses with expanding ring,
+       candles populate left-to-right, then the educator's uptrend line
+       draws across the chart with a cursor following the end. An ENTRY
+       annotation pops in on a key candle with pulse rings. Bottom strip
+       shows the host webcam with a speaking ring, name, and session
+       title. Viewer count ticks up. Frame idle-floats. */
+    .anim-live .frame{
       transform-origin:center;transform-box:fill-box;
-      animation:liveBarPulse 1.1s ease-in-out infinite;
-      filter:drop-shadow(0 0 4px rgba(122,224,255,.55));
+      opacity:0;
+      animation:liveFrameIn 1s cubic-bezier(.22,1,.36,1) .15s forwards,
+                liveFrameFloat 6s ease-in-out infinite 1.2s;
     }
-    .anim-live .bar.b1{animation-duration:1.30s; animation-delay:-.10s}
-    .anim-live .bar.b2{animation-duration:0.95s; animation-delay:-.45s}
-    .anim-live .bar.b3{animation-duration:1.50s; animation-delay:-.20s}
-    .anim-live .bar.b4{animation-duration:1.05s; animation-delay:-.65s}
-    .anim-live .bar.b5{animation-duration:1.20s; animation-delay:-.30s}
-    .anim-live .bar.b6{animation-duration:0.90s; animation-delay:-.55s}
-    .anim-live .bar.b7{animation-duration:1.40s; animation-delay:-.15s}
-    .anim-live .bar.b8{animation-duration:1.10s; animation-delay:-.70s}
-    @keyframes liveBarPulse{
-      0%,100%{transform:scaleY(.30)}
-      50%    {transform:scaleY(1.25)}
+    @keyframes liveFrameIn{
+      0%  {opacity:0;transform:translateY(8px) scale(.97)}
+      100%{opacity:1;transform:translateY(0) scale(1)}
     }
+    @keyframes liveFrameFloat{
+      0%,100%{transform:translateY(0)}
+      50%    {transform:translateY(-2.5px)}
+    }
+    .anim-live .frame-glow{
+      transform-origin:center;transform-box:fill-box;
+      animation:liveGlowPulse 4s ease-in-out infinite;
+    }
+    @keyframes liveGlowPulse{
+      0%,100%{opacity:.45;transform:scaleX(1)}
+      50%    {opacity:.75;transform:scaleX(1.05)}
+    }
+    .anim-live .live-badge{
+      opacity:0;
+      animation:liveBadgeIn .4s ease-out .4s forwards;
+    }
+    @keyframes liveBadgeIn{0%{opacity:0}100%{opacity:1}}
     .anim-live .live-dot{
       transform-origin:center;transform-box:fill-box;
-      animation:liveDotPulse 1.4s ease-in-out infinite;
+      animation:liveDotPulse 1.4s ease-in-out infinite 1s;
     }
     @keyframes liveDotPulse{
       0%,100%{transform:scale(1);  opacity:1}
-      50%    {transform:scale(1.25);opacity:.7}
+      50%    {transform:scale(1.4);opacity:.55}
     }
     .anim-live .live-ring{
       transform-origin:center;transform-box:fill-box;
-      animation:liveRingExpand 1.8s ease-out infinite;
+      opacity:0;
+      animation:liveRingExpand 1.8s ease-out infinite 1s;
     }
     @keyframes liveRingExpand{
-      0%   {transform:scale(.6); opacity:1}
-      100% {transform:scale(2.4);opacity:0}
+      0%  {transform:scale(1);  opacity:.85}
+      100%{transform:scale(3.5);opacity:0}
     }
-    .anim-live .mic-glow{
+    .anim-live .viewers{
+      opacity:0;
+      animation:liveViewersIn .4s ease-out 1.8s forwards;
+    }
+    @keyframes liveViewersIn{0%{opacity:0}100%{opacity:1}}
+    .anim-live .vn{opacity:0}
+    .anim-live .vn1{opacity:1;animation:liveVnOut .25s ease 4.5s forwards}
+    .anim-live .vn2{animation:liveVnIn .25s ease 4.5s forwards, liveVnOut .25s ease 6.5s forwards}
+    .anim-live .vn3{animation:liveVnIn .25s ease 6.5s forwards}
+    @keyframes liveVnIn{0%{opacity:0}100%{opacity:1}}
+    @keyframes liveVnOut{0%{opacity:1}100%{opacity:0}}
+    .anim-live .cdl{
+      transform-origin:bottom center;transform-box:fill-box;
+      animation:liveCdlRise .55s cubic-bezier(.22,1,.36,1) backwards;
+    }
+    .anim-live .cdl.c1{animation-delay:.6s}
+    .anim-live .cdl.c2{animation-delay:.7s}
+    .anim-live .cdl.c3{animation-delay:.8s}
+    .anim-live .cdl.c4{animation-delay:.9s}
+    .anim-live .cdl.c5{animation-delay:1.0s}
+    .anim-live .cdl.c6{animation-delay:1.1s}
+    .anim-live .cdl.c7{animation-delay:1.2s}
+    @keyframes liveCdlRise{
+      0%  {transform:scaleY(0);opacity:0}
+      100%{transform:scaleY(1);opacity:1}
+    }
+    .anim-live .trend-line{
+      stroke-dasharray:220;stroke-dashoffset:220;
+      animation:liveTrendDraw 1.2s cubic-bezier(.4,0,.2,1) 2.2s forwards;
+    }
+    @keyframes liveTrendDraw{
+      0%  {stroke-dashoffset:220}
+      100%{stroke-dashoffset:0}
+    }
+    .anim-live .cursor{
+      offset-path:path("M88,118 Q160,100 232,68");
+      offset-rotate:0deg;
+      opacity:0;
+      filter:drop-shadow(0 0 4px rgba(122,224,255,.8));
+      animation:liveCursorIn .2s ease-out 2.2s forwards,
+                liveCursorMove 1.2s cubic-bezier(.4,0,.2,1) 2.2s forwards,
+                liveCursorOut .3s ease-in 3.5s forwards;
+    }
+    @keyframes liveCursorIn{0%{opacity:0}100%{opacity:1}}
+    @keyframes liveCursorMove{
+      0%  {offset-distance:0%}
+      100%{offset-distance:100%}
+    }
+    @keyframes liveCursorOut{0%{opacity:1}100%{opacity:0}}
+    .anim-live .annotation{
+      opacity:0;
+      animation:liveAnnGroupIn .4s ease-out 3.5s forwards;
+    }
+    @keyframes liveAnnGroupIn{0%{opacity:0}100%{opacity:1}}
+    .anim-live .ann-ring{
       transform-origin:center;transform-box:fill-box;
-      animation:liveMicGlow 2s ease-in-out infinite;
+      animation:liveAnnRingIn .4s cubic-bezier(.34,1.4,.5,1) 3.5s backwards;
     }
-    @keyframes liveMicGlow{
-      0%,100%{transform:scale(1);  opacity:.85}
-      50%    {transform:scale(1.5);opacity:1}
+    @keyframes liveAnnRingIn{
+      0%  {transform:scale(.3)}
+      100%{transform:scale(1)}
     }
+    .anim-live .ann-pulse{
+      transform-origin:center;transform-box:fill-box;
+      opacity:0;
+      animation:liveAnnPulse 2.2s ease-out infinite 4.0s;
+    }
+    @keyframes liveAnnPulse{
+      0%  {transform:scale(1);  opacity:.9}
+      100%{transform:scale(2.8);opacity:0}
+    }
+    .anim-live .ann-label{
+      opacity:0;
+      animation:liveAnnLabelIn .4s ease-out 3.8s forwards;
+    }
+    @keyframes liveAnnLabelIn{
+      0%  {opacity:0;transform:translateY(2px)}
+      100%{opacity:1;transform:translateY(0)}
+    }
+    .anim-live .webcam{
+      opacity:0;
+      animation:liveWebcamIn .5s cubic-bezier(.22,1,.36,1) 1.4s forwards;
+    }
+    @keyframes liveWebcamIn{
+      0%  {opacity:0;transform:translateY(4px) scale(.95)}
+      100%{opacity:1;transform:translateY(0)   scale(1)}
+    }
+    .anim-live .speak-ring{
+      transform-origin:center;transform-box:fill-box;
+      opacity:0;
+      animation:liveSpeakRing 2.2s ease-out infinite 1.8s;
+    }
+    @keyframes liveSpeakRing{
+      0%  {transform:scale(.85);opacity:.85}
+      100%{transform:scale(1.7);opacity:0}
+    }
+    .anim-live .host{
+      opacity:0;
+      animation:liveHostIn .5s ease-out 1.6s forwards;
+    }
+    @keyframes liveHostIn{0%{opacity:0}100%{opacity:1}}
     @media (prefers-reduced-motion: reduce){
-      .anim-live .bar,.anim-live .live-dot,.anim-live .live-ring,.anim-live .mic-glow{
-        animation:none;
+      .anim-live .frame,.anim-live .frame-glow,
+      .anim-live .live-badge,.anim-live .live-dot,.anim-live .live-ring,
+      .anim-live .viewers,.anim-live .vn,
+      .anim-live .cdl,.anim-live .trend-line,.anim-live .cursor,
+      .anim-live .annotation,.anim-live .ann-ring,.anim-live .ann-pulse,.anim-live .ann-label,
+      .anim-live .webcam,.anim-live .speak-ring,.anim-live .host{
+        animation:none;opacity:1;transform:none;stroke-dashoffset:0;
       }
     }
 
@@ -2605,30 +2718,121 @@
         <a href="#community" class="f-card has-banner has-anim products-card reveal" style="--bg-a:120deg;--bg-c1:rgba(108,243,180,.10);--bg-c2:rgba(7,21,43,.65);text-decoration:none;color:inherit">
           <div class="card-banner">
             <svg class="anim-svg anim-live" viewBox="0 0 320 180" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
-              <g transform="translate(238 36)">
-                <circle class="live-dot" r="5" fill="#ff7a9b"/>
-                <circle class="live-ring" r="9" fill="none" stroke="rgba(255,122,155,.7)" stroke-width="1"/>
-                <text x="14" y="3" fill="#ff7a9b" font-family="Inter,sans-serif" font-size="9" font-weight="800" letter-spacing="2">LIVE</text>
+              <defs>
+                <linearGradient id="liveFrameBody" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="rgba(11,28,52,.98)"/>
+                  <stop offset="1" stop-color="rgba(4,12,28,.98)"/>
+                </linearGradient>
+                <radialGradient id="liveScreenGlow" cx="0.5" cy="0.18" r="0.9">
+                  <stop offset="0" stop-color="rgba(122,224,255,.10)"/>
+                  <stop offset="1" stop-color="rgba(122,224,255,0)"/>
+                </radialGradient>
+              </defs>
+
+              <!-- Ambient glow under frame -->
+              <ellipse class="frame-glow" cx="160" cy="168" rx="120" ry="6" fill="rgba(122,224,255,.20)"/>
+
+              <!-- Broadcast frame (fades in + idle float) -->
+              <g class="frame">
+                <!-- Frame body -->
+                <rect x="28" y="18" width="264" height="144" rx="10"
+                      fill="url(#liveFrameBody)" stroke="rgba(122,224,255,.45)" stroke-width="1.2"/>
+                <rect x="28" y="18" width="264" height="144" rx="10" fill="url(#liveScreenGlow)"/>
+
+                <!-- Subtle chart gridlines -->
+                <g stroke="rgba(122,224,255,.05)" stroke-width=".5">
+                  <line x1="32" y1="68"  x2="288" y2="68"/>
+                  <line x1="32" y1="92"  x2="288" y2="92"/>
+                  <line x1="32" y1="116" x2="288" y2="116"/>
+                </g>
+
+                <!-- LIVE badge (top-left) -->
+                <g class="live-badge">
+                  <rect x="38" y="28" width="34" height="12" rx="3" fill="rgba(255,90,120,.18)" stroke="rgba(255,90,120,.7)" stroke-width=".7"/>
+                  <circle class="live-dot" cx="44" cy="34" r="2" fill="#ff5a78"/>
+                  <circle class="live-ring" cx="44" cy="34" r="2" fill="none" stroke="#ff5a78" stroke-width=".8"/>
+                  <text x="50" y="37" fill="#ff5a78" font-family="Inter,sans-serif" font-size="6" font-weight="800" letter-spacing="1.4">LIVE</text>
+                </g>
+
+                <!-- Viewer count (top-right) -->
+                <g class="viewers">
+                  <rect x="208" y="28" width="74" height="12" rx="3" fill="rgba(7,21,43,.7)" stroke="rgba(122,224,255,.30)" stroke-width=".5"/>
+                  <!-- Eye icon -->
+                  <path d="M215,34 c2.5,-3 5.5,-3 8,0 c-2.5,3 -5.5,3 -8,0" fill="none" stroke="rgba(190,222,245,.7)" stroke-width=".6"/>
+                  <circle cx="219" cy="34" r="1.1" fill="rgba(190,222,245,.85)"/>
+                  <!-- Viewer count: 3 stacked tspans that cross-fade -->
+                  <text x="229" y="37" fill="rgba(190,222,245,.9)" font-family="JetBrains Mono,monospace" font-size="6" font-weight="700">
+                    <tspan class="vn vn1" x="229" y="37">324</tspan>
+                    <tspan class="vn vn2" x="229" y="37">325</tspan>
+                    <tspan class="vn vn3" x="229" y="37">326</tspan>
+                  </text>
+                  <text x="250" y="37" fill="rgba(190,222,245,.55)" font-family="Inter,sans-serif" font-size="5" font-weight="500">watching</text>
+                </g>
+
+                <!-- Chart: 7 candles tell a "low → bounce → breakout → run" story -->
+                <g class="candles">
+                  <g class="cdl c1" fill="rgba(108,243,180,.55)" stroke="rgba(108,243,180,.9)" stroke-width=".7">
+                    <line x1="86"  y1="100" x2="86"  y2="120" stroke="rgba(108,243,180,.7)"/>
+                    <rect x="82"  y="104" width="8" height="12"/>
+                  </g>
+                  <g class="cdl c2" fill="rgba(255,122,155,.45)" stroke="rgba(255,122,155,.85)" stroke-width=".7">
+                    <line x1="108" y1="104" x2="108" y2="120" stroke="rgba(255,122,155,.7)"/>
+                    <rect x="104" y="108" width="8" height="10"/>
+                  </g>
+                  <g class="cdl c3" fill="rgba(108,243,180,.45)" stroke="rgba(108,243,180,.85)" stroke-width=".7">
+                    <line x1="130" y1="96"  x2="130" y2="114" stroke="rgba(108,243,180,.7)"/>
+                    <rect x="126" y="100" width="8" height="10"/>
+                  </g>
+                  <g class="cdl c4" fill="rgba(255,122,155,.45)" stroke="rgba(255,122,155,.85)" stroke-width=".7">
+                    <line x1="152" y1="100" x2="152" y2="120" stroke="rgba(255,122,155,.7)"/>
+                    <rect x="148" y="104" width="8" height="12"/>
+                  </g>
+                  <g class="cdl c5" fill="rgba(108,243,180,.55)" stroke="rgba(108,243,180,.9)" stroke-width=".7">
+                    <line x1="174" y1="88"  x2="174" y2="108" stroke="rgba(108,243,180,.7)"/>
+                    <rect x="170" y="92"  width="8" height="12"/>
+                  </g>
+                  <g class="cdl c6" fill="rgba(108,243,180,.55)" stroke="rgba(108,243,180,.9)" stroke-width=".7">
+                    <line x1="196" y1="76"  x2="196" y2="96" stroke="rgba(108,243,180,.7)"/>
+                    <rect x="192" y="80"  width="8" height="12"/>
+                  </g>
+                  <g class="cdl c7" fill="rgba(108,243,180,.55)" stroke="rgba(108,243,180,.9)" stroke-width=".7">
+                    <line x1="218" y1="64"  x2="218" y2="84" stroke="rgba(108,243,180,.7)"/>
+                    <rect x="214" y="68"  width="8" height="12"/>
+                  </g>
+                </g>
+
+                <!-- Educator's hand-drawn uptrend line -->
+                <path class="trend-line" d="M88,118 Q160,100 232,68"
+                      fill="none" stroke="#7ae0ff" stroke-width="1.4" stroke-linecap="round" stroke-dasharray="3 3"/>
+
+                <!-- Cursor follows the trend line as it draws -->
+                <circle class="cursor" cx="0" cy="0" r="2.5" fill="#dffaff" stroke="#7ae0ff" stroke-width="1"/>
+
+                <!-- ENTRY annotation on the breakout candle (c5) -->
+                <g class="annotation">
+                  <circle class="ann-ring" cx="174" cy="98" r="5.5" fill="none" stroke="#ff7a9b" stroke-width="1.2"/>
+                  <circle class="ann-pulse" cx="174" cy="98" r="5.5" fill="none" stroke="#ff7a9b" stroke-width="1"/>
+                  <text class="ann-label" x="183" y="92" fill="#ff7a9b" font-family="JetBrains Mono,monospace" font-size="5" font-weight="800" letter-spacing="1">ENTRY</text>
+                </g>
+
+                <!-- Bottom strip: educator webcam thumbnail + host info -->
+                <g class="webcam">
+                  <!-- Expanding speak-ring (cyan, suggests they're talking) -->
+                  <circle class="speak-ring" cx="56" cy="140" r="13" fill="none" stroke="rgba(122,224,255,.5)" stroke-width="1"/>
+                  <!-- Avatar background circle -->
+                  <circle cx="56" cy="140" r="12" fill="rgba(11,28,52,.95)" stroke="#7ae0ff" stroke-width="1.2"/>
+                  <!-- Head -->
+                  <circle cx="56" cy="136" r="3.6" fill="rgba(122,224,255,.5)"/>
+                  <!-- Shoulders -->
+                  <path d="M48,150 a8,7 0 0 1 16,0 L64,152 L48,152 Z" fill="rgba(122,224,255,.5)"/>
+                </g>
+
+                <!-- Host name + session title -->
+                <g class="host">
+                  <text x="74" y="138" fill="#eaf6ff" font-family="Inter,sans-serif" font-size="6" font-weight="700">Gio · Live</text>
+                  <text x="74" y="148" fill="rgba(190,222,245,.6)" font-family="Inter,sans-serif" font-size="4.5" font-weight="500">XAUUSD · London Open Breakdown</text>
+                </g>
               </g>
-              <g fill="#7ae0ff">
-                <rect class="bar b1" x="60"  y="88" width="3" height="22" rx="1.5"/>
-                <rect class="bar b2" x="72"  y="78" width="3" height="42" rx="1.5"/>
-                <rect class="bar b3" x="84"  y="84" width="3" height="30" rx="1.5"/>
-                <rect class="bar b4" x="96"  y="74" width="3" height="50" rx="1.5"/>
-                <rect class="bar b5" x="108" y="82" width="3" height="34" rx="1.5"/>
-                <rect class="bar b5" x="200" y="82" width="3" height="34" rx="1.5"/>
-                <rect class="bar b4" x="212" y="74" width="3" height="50" rx="1.5"/>
-                <rect class="bar b3" x="224" y="84" width="3" height="30" rx="1.5"/>
-                <rect class="bar b2" x="236" y="78" width="3" height="42" rx="1.5"/>
-                <rect class="bar b1" x="248" y="88" width="3" height="22" rx="1.5"/>
-              </g>
-              <g stroke="#7ae0ff" stroke-width="1.6" stroke-linecap="round" fill="none">
-                <rect x="148" y="62" width="24" height="44" rx="12" fill="rgba(122,224,255,.18)"/>
-                <path d="M134 96 a 26 26 0 0 0 52 0"/>
-                <line x1="160" y1="122" x2="160" y2="138"/>
-                <line x1="142" y1="138" x2="178" y2="138"/>
-              </g>
-              <circle class="mic-glow" cx="160" cy="80" r="2.4" fill="#dffaff"/>
             </svg>
           </div>
           <div class="card-meta">
@@ -2636,7 +2840,7 @@
             <span class="meta-pill">Daily</span>
           </div>
           <h3>Live Trading Floor</h3>
-          <p>Voice sessions through London, New York, and Asia opens — real-time commentary, walkthroughs, and post-market reviews.</p>
+          <p>Live video market breakdowns with our educators — real-time analysis, live trades alongside the community, and walkthroughs through every major session.</p>
           <span class="card-link">Explore <span class="arr">→</span></span>
         </a>
 
