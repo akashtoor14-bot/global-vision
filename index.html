@@ -4776,6 +4776,19 @@
       var camera = new THREE.PerspectiveCamera(35, s.w / s.h, 0.1, 100);
       camera.position.set(0, 0, 5);
 
+      // Horizontal offset that places the ASSEMBLED globe on the right
+      // side of the section. The globe slides from this offset toward
+      // center as it explodes (see tick), so scattered dots end up
+      // spread across the whole section. Scaled to the visible width so
+      // it stays on-screen at any aspect ratio.
+      var rightOffset = 0;
+      function computeOffset(){
+        var halfH = Math.tan((35 * Math.PI / 180) / 2) * camera.position.z;
+        var halfW = halfH * camera.aspect;
+        rightOffset = halfW * 0.46;
+      }
+      computeOffset();
+
       // ---- Fibonacci sphere distribution ----
       var DOT_COUNT = 2500;
       var RADIUS    = 0.85;
@@ -4912,6 +4925,7 @@
         renderer.setSize(n.w, n.h, false);
         camera.aspect = n.w / n.h;
         camera.updateProjectionMatrix();
+        computeOffset();
         mat.uniforms.uPixel.value = renderer.getPixelRatio();
       }
       window.addEventListener('resize', onResize, { passive: true });
@@ -4930,6 +4944,10 @@
         // Click toggle dampened by scroll: scroll always pulls toward 0
         var tgt = clickTarget * (1 - scrollProg);
         curExplode += (tgt - curExplode) * Math.min(1, dt * 4.5);
+
+        // Assembled globe sits on the right; as it explodes it slides to
+        // center so the scattered dots spread across the whole section.
+        group.position.x = rightOffset * (1 - curExplode);
 
         mat.uniforms.uExplode.value = curExplode;
         mat.uniforms.uTime.value    = now / 1000;
