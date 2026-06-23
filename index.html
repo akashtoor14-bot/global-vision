@@ -4715,14 +4715,9 @@
       scene.add(particles);
 
       // ---- Lighting ----
-      // Key (warm white from front-left)
       const sun = new THREE.DirectionalLight(0xddedff, 2.8);
       sun.position.set(-0.7, 0.5, 2);
       scene.add(sun);
-      // Cool cyan rim (back-right) — adds the moody two-tone look
-      const rim = new THREE.DirectionalLight(0x7ae0ff, 0.9);
-      rim.position.set(1.6, -0.4, -1.2);
-      scene.add(rim);
       scene.add(new THREE.AmbientLight(0x14305a, 0.32));
 
       // ---- Lat/lng -> world-space vector (foundation for marker placement) ----
@@ -4742,107 +4737,6 @@
       window.GVMarkerGroup = markerGroup;
       window.GVEarth = earth;
 
-      // ---- Avatar pin marker system ----
-      // Canvas-generated placeholder avatar — head+shoulders silhouette inside
-      // a navy disc with a cyan ring + soft outer glow. Same texture is reused
-      // across every marker so we only allocate once.
-      const markerTex = (function buildMarkerTexture(){
-        const sz = 128;
-        const c  = document.createElement('canvas');
-        c.width = sz; c.height = sz;
-        const ctx = c.getContext('2d');
-        const cx = sz/2, cy = sz/2;
-        // Soft outer cyan glow
-        const glow = ctx.createRadialGradient(cx, cy, 22, cx, cy, 62);
-        glow.addColorStop(0, 'rgba(122,224,255,.55)');
-        glow.addColorStop(1, 'rgba(122,224,255,0)');
-        ctx.fillStyle = glow;
-        ctx.fillRect(0, 0, sz, sz);
-        // Navy disc background
-        ctx.beginPath(); ctx.arc(cx, cy, 24, 0, Math.PI*2);
-        ctx.fillStyle = 'rgba(11,28,52,.95)'; ctx.fill();
-        // Cyan ring
-        ctx.beginPath(); ctx.arc(cx, cy, 24, 0, Math.PI*2);
-        ctx.lineWidth = 2.5; ctx.strokeStyle = '#7ae0ff'; ctx.stroke();
-        // Head silhouette
-        ctx.beginPath(); ctx.arc(cx, cy - 5, 7, 0, Math.PI*2);
-        ctx.fillStyle = 'rgba(122,224,255,.72)'; ctx.fill();
-        // Shoulders silhouette (semicircular shape below the head)
-        ctx.beginPath();
-        ctx.arc(cx, cy + 22, 14, Math.PI, Math.PI * 2);
-        ctx.lineTo(cx + 14, cy + 24);
-        ctx.lineTo(cx - 14, cy + 24);
-        ctx.closePath();
-        ctx.fillStyle = 'rgba(122,224,255,.72)'; ctx.fill();
-        const t = new THREE.CanvasTexture(c);
-        if ('SRGBColorSpace' in THREE) t.colorSpace = THREE.SRGBColorSpace;
-        return t;
-      })();
-
-      // Per-marker materials (separate instances so opacity culling per marker
-      // doesn't bleed across markers). We build small reusable geometries once.
-      const PIN_SURFACE_R = EARTH_RADIUS * 1.001;
-      const PIN_AVATAR_R  = EARTH_RADIUS * 1.18;
-      const STALK_LEN     = PIN_AVATAR_R - PIN_SURFACE_R;
-      const stalkGeom = new THREE.CylinderGeometry(0.005, 0.005, STALK_LEN, 6);
-      const baseGeom  = new THREE.SphereGeometry(0.018, 10, 10);
-
-      function addGlobeMarker(lat, lng){
-        const surface = window.GVLatLngToVec3(lat, lng, PIN_SURFACE_R);
-        const top     = window.GVLatLngToVec3(lat, lng, PIN_AVATAR_R);
-
-        // Stalk — midpoint placement, oriented from surface toward top
-        const stalkMat = new THREE.MeshBasicMaterial({
-          color: 0x7ae0ff, transparent: true, opacity: 0.6, depthWrite: false
-        });
-        const stalk = new THREE.Mesh(stalkGeom, stalkMat);
-        stalk.position.copy(surface.clone().lerp(top, 0.5));
-        const dir = top.clone().sub(surface).normalize();
-        stalk.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), dir);
-
-        // Base — small cyan glow dot at the actual surface point
-        const baseMat = new THREE.MeshBasicMaterial({
-          color: 0x7ae0ff, transparent: true, opacity: 0.9, depthWrite: false
-        });
-        const base = new THREE.Mesh(baseGeom, baseMat);
-        base.position.copy(surface);
-
-        // Avatar sprite — billboards to camera automatically
-        const sprMat = new THREE.SpriteMaterial({
-          map: markerTex, transparent: true, depthWrite: false, opacity: 1.0
-        });
-        const sprite = new THREE.Sprite(sprMat);
-        sprite.position.copy(top);
-        sprite.scale.setScalar(0.20);
-
-        // Group all 3 pieces so culling can hide them together
-        const group = new THREE.Group();
-        group.add(base);
-        group.add(stalk);
-        group.add(sprite);
-        // Stash the "top" position in local space so the tick can dot it
-        // against the camera direction without recomputing every frame.
-        group.userData.topLocal = top.clone();
-        markerGroup.add(group);
-        return group;
-      }
-
-      // Placeholder cities (no real member data — biased toward GV's actual
-      // audience: Philippines / Canada / UAE, with a global spread).
-      const PLACEHOLDER_CITIES = [
-        { lat: 14.60,  lng: 120.98  }, // Manila
-        { lat: 10.32,  lng: 123.90  }, // Cebu
-        { lat: 43.65,  lng: -79.38  }, // Toronto
-        { lat: 49.28,  lng: -123.12 }, // Vancouver
-        { lat: 25.20,  lng:   55.27 }, // Dubai
-        { lat: 51.51,  lng:   -0.13 }, // London
-        { lat:  1.35,  lng:  103.82 }, // Singapore
-        { lat: -33.87, lng:  151.21 }, // Sydney
-        { lat: 35.68,  lng:  139.65 }, // Tokyo
-        { lat: 40.71,  lng:  -74.01 }, // New York
-      ];
-      PLACEHOLDER_CITIES.forEach(c => addGlobeMarker(c.lat, c.lng));
-
       // ---- Resize & animate ----
       function onResize(){
         size = parent.getBoundingClientRect().width || size;
@@ -4850,33 +4744,11 @@
       }
       window.addEventListener('resize', onResize, { passive:true });
 
-      // Reusable temporaries for the marker culling pass (avoid per-frame GC).
-      const _tmpCam = new THREE.Vector3();
-      const _tmpPos = new THREE.Vector3();
-
       let last = performance.now();
       function tick(now){
         const dt = (now - last) / 1000; last = now;
         earth.rotation.y     += 0.10  * dt; // ~1 rotation / minute
         particles.rotation.y -= 0.005 * dt; // slight counter-drift
-
-        // Back-side marker culling — fade pins facing away from the camera.
-        // The dot product between (marker world-direction) and (camera world-
-        // direction) is positive when the marker is on the visible hemisphere.
-        const camDir = _tmpCam.copy(camera.position).normalize();
-        for (let i = 0; i < markerGroup.children.length; i++) {
-          const m = markerGroup.children[i];
-          const sprite = m.children[2];
-          sprite.getWorldPosition(_tmpPos);
-          const dot = _tmpPos.normalize().dot(camDir);
-          const target = dot > 0.1 ? 1 : 0;
-          // Lerp each child's opacity toward its base * visibility.
-          // Base opacities: base=0.9, stalk=0.6, sprite=1.0
-          m.children[0].material.opacity = THREE.MathUtils.lerp(m.children[0].material.opacity, target * 0.9, 0.15);
-          m.children[1].material.opacity = THREE.MathUtils.lerp(m.children[1].material.opacity, target * 0.6, 0.15);
-          m.children[2].material.opacity = THREE.MathUtils.lerp(m.children[2].material.opacity, target * 1.0, 0.15);
-        }
-
         renderer.render(scene, camera);
         requestAnimationFrame(tick);
       }
