@@ -384,18 +384,28 @@
       min-height:100vh;
       width:100%;
       overflow:hidden;
-      display:flex;
-      flex-direction:column;
+      /* Two-column layout: copy on the left, dotted globe on the right
+         (the position our old globe used to occupy). */
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
       align-items:center;
-      justify-content:center;
-      padding:6rem 2rem 5rem;
+      gap:2.5rem;
+      max-width:1400px;
+      margin:0 auto;
+      padding:6rem 2.5rem 5rem;
+    }
+    /* Right-column container that the globe canvas fills */
+    .modal-globe-col{
+      position:relative;
+      width:100%;
+      height:560px;
+      z-index:1;
     }
     #globe-canvas{
       position:absolute;
       inset:0;
       width:100%;
       height:100%;
-      z-index:1;
       cursor:pointer;
       opacity:0;
       transition:opacity 1.2s ease;
@@ -404,10 +414,8 @@
     .modal-hero-text{
       position:relative;
       z-index:3;
-      text-align:center;
-      max-width:780px;
-      margin:0 auto;
-      pointer-events:none;
+      text-align:left;
+      max-width:600px;
     }
     .modal-hero-eyebrow{
       display:inline-flex;
@@ -445,15 +453,14 @@
       line-height:1.5;
       color:#dffaff;
       opacity:.72;
-      margin:0 auto 2.5rem;
-      max-width:560px;
+      margin:0 0 2.5rem;
+      max-width:480px;
     }
     .modal-hero-cta{
       display:flex;
       gap:.75rem;
-      justify-content:center;
+      justify-content:flex-start;
       align-items:center;
-      pointer-events:auto;
     }
     .modal-btn-primary,
     .modal-btn-ghost{
@@ -492,7 +499,7 @@
     .modal-hero-meta{
       display:flex;
       gap:1.25rem;
-      justify-content:center;
+      justify-content:flex-start;
       margin-top:2.25rem;
       font-family:Inter,system-ui,sans-serif;
       font-size:12px;
@@ -523,10 +530,21 @@
     }
     @keyframes hintFadeIn{to{opacity:.9}}
     @media (max-width:1100px){
+      /* Collapse to a single centered column: text on top, globe below. */
+      .modal-hero{
+        grid-template-columns:1fr;
+        gap:1.5rem;
+        text-align:center;
+      }
+      .modal-hero-text{max-width:640px;margin:0 auto;text-align:center}
+      .modal-hero-sub{margin-left:auto;margin-right:auto}
+      .modal-hero-cta{justify-content:center}
+      .modal-hero-meta{justify-content:center}
+      .modal-globe-col{height:440px}
       .modal-hero-h1{font-size:52px}
     }
     @media (max-width:768px){
-      .modal-hero{padding:5rem 1rem 3rem;min-height:80vh}
+      .modal-hero{padding:5rem 1rem 3rem;min-height:auto}
       .modal-hero-h1{font-size:36px;line-height:1.1}
       .modal-hero-sub{font-size:15px}
       .modal-hero-cta{flex-direction:column;gap:.6rem;width:100%;max-width:280px;margin:0 auto}
@@ -534,6 +552,9 @@
       .modal-hero-meta{flex-direction:column;gap:.4rem;align-items:center;margin-top:1.5rem}
       .modal-hero-meta-sep{display:none}
       .modal-hero-hint{display:none}
+      /* Globe is skipped on mobile (three.js not loaded) — hide the
+         empty column so it doesn't leave a gap. */
+      .modal-globe-col{display:none}
     }
 
     /* Hero brand logo — primary visual focal point in place of any
@@ -2700,18 +2721,11 @@
   </header>
 
   <!-- ============================================================
-       HERO — interactive dotted globe behind centered text
+       HERO — copy on the left, interactive dotted globe on the right
        ============================================================ -->
   <section id="hero" class="hero modal-hero">
 
-    <!-- Three.js draws the dotted globe here. Click anywhere on it
-         to explode the dots; scroll past the hero and they
-         reassemble. Wired up in GVInitGlobe at the end of body. -->
-    <canvas id="globe-canvas" aria-label="Interactive globe"></canvas>
-
-    <!-- Centered text overlay. pointer-events:none on the wrapper so
-         clicks pass through to the canvas; auto on the CTA row so
-         the buttons stay clickable. -->
+    <!-- Left column: copy -->
     <div class="modal-hero-text">
       <span class="modal-hero-eyebrow">Global Vision · Free Forever</span>
       <h1 class="modal-hero-h1">Trade With A<br>Global Edge.</h1>
@@ -2727,6 +2741,13 @@
         <span class="modal-hero-meta-sep">·</span>
         <span><strong>24/5</strong> Coverage</span>
       </div>
+    </div>
+
+    <!-- Right column: Three.js dotted globe. Click it to explode the
+         dots; scroll past the hero and they reassemble. Wired up in
+         GVInitGlobe at the end of body. -->
+    <div class="modal-globe-col">
+      <canvas id="globe-canvas" aria-label="Interactive globe"></canvas>
     </div>
 
     <div class="modal-hero-hint">Click globe · scroll to reassemble</div>
@@ -4750,11 +4771,14 @@
       if (!canvas || typeof THREE === 'undefined') return;
       window.__gvGlobeInited = true;
 
-      var hero = canvas.parentElement;
+      // Canvas sizes to its own column (.modal-globe-col); scroll
+      // progress is measured against the whole hero section.
+      var glCol = canvas.parentElement;
+      var section = document.getElementById('hero') || glCol;
       var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-      function size(){ return { w: hero.clientWidth, h: hero.clientHeight }; }
+      function size(){ return { w: glCol.clientWidth, h: glCol.clientHeight }; }
       var s = size();
       renderer.setSize(s.w, s.h, false);
 
@@ -4885,8 +4909,8 @@
 
       // ---- Scroll progress past the hero ----
       function onScroll(){
-        var rect = hero.getBoundingClientRect();
-        var p = Math.max(0, Math.min(1, -rect.top / hero.offsetHeight));
+        var rect = section.getBoundingClientRect();
+        var p = Math.max(0, Math.min(1, -rect.top / section.offsetHeight));
         scrollProg = p;
       }
       window.addEventListener('scroll', onScroll, { passive: true });
