@@ -366,51 +366,15 @@
       50%{opacity:.55;transform:scale(1.2)}
     }
 
-    .hero{position:relative;overflow:hidden}
-
     .hero-grid{
-      max-width:1400px;margin:0 auto;position:relative;z-index:3;
-      display:grid;grid-template-columns:1.5fr 1fr;gap:4rem;
-      align-items:end;
-      padding-top:1rem;padding-bottom:5rem;
+      max-width:1100px;margin:0 auto;position:relative;z-index:2;
+      display:grid;grid-template-columns:1fr;gap:3rem;align-items:center;
+      text-align:center;
     }
-    /* Right column carries the subhead + CTA */
-    .hero-right{
-      display:flex;flex-direction:column;gap:1.75rem;
-      align-items:flex-start;
-    }
-    .hero-right .sub{
-      font-size:18px;color:#b4c3dc;
-      max-width:380px;line-height:1.55;
-      margin:0;
-    }
-
-    /* Faint massive brand watermark behind the horizon */
-    .hero-watermark{
-      position:absolute;
-      bottom:8%;
-      left:50%;
-      transform:translateX(-50%);
-      font-family:Inter,system-ui,sans-serif;
-      font-size:22vw;
-      font-weight:900;
-      color:rgba(122,224,255,.030);
-      letter-spacing:-.05em;
-      white-space:nowrap;
-      pointer-events:none;
-      z-index:1;
-      line-height:.85;
-      user-select:none;
-    }
-
-    /* Glowing horizon SVG: radial-gradient glow + gently-curved planet rim arc */
-    .hero-horizon{
-      position:absolute;
-      bottom:0;left:0;width:100%;
-      height:62%;
-      pointer-events:none;
-      z-index:2;
-    }
+    .hero-copy{margin-left:auto;margin-right:auto}
+    .hero-copy .sub,.hero-copy h1{margin-left:auto;margin-right:auto}
+    .hero-cta,.tier-tabs{justify-content:center}
+    .hero-meta{margin-left:auto;margin-right:auto}
     .hero h1{margin-bottom:1.35rem}
     .hero .sub{
       font-size:19px;color:#b4c3dc;max-width:560px;margin-bottom:2.25rem;
@@ -2224,15 +2188,9 @@
        RESPONSIVE
        ============================================================ */
     @media (max-width:1100px){
-      .hero-grid{
-        grid-template-columns:1fr;gap:2.5rem;
-        text-align:center;align-items:center;
-      }
-      .hero-right{align-items:center;text-align:center}
-      .hero-right .sub{margin-left:auto;margin-right:auto}
+      .hero-grid{grid-template-columns:1fr;text-align:center}
       .hero-meta{margin-left:auto;margin-right:auto}
       .hero-cta,.tier-tabs{justify-content:center}
-      .hero-watermark{font-size:28vw}
       h1{font-size:88px}h2{font-size:64px}
     }
     @media (max-width:1024px){
@@ -2256,9 +2214,7 @@
       .nav-cta .nav-login{display:none}
       .mobile-menu{display:block}
       .hero{padding:3.5rem 1rem 3.5rem}
-      .hero .sub,.hero-right .sub{font-size:16px}
-      .hero-watermark{font-size:32vw;bottom:12%}
-      .hero-horizon{height:48%}
+      .hero .sub{font-size:16px}
       /* Cards stack single-column on mobile for max readability. Stats
          row stays 3-up since the small stat cards are info-dense, not
          content. */
@@ -2547,37 +2503,16 @@
        ============================================================ -->
   <section id="hero" class="hero">
 
-    <!-- Faint massive brand watermark — sits behind the horizon -->
-    <div class="hero-watermark" aria-hidden="true">VISION</div>
-
-    <!-- Glowing horizon: radial-glow gradient + curved planet rim arc -->
-    <svg class="hero-horizon" viewBox="0 0 1000 400" preserveAspectRatio="none" aria-hidden="true">
-      <defs>
-        <radialGradient id="hHorGlow" cx="0.5" cy="1" r="1.1" fx="0.5" fy="1">
-          <stop offset="0"    stop-color="rgba(122,224,255,.55)"/>
-          <stop offset="0.15" stop-color="rgba(122,224,255,.22)"/>
-          <stop offset="0.4"  stop-color="rgba(122,224,255,.07)"/>
-          <stop offset="1"    stop-color="rgba(122,224,255,0)"/>
-        </radialGradient>
-      </defs>
-      <!-- Soft glow emanating from the horizon -->
-      <rect x="0" y="0" width="1000" height="400" fill="url(#hHorGlow)"/>
-      <!-- Wider outer halo on the arc -->
-      <path d="M -50,400 Q 500,210 1050,400"
-            fill="none" stroke="rgba(122,224,255,.18)" stroke-width="8" stroke-linecap="round"/>
-      <!-- Core arc line -->
-      <path d="M -50,400 Q 500,210 1050,400"
-            fill="none" stroke="rgba(122,224,255,.6)" stroke-width="2" stroke-linecap="round"/>
-      <!-- Bright highlight on top of the arc -->
-      <path d="M -50,400 Q 500,210 1050,400"
-            fill="none" stroke="rgba(223,250,255,.45)" stroke-width=".6" stroke-linecap="round"/>
-    </svg>
-
     <div class="hero-grid">
-      <!-- Left: eyebrow + headline + stats -->
+      <!-- Copy -->
       <div class="hero-copy">
         <span class="eyebrow fade-in"><span class="dot"></span>Global Vision · Free Forever</span>
         <h1 class="fade-in delay-1">Trade With A<br/><span class="grad-text">Global Edge.</span></h1>
+        <p class="sub fade-in delay-2">Live trade signals, institutional tooling, and an active worldwide community — entirely free, forever. No paywalls. No upsells. Just the edge.</p>
+
+        <div class="hero-cta fade-in delay-3">
+          <a href="#" class="btn btn-neon btn-lg" data-open-modal>Join Free Forever <span class="arrow">→</span></a>
+        </div>
 
         <div class="hero-meta fade-in delay-4">
           <div class="meta-card">
@@ -2593,15 +2528,7 @@
             <span>Coverage</span>
           </div>
         </div>
-      </div>
 
-      <!-- Right: subhead + CTA -->
-      <div class="hero-right">
-        <p class="sub fade-in delay-2">Live trade signals, institutional tooling, and an active worldwide community — entirely free, forever. No paywalls. No upsells. Just the edge.</p>
-
-        <div class="hero-cta fade-in delay-3">
-          <a href="#" class="btn btn-neon btn-lg" data-open-modal>Join Free Forever <span class="arrow">→</span></a>
-        </div>
       </div>
 
     </div>
