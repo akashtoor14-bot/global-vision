@@ -366,15 +366,199 @@
       50%{opacity:.55;transform:scale(1.2)}
     }
 
-    .hero-grid{
-      max-width:1100px;margin:0 auto;position:relative;z-index:2;
-      display:grid;grid-template-columns:1fr;gap:3rem;align-items:center;
-      text-align:center;
+    /* ============================================================
+       HERO — dark void canvas, interactive dotted globe in the
+       background, centered text overlay. Patterns inspired by the
+       Modal-style "single luminous artifact on a black canvas"
+       brief from DESIGN.md; palette is GV cyan, not green. The
+       cube becomes a sphere (a Fibonacci-distributed cloud of
+       cyan dots), wired up to explode on click and reassemble on
+       scroll via Three.js. See the GVInitGlobe script at the end
+       of <body> for the WebGL setup.
+       ============================================================ */
+    .modal-hero{
+      position:relative;
+      background:#000;
+      min-height:100vh;
+      width:100%;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:6rem 2rem 5rem;
     }
-    .hero-copy{margin-left:auto;margin-right:auto}
-    .hero-copy .sub,.hero-copy h1{margin-left:auto;margin-right:auto}
-    .hero-cta,.tier-tabs{justify-content:center}
-    .hero-meta{margin-left:auto;margin-right:auto}
+    #globe-canvas{
+      position:absolute;
+      inset:0;
+      width:100%;
+      height:100%;
+      z-index:1;
+      cursor:pointer;
+      opacity:0;
+      transition:opacity 1.2s ease;
+    }
+    #globe-canvas.loaded{opacity:1}
+    .modal-hero-text{
+      position:relative;
+      z-index:3;
+      text-align:center;
+      max-width:780px;
+      margin:0 auto;
+      pointer-events:none;
+    }
+    .modal-hero-eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:.5rem;
+      font-family:Inter,system-ui,sans-serif;
+      font-size:12px;
+      font-weight:500;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:#7ae0ff;
+      margin-bottom:1.5rem;
+    }
+    .modal-hero-eyebrow::before{
+      content:"";
+      width:6px;height:6px;
+      background:#7ae0ff;
+      border-radius:50%;
+      box-shadow:0 0 8px #7ae0ff;
+    }
+    .modal-hero-h1{
+      font-family:Inter,system-ui,sans-serif;
+      font-size:64px;
+      font-weight:700;
+      line-height:1.05;
+      letter-spacing:-.015em;
+      color:#dffaff;
+      margin:0 0 1.5rem 0;
+      background:none;
+      -webkit-text-fill-color:#dffaff;
+    }
+    .modal-hero-sub{
+      font-family:Inter,system-ui,sans-serif;
+      font-size:18px;
+      line-height:1.5;
+      color:#dffaff;
+      opacity:.72;
+      margin:0 auto 2.5rem;
+      max-width:560px;
+    }
+    .modal-hero-cta{
+      display:flex;
+      gap:.75rem;
+      justify-content:center;
+      align-items:center;
+      pointer-events:auto;
+    }
+    .modal-btn-primary,
+    .modal-btn-ghost{
+      display:inline-flex;
+      align-items:center;
+      gap:.5rem;
+      font-family:Inter,system-ui,sans-serif;
+      font-size:14px;
+      font-weight:500;
+      letter-spacing:-.02em;
+      padding:.7rem 1.5rem;
+      border-radius:4px;
+      text-decoration:none;
+      cursor:pointer;
+      transition:background-color .2s ease,color .2s ease,
+                 border-color .2s ease,transform .15s ease;
+    }
+    .modal-btn-primary{
+      background:#7ae0ff;
+      color:#01040d;
+      border:0;
+    }
+    .modal-btn-primary:hover{
+      background:#a8eaff;
+      transform:translateY(-1px);
+    }
+    .modal-btn-ghost{
+      background:transparent;
+      color:#dffaff;
+      border:1px solid #1a3258;
+    }
+    .modal-btn-ghost:hover{
+      border-color:#7ae0ff;
+      color:#fff;
+    }
+    .modal-hero-meta{
+      display:flex;
+      gap:1.25rem;
+      justify-content:center;
+      margin-top:2.25rem;
+      font-family:Inter,system-ui,sans-serif;
+      font-size:12px;
+      letter-spacing:.05em;
+      color:#677d8e;
+      text-transform:uppercase;
+    }
+    .modal-hero-meta strong{
+      color:#dffaff;
+      font-weight:600;
+    }
+    .modal-hero-meta-sep{color:#1a3258}
+    .modal-hero-hint{
+      position:absolute;
+      bottom:1.5rem;
+      left:50%;
+      transform:translateX(-50%);
+      font-family:Inter,system-ui,sans-serif;
+      font-size:11px;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      color:#3a5573;
+      z-index:5;
+      pointer-events:none;
+      user-select:none;
+      opacity:0;
+      animation:hintFadeIn .8s ease 2.4s forwards;
+    }
+    @keyframes hintFadeIn{to{opacity:.9}}
+    @media (max-width:1100px){
+      .modal-hero-h1{font-size:52px}
+    }
+    @media (max-width:768px){
+      .modal-hero{padding:5rem 1rem 3rem;min-height:80vh}
+      .modal-hero-h1{font-size:36px;line-height:1.1}
+      .modal-hero-sub{font-size:15px}
+      .modal-hero-cta{flex-direction:column;gap:.6rem;width:100%;max-width:280px;margin:0 auto}
+      .modal-btn-primary,.modal-btn-ghost{width:100%;justify-content:center}
+      .modal-hero-meta{flex-direction:column;gap:.4rem;align-items:center;margin-top:1.5rem}
+      .modal-hero-meta-sep{display:none}
+      .modal-hero-hint{display:none}
+    }
+
+    /* Hero brand logo — primary visual focal point in place of any
+       planet / 3D rendering. Subtle cyan drop-shadow halo + gentle
+       6s vertical float. Fades in on initial load. */
+    .hero-logo{
+      display:block;
+      width:100%;max-width:520px;height:auto;
+      margin:0 auto 2.25rem;
+      filter:drop-shadow(0 0 36px rgba(122,224,255,.35))
+             drop-shadow(0 0 10px rgba(122,224,255,.25));
+      animation:heroLogoIn 1.1s cubic-bezier(.22,1,.36,1) .15s backwards,
+                heroLogoFloat 6s ease-in-out infinite 1.2s;
+    }
+    @keyframes heroLogoIn{
+      0%{opacity:0;transform:translateY(10px) scale(.97)}
+      100%{opacity:1;transform:translateY(0) scale(1)}
+    }
+    @keyframes heroLogoFloat{
+      0%,100%{transform:translateY(0)}
+      50%{transform:translateY(-5px)}
+    }
+    @media (max-width:1100px){.hero-logo{max-width:420px}}
+    @media (max-width:768px){.hero-logo{max-width:300px;margin-bottom:1.5rem}}
+    @media (prefers-reduced-motion:reduce){
+      .hero-logo{animation:none}
+    }
     .hero h1{margin-bottom:1.35rem}
     .hero .sub{
       font-size:19px;color:#b4c3dc;max-width:560px;margin-bottom:2.25rem;
@@ -2399,6 +2583,21 @@
       .modal h3{font-size:20px}
     }
   </style>
+  <!-- Three.js for the interactive dotted globe in the hero. Skipped
+       on touch devices and prefers-reduced-motion. The init function
+       below is idempotent and called both on script load and (if
+       three.js is already present) once the script section runs. -->
+  <script>
+    (function(){
+      if (window.matchMedia('(max-width:768px)').matches) return;
+      if (window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+      var s = document.createElement('script');
+      s.src = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js';
+      s.defer = true;
+      s.onload = function(){ if (window.GVInitGlobe) window.GVInitGlobe(); };
+      document.head.appendChild(s);
+    })();
+  </script>
 </head>
 <body>
 
@@ -2499,39 +2698,37 @@
   </header>
 
   <!-- ============================================================
-       HERO
+       HERO — interactive dotted globe behind centered text
        ============================================================ -->
-  <section id="hero" class="hero">
+  <section id="hero" class="hero modal-hero">
 
-    <div class="hero-grid">
-      <!-- Copy -->
-      <div class="hero-copy">
-        <span class="eyebrow fade-in"><span class="dot"></span>Global Vision · Free Forever</span>
-        <h1 class="fade-in delay-1">Trade With A<br/><span class="grad-text">Global Edge.</span></h1>
-        <p class="sub fade-in delay-2">Live trade signals, institutional tooling, and an active worldwide community — entirely free, forever. No paywalls. No upsells. Just the edge.</p>
+    <!-- Three.js draws the dotted globe here. Click anywhere on it
+         to explode the dots; scroll past the hero and they
+         reassemble. Wired up in GVInitGlobe at the end of body. -->
+    <canvas id="globe-canvas" aria-label="Interactive globe"></canvas>
 
-        <div class="hero-cta fade-in delay-3">
-          <a href="#" class="btn btn-neon btn-lg" data-open-modal>Join Free Forever <span class="arrow">→</span></a>
-        </div>
-
-        <div class="hero-meta fade-in delay-4">
-          <div class="meta-card">
-            <strong data-count="15000" data-suffix="+">0</strong>
-            <span>Active Traders</span>
-          </div>
-          <div class="meta-card">
-            <strong data-count="86" data-suffix="%">0</strong>
-            <span>Hit Rate</span>
-          </div>
-          <div class="meta-card">
-            <strong>24/5</strong>
-            <span>Coverage</span>
-          </div>
-        </div>
-
+    <!-- Centered text overlay. pointer-events:none on the wrapper so
+         clicks pass through to the canvas; auto on the CTA row so
+         the buttons stay clickable. -->
+    <div class="modal-hero-text">
+      <span class="modal-hero-eyebrow">Global Vision · Free Forever</span>
+      <h1 class="modal-hero-h1">Trade With A<br>Global Edge.</h1>
+      <p class="modal-hero-sub">Live trade signals, institutional tooling, and an active worldwide community — entirely free, forever.</p>
+      <div class="modal-hero-cta">
+        <a href="#" class="modal-btn-primary" data-open-modal>Join Free Forever</a>
+        <a href="#trading" class="modal-btn-ghost">Explore</a>
       </div>
-
+      <div class="modal-hero-meta">
+        <span><strong>15,000+</strong> Traders</span>
+        <span class="modal-hero-meta-sep">·</span>
+        <span><strong>86%</strong> Hit Rate</span>
+        <span class="modal-hero-meta-sep">·</span>
+        <span><strong>24/5</strong> Coverage</span>
+      </div>
     </div>
+
+    <div class="modal-hero-hint">Click globe · scroll to reassemble</div>
+
   </section>
 
   <!-- ============================================================
@@ -4521,5 +4718,219 @@
   <!-- GoHighLevel inline form bootstrap (TEMPORARILY DISABLED to test
        whether it is the cause of the centered-card hover dead spot). -->
   <!-- <script src="https://links.globalv.me/js/form_embed.js"></script> -->
+
+  <!-- ============================================================
+       INTERACTIVE DOTTED GLOBE — Three.js implementation
+       ----------------------------------------------------------
+       Geometry: ~2500 cyan dots arranged on a sphere surface using
+       a Fibonacci spiral for even distribution. Each dot stores
+       both its "rest" position (on sphere) and a "target" position
+       (random direction out in space).
+
+       Animation: a single uniform `uExplode` (0..1) lerps every
+       dot between its rest and target positions in the vertex
+       shader. The whole group rotates slowly around Y.
+
+       Interaction:
+       - Click on the canvas toggles a target value (0 ↔ 1).
+       - Scroll past the hero scales the toggle down toward 0
+         (so scrolling reassembles even if you'd clicked-exploded).
+       - The current value lerps toward the target each frame for
+         smooth easing.
+
+       Skipped on mobile and prefers-reduced-motion via the loader
+       in <head>. Function is idempotent.
+       ============================================================ -->
+  <script>
+    window.GVInitGlobe = function(){
+      if (window.__gvGlobeInited) return;
+      var canvas = document.getElementById('globe-canvas');
+      if (!canvas || typeof THREE === 'undefined') return;
+      window.__gvGlobeInited = true;
+
+      var hero = canvas.parentElement;
+      var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+      function size(){ return { w: hero.clientWidth, h: hero.clientHeight }; }
+      var s = size();
+      renderer.setSize(s.w, s.h, false);
+
+      var scene = new THREE.Scene();
+      var camera = new THREE.PerspectiveCamera(35, s.w / s.h, 0.1, 100);
+      camera.position.set(0, 0, 5);
+
+      // ---- Fibonacci sphere distribution ----
+      var DOT_COUNT = 2500;
+      var RADIUS    = 0.85;
+      var rest      = new Float32Array(DOT_COUNT * 3);
+      var target    = new Float32Array(DOT_COUNT * 3);
+      var seed      = new Float32Array(DOT_COUNT);     // for per-dot wobble phase
+      var phi       = Math.PI * (3 - Math.sqrt(5));    // golden angle
+
+      for (var i = 0; i < DOT_COUNT; i++){
+        var y  = 1 - (i / (DOT_COUNT - 1)) * 2;
+        var r  = Math.sqrt(1 - y * y);
+        var th = phi * i;
+
+        var rx = Math.cos(th) * r * RADIUS;
+        var ry = y * RADIUS;
+        var rz = Math.sin(th) * r * RADIUS;
+
+        rest[i*3]   = rx;
+        rest[i*3+1] = ry;
+        rest[i*3+2] = rz;
+
+        // Target: same direction from origin but pushed outward,
+        // plus a random jitter so the explode field looks scattered.
+        var dist = 2.6 + Math.random() * 1.8;
+        target[i*3]   = rx * dist + (Math.random() - 0.5) * 0.9;
+        target[i*3+1] = ry * dist + (Math.random() - 0.5) * 0.9;
+        target[i*3+2] = rz * dist + (Math.random() - 0.5) * 0.9;
+
+        seed[i] = Math.random();
+      }
+
+      var geom = new THREE.BufferGeometry();
+      geom.setAttribute('position', new THREE.BufferAttribute(rest, 3));
+      geom.setAttribute('aTarget',  new THREE.BufferAttribute(target, 3));
+      geom.setAttribute('aSeed',    new THREE.BufferAttribute(seed, 1));
+
+      var mat = new THREE.ShaderMaterial({
+        uniforms: {
+          uExplode: { value: 0 },
+          uTime:    { value: 0 },
+          uPixel:   { value: renderer.getPixelRatio() }
+        },
+        transparent: true,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending,
+        vertexShader: [
+          'attribute vec3 aTarget;',
+          'attribute float aSeed;',
+          'uniform float uExplode;',
+          'uniform float uTime;',
+          'uniform float uPixel;',
+          'varying float vExp;',
+          'void main(){',
+          '  vec3 pos = mix(position, aTarget, uExplode);',
+          '  // Subtle drift on each dot while exploded',
+          '  float w = uTime * 0.6 + aSeed * 6.2831;',
+          '  pos += vec3(sin(w) * 0.025, cos(w * 1.3) * 0.025, sin(w * 0.8) * 0.025) * uExplode;',
+          '  vec4 mv = modelViewMatrix * vec4(pos, 1.0);',
+          '  gl_Position = projectionMatrix * mv;',
+          '  // Point size: a bit larger when exploded, attenuated by distance',
+          '  float base = 3.8 + 1.4 * uExplode;',
+          '  gl_PointSize = base * uPixel * (12.0 / -mv.z);',
+          '  vExp = uExplode;',
+          '}'
+        ].join('\n'),
+        fragmentShader: [
+          'varying float vExp;',
+          'void main(){',
+          '  vec2 c = gl_PointCoord - vec2(0.5);',
+          '  float d = length(c);',
+          '  if (d > 0.5) discard;',
+          '  // Soft circular falloff so dots accumulate as glow',
+          '  float a = smoothstep(0.5, 0.05, d);',
+          '  // Cyan core, slight cool-white shift when exploded',
+          '  vec3 cyan  = vec3(0.48, 0.88, 1.0);',
+          '  vec3 white = vec3(0.87, 0.98, 1.0);',
+          '  vec3 col   = mix(cyan, white, vExp * 0.25);',
+          '  gl_FragColor = vec4(col, a * (0.85 - vExp * 0.15));',
+          '}'
+        ].join('\n')
+      });
+
+      var points = new THREE.Points(geom, mat);
+      var group  = new THREE.Group();
+      group.add(points);
+      scene.add(group);
+
+      // ---- Ambient particle field around the globe ----
+      var STARS = 220;
+      var sPos = new Float32Array(STARS * 3);
+      for (var j = 0; j < STARS; j++){
+        var rr = 3.2 + Math.random() * 2.4;
+        var th2 = Math.random() * Math.PI * 2;
+        var ph2 = Math.acos(2 * Math.random() - 1);
+        sPos[j*3]   = rr * Math.sin(ph2) * Math.cos(th2);
+        sPos[j*3+1] = rr * Math.sin(ph2) * Math.sin(th2);
+        sPos[j*3+2] = rr * Math.cos(ph2);
+      }
+      var sGeom = new THREE.BufferGeometry();
+      sGeom.setAttribute('position', new THREE.BufferAttribute(sPos, 3));
+      var sMat = new THREE.PointsMaterial({
+        color: 0x7ae0ff,
+        size: 0.016,
+        transparent: true,
+        opacity: 0.4,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+      var stars = new THREE.Points(sGeom, sMat);
+      scene.add(stars);
+
+      // ---- State ----
+      var clickTarget = 0;    // 0 together, 1 exploded
+      var scrollProg  = 0;    // 0 at top of hero, 1 past hero bottom
+      var curExplode  = 0;    // animated value passed to the shader
+
+      // ---- Click on canvas toggles explode/together ----
+      canvas.addEventListener('click', function(){
+        clickTarget = clickTarget < 0.5 ? 1 : 0;
+      });
+
+      // ---- Scroll progress past the hero ----
+      function onScroll(){
+        var rect = hero.getBoundingClientRect();
+        var p = Math.max(0, Math.min(1, -rect.top / hero.offsetHeight));
+        scrollProg = p;
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      // ---- Resize ----
+      function onResize(){
+        var n = size();
+        renderer.setSize(n.w, n.h, false);
+        camera.aspect = n.w / n.h;
+        camera.updateProjectionMatrix();
+        mat.uniforms.uPixel.value = renderer.getPixelRatio();
+      }
+      window.addEventListener('resize', onResize, { passive: true });
+
+      // ---- Animation loop ----
+      var last = performance.now();
+      function tick(now){
+        var dt = Math.min(0.1, (now - last) / 1000);
+        last = now;
+
+        // Slow continuous rotation
+        group.rotation.y += dt * 0.16;
+        group.rotation.x = Math.sin(now / 9000) * 0.08;
+        stars.rotation.y -= dt * 0.012;
+
+        // Click toggle dampened by scroll: scroll always pulls toward 0
+        var tgt = clickTarget * (1 - scrollProg);
+        curExplode += (tgt - curExplode) * Math.min(1, dt * 4.5);
+
+        mat.uniforms.uExplode.value = curExplode;
+        mat.uniforms.uTime.value    = now / 1000;
+
+        renderer.render(scene, camera);
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+
+      // Fade the canvas in once the first frame paints
+      requestAnimationFrame(function(){
+        canvas.classList.add('loaded');
+      });
+    };
+    // If three.js was already loaded by the deferred head loader by
+    // the time this inline script runs, kick the init right away.
+    if (typeof THREE !== 'undefined') window.GVInitGlobe();
+  </script>
 </body>
 </html>
