@@ -384,38 +384,33 @@
       min-height:100vh;
       width:100%;
       overflow:hidden;
-      /* Two-column layout: copy on the left, dotted globe on the right
-         (the position our old globe used to occupy). */
-      display:grid;
-      grid-template-columns:1.05fr .95fr;
+      display:flex;
       align-items:center;
-      gap:2.5rem;
-      max-width:1400px;
-      margin:0 auto;
-      padding:6rem 2.5rem 5rem;
     }
-    /* Right-column container that the globe canvas fills */
-    .modal-globe-col{
-      position:relative;
-      width:100%;
-      height:560px;
-      z-index:1;
-    }
+    /* Globe canvas spans the ENTIRE hero section (full-bleed). No box,
+       no border — exploded dots fill the whole section edge to edge. */
     #globe-canvas{
       position:absolute;
       inset:0;
       width:100%;
       height:100%;
+      z-index:1;
       cursor:pointer;
       opacity:0;
       transition:opacity 1.2s ease;
-      /* Soft radial fade so the dots dissolve toward the edges instead
-         of hard-clipping at the canvas rectangle (which read as a
-         "border" box when the globe is exploded). */
-      -webkit-mask-image:radial-gradient(ellipse 72% 72% at 50% 50%, #000 58%, transparent 100%);
-              mask-image:radial-gradient(ellipse 72% 72% at 50% 50%, #000 58%, transparent 100%);
     }
     #globe-canvas.loaded{opacity:1}
+    /* Inner wrapper holds the copy, aligned to the same max-width /
+       gutters as the rest of the site so the text sits at the left. */
+    .modal-hero-inner{
+      position:relative;
+      z-index:3;
+      width:100%;
+      max-width:1400px;
+      margin:0 auto;
+      padding:6rem 2.5rem 5rem;
+      pointer-events:none;
+    }
     .modal-hero-text{
       position:relative;
       z-index:3;
@@ -466,6 +461,9 @@
       gap:.75rem;
       justify-content:flex-start;
       align-items:center;
+      /* Re-enable clicks on the buttons; the wrapper passes clicks
+         through to the globe canvas behind it. */
+      pointer-events:auto;
     }
     .modal-btn-primary,
     .modal-btn-ghost{
@@ -535,31 +533,19 @@
     }
     @keyframes hintFadeIn{to{opacity:.9}}
     @media (max-width:1100px){
-      /* Collapse to a single centered column: text on top, globe below. */
-      .modal-hero{
-        grid-template-columns:1fr;
-        gap:1.5rem;
-        text-align:center;
-      }
-      .modal-hero-text{max-width:640px;margin:0 auto;text-align:center}
-      .modal-hero-sub{margin-left:auto;margin-right:auto}
-      .modal-hero-cta{justify-content:center}
-      .modal-hero-meta{justify-content:center}
-      .modal-globe-col{height:440px}
       .modal-hero-h1{font-size:52px}
     }
     @media (max-width:768px){
-      .modal-hero{padding:5rem 1rem 3rem;min-height:auto}
+      .modal-hero{min-height:auto}
+      .modal-hero-inner{padding:5rem 1rem 3rem;text-align:center}
+      .modal-hero-text{max-width:none;text-align:center}
       .modal-hero-h1{font-size:36px;line-height:1.1}
-      .modal-hero-sub{font-size:15px}
-      .modal-hero-cta{flex-direction:column;gap:.6rem;width:100%;max-width:280px;margin:0 auto}
+      .modal-hero-sub{font-size:15px;margin-left:auto;margin-right:auto}
+      .modal-hero-cta{flex-direction:column;gap:.6rem;width:100%;max-width:280px;margin:0 auto;justify-content:center}
       .modal-btn-primary,.modal-btn-ghost{width:100%;justify-content:center}
-      .modal-hero-meta{flex-direction:column;gap:.4rem;align-items:center;margin-top:1.5rem}
+      .modal-hero-meta{flex-direction:column;gap:.4rem;align-items:center;justify-content:center;margin-top:1.5rem}
       .modal-hero-meta-sep{display:none}
       .modal-hero-hint{display:none}
-      /* Globe is skipped on mobile (three.js not loaded) — hide the
-         empty column so it doesn't leave a gap. */
-      .modal-globe-col{display:none}
     }
 
     /* Hero brand logo — primary visual focal point in place of any
@@ -2726,33 +2712,33 @@
   </header>
 
   <!-- ============================================================
-       HERO — copy on the left, interactive dotted globe on the right
+       HERO — full-bleed interactive dotted globe, copy on the left
        ============================================================ -->
   <section id="hero" class="hero modal-hero">
 
-    <!-- Left column: copy -->
-    <div class="modal-hero-text">
-      <span class="modal-hero-eyebrow">Global Vision · Free Forever</span>
-      <h1 class="modal-hero-h1">Trade With A<br>Global Edge.</h1>
-      <p class="modal-hero-sub">Live trade signals, institutional tooling, and an active worldwide community — entirely free, forever.</p>
-      <div class="modal-hero-cta">
-        <a href="#" class="modal-btn-primary" data-open-modal>Join Free Forever</a>
-        <a href="#trading" class="modal-btn-ghost">Explore</a>
-      </div>
-      <div class="modal-hero-meta">
-        <span><strong>15,000+</strong> Traders</span>
-        <span class="modal-hero-meta-sep">·</span>
-        <span><strong>86%</strong> Hit Rate</span>
-        <span class="modal-hero-meta-sep">·</span>
-        <span><strong>24/5</strong> Coverage</span>
-      </div>
-    </div>
+    <!-- Three.js dotted globe spans the entire section. Click it to
+         explode the dots across the whole hero; scroll past and they
+         reassemble. Wired up in GVInitGlobe at the end of body. -->
+    <canvas id="globe-canvas" aria-label="Interactive globe"></canvas>
 
-    <!-- Right column: Three.js dotted globe. Click it to explode the
-         dots; scroll past the hero and they reassemble. Wired up in
-         GVInitGlobe at the end of body. -->
-    <div class="modal-globe-col">
-      <canvas id="globe-canvas" aria-label="Interactive globe"></canvas>
+    <!-- Copy, aligned to the site's left gutter, overlaid on the globe. -->
+    <div class="modal-hero-inner">
+      <div class="modal-hero-text">
+        <span class="modal-hero-eyebrow">Global Vision · Free Forever</span>
+        <h1 class="modal-hero-h1">Trade With A<br>Global Edge.</h1>
+        <p class="modal-hero-sub">Live trade signals, institutional tooling, and an active worldwide community — entirely free, forever.</p>
+        <div class="modal-hero-cta">
+          <a href="#" class="modal-btn-primary" data-open-modal>Join Free Forever</a>
+          <a href="#trading" class="modal-btn-ghost">Explore</a>
+        </div>
+        <div class="modal-hero-meta">
+          <span><strong>15,000+</strong> Traders</span>
+          <span class="modal-hero-meta-sep">·</span>
+          <span><strong>86%</strong> Hit Rate</span>
+          <span class="modal-hero-meta-sep">·</span>
+          <span><strong>24/5</strong> Coverage</span>
+        </div>
+      </div>
     </div>
 
     <div class="modal-hero-hint">Click globe · scroll to reassemble</div>
@@ -4776,14 +4762,13 @@
       if (!canvas || typeof THREE === 'undefined') return;
       window.__gvGlobeInited = true;
 
-      // Canvas sizes to its own column (.modal-globe-col); scroll
-      // progress is measured against the whole hero section.
-      var glCol = canvas.parentElement;
-      var section = document.getElementById('hero') || glCol;
+      // Canvas is full-bleed across the hero section; scroll progress
+      // is measured against that same section.
+      var section = document.getElementById('hero') || canvas.parentElement;
       var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
       renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
-      function size(){ return { w: glCol.clientWidth, h: glCol.clientHeight }; }
+      function size(){ return { w: section.clientWidth, h: section.clientHeight }; }
       var s = size();
       renderer.setSize(s.w, s.h, false);
 
