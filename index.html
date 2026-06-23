@@ -378,7 +378,9 @@
        ============================================================ */
     .modal-hero{
       position:relative;
-      background:#000;
+      /* Transparent so the fixed parallax star layer + html gradient
+         show through behind the dotted globe (canvas uses alpha:true). */
+      background:transparent;
       min-height:100vh;
       width:100%;
       overflow:hidden;
