@@ -5067,7 +5067,7 @@
         xx.beginPath(); xx.arc(sz/2, sz/2, sz*0.34, 0, Math.PI*2); xx.fill();
         return new THREE.CanvasTexture(cc);
       })();
-      var PING_DUR = 1.7;   // seconds per ping
+      var PING_DUR = 2.4;   // seconds per ping (slow + gentle)
       var pings = [];
       for (var pq = 0; pq < 6; pq++){
         var sMatP = new THREE.SpriteMaterial({
@@ -5153,7 +5153,7 @@
               break;
             }
           }
-          pingNext = now + 850 + Math.random() * 1300;
+          pingNext = now + 3200 + Math.random() * 3000;
         }
         for (var pi = 0; pi < pings.length; pi++){
           var pg = pings[pi];
@@ -5162,10 +5162,12 @@
           if (pt >= 1 || curExplode > 0.5){ pg.start = -1; pg.sprite.visible = false; continue; }
           var pv = cityVec(CITIES[pg.city][0], CITIES[pg.city][1], RADIUS * 1.012);
           pg.sprite.position.copy(pv);
-          pg.sprite.scale.setScalar(0.05 + pt * 0.55);
+          pg.sprite.scale.setScalar(0.04 + pt * 0.34);
           var wz = pv.clone().normalize().applyEuler(group.rotation).z;
           var face = Math.max(0, Math.min(1, (wz + 0.1) / 0.4));
-          pg.sprite.material.opacity = (1 - pt) * face * (1 - curExplode) * 0.9;
+          // Ease the fade in then out so it's a soft breath, capped low.
+          var env = Math.sin(Math.min(1, pt) * Math.PI);
+          pg.sprite.material.opacity = env * face * (1 - curExplode) * 0.22;
         }
 
         renderer.render(scene, camera);
