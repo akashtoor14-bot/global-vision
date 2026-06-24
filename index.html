@@ -1290,7 +1290,7 @@
       50%    {transform:translateY(-3px)}
     }
     .anim-academy .tassel{
-      transform-origin:196px 78px;
+      transform-origin:201px 77px;
       animation:acTasselSway 3.5s ease-in-out infinite 1.6s;
     }
     @keyframes acTasselSway{
@@ -3106,33 +3106,31 @@
 
               <!-- Mortarboard cap (rendered last so it sits on top) -->
               <g class="cap">
-                <!-- Bowl/dome under the board -->
-                <path d="M138,80 a22,12 0 0 0 44,0"
+                <!-- Cap base / head piece — sits under the board, visible
+                     below it so the cap reads as a complete graduation hat -->
+                <path d="M143,79 L147,99 Q160,107 173,99 L177,79 Z"
                       fill="url(#acCapBowl)" stroke="#7ae0ff" stroke-width="1.4"
-                      stroke-linecap="round" stroke-linejoin="round"/>
-                <!-- Inner highlight on the dome -->
-                <path d="M144,82 a16,7 0 0 0 32,0"
-                      fill="none" stroke="rgba(122,224,255,.35)" stroke-width=".5"/>
+                      stroke-linejoin="round"/>
 
-                <!-- Square board (diamond shape, slightly tilted) -->
-                <path d="M160,56 L196,78 L160,100 L124,78 Z"
+                <!-- Flat board on top (tilted square / rhombus) -->
+                <path d="M160,54 L201,77 L160,100 L119,77 Z"
                       fill="url(#acCapBoard)" stroke="#7ae0ff" stroke-width="1.6"
                       stroke-linejoin="round"/>
-                <!-- Edge highlight on the board -->
-                <path d="M160,56 L196,78" fill="none" stroke="rgba(223,250,255,.6)" stroke-width=".7"/>
+                <!-- Top edge highlight on the board -->
+                <path d="M160,54 L201,77" fill="none" stroke="rgba(223,250,255,.6)" stroke-width=".8"/>
 
                 <!-- Center button on the board -->
-                <circle class="cap-btn" cx="160" cy="78" r="2.3" fill="#7ae0ff"/>
+                <circle class="cap-btn" cx="160" cy="77" r="2.6" fill="#7ae0ff"/>
 
                 <!-- Tassel hanging from the right corner -->
                 <g class="tassel">
-                  <line x1="196" y1="78" x2="204" y2="106"
-                        stroke="#7ae0ff" stroke-width="1.2" stroke-linecap="round"/>
-                  <circle cx="204" cy="108" r="2.6" fill="#7ae0ff"/>
+                  <path d="M201,77 C 209,87 211,98 210,107"
+                        fill="none" stroke="#7ae0ff" stroke-width="1.2" stroke-linecap="round"/>
+                  <circle cx="210" cy="109" r="2.6" fill="#7ae0ff"/>
                   <!-- Tassel strands -->
-                  <line x1="204" y1="110" x2="202" y2="116" stroke="#7ae0ff" stroke-width=".7" stroke-linecap="round"/>
-                  <line x1="204" y1="110" x2="206" y2="116" stroke="#7ae0ff" stroke-width=".7" stroke-linecap="round"/>
-                  <line x1="204" y1="110" x2="204" y2="117" stroke="#7ae0ff" stroke-width=".7" stroke-linecap="round"/>
+                  <line x1="210" y1="111" x2="208" y2="117" stroke="#7ae0ff" stroke-width=".8" stroke-linecap="round"/>
+                  <line x1="210" y1="111" x2="212" y2="117" stroke="#7ae0ff" stroke-width=".8" stroke-linecap="round"/>
+                  <line x1="210" y1="111" x2="210" y2="118" stroke="#7ae0ff" stroke-width=".8" stroke-linecap="round"/>
                 </g>
               </g>
             </svg>
