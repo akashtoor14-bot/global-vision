@@ -4351,10 +4351,15 @@
 
     /* ---------- (Removed: fake ticker + price flicker — replaced by TradingView widgets) ---------- */
 
-    /* ---------- Header shadow on scroll ---------- */
+    /* ---------- Header shadow on scroll (only writes on state change) ---------- */
     const header = document.querySelector('.site-header');
+    let headerShadowed = null;
     window.addEventListener('scroll', ()=>{
-      header.style.boxShadow = window.scrollY > 8 ? '0 6px 30px rgba(0,0,0,.5)' : 'none';
+      const on = window.scrollY > 8;
+      if (on !== headerShadowed){
+        headerShadowed = on;
+        header.style.boxShadow = on ? '0 6px 30px rgba(0,0,0,.5)' : 'none';
+      }
     }, { passive:true });
 
     /* ---------- Year ---------- */
@@ -4903,6 +4908,7 @@
       var clickTarget = 0;    // 0 together, 1 exploded
       var scrollProg  = 0;    // 0 at top of hero, 1 past hero bottom
       var curExplode  = 0;    // animated value passed to the shader
+      var heroVisible = true; // pause the whole WebGL loop when off-screen
 
       // ---- Click on canvas toggles explode/together ----
       canvas.addEventListener('click', function(){
@@ -4918,6 +4924,17 @@
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
 
+      // ---- Pause the render loop when the hero is scrolled out of view ----
+      if ('IntersectionObserver' in window){
+        var visIO = new IntersectionObserver(function(es){
+          var wasVisible = heroVisible;
+          heroVisible = es[0].isIntersecting;
+          // Re-prime the clock + restart the loop when it scrolls back in.
+          if (heroVisible && !wasVisible){ last = performance.now(); requestAnimationFrame(tick); }
+        }, { threshold: 0 });
+        visIO.observe(section);
+      }
+
       // ---- Resize ----
       function onResize(){
         var n = size();
@@ -4932,6 +4949,9 @@
       // ---- Animation loop ----
       var last = performance.now();
       function tick(now){
+        // Hero off-screen → stop the loop entirely (the IntersectionObserver
+        // re-primes the clock and restarts it when it scrolls back in).
+        if (!heroVisible) return;
         var dt = Math.min(0.1, (now - last) / 1000);
         last = now;
 
