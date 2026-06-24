@@ -4986,6 +4986,101 @@
       var stars = new THREE.Points(sGeom, sMat);
       scene.add(stars);
 
+      // ---- Community markers + signal pings ----
+      // Cities weighted to GV's real audience: Philippines-heavy, then
+      // Canada + UAE, with a global spread. (No US members.)
+      var CITIES = [
+        [14.60, 121.00],[10.32, 123.90],[7.07, 125.61],  // Manila, Cebu, Davao
+        [43.65, -79.38],[49.28, -123.12],                 // Toronto, Vancouver
+        [25.20, 55.27],[24.45, 54.38],                    // Dubai, Abu Dhabi
+        [51.51, -0.13],[1.35, 103.82],[-33.87, 151.21],   // London, Singapore, Sydney
+        [35.68, 139.65],[19.07, 72.88],[-23.55, -46.63]   // Tokyo, Mumbai, Sao Paulo
+      ];
+      function cityVec(lat, lng, r){
+        var la = lat * Math.PI / 180, lo = lng * Math.PI / 180;
+        return new THREE.Vector3(
+          r * Math.cos(la) * Math.cos(lo),
+          r * Math.sin(la),
+          r * Math.cos(la) * Math.sin(lo)
+        );
+      }
+
+      // Glowing marker pins — facing-faded (hidden on the back) + gentle pulse.
+      var mkPos  = new Float32Array(CITIES.length * 3);
+      var mkSeed = new Float32Array(CITIES.length);
+      for (var m = 0; m < CITIES.length; m++){
+        var cv0 = cityVec(CITIES[m][0], CITIES[m][1], RADIUS * 1.012);
+        mkPos[m*3] = cv0.x; mkPos[m*3+1] = cv0.y; mkPos[m*3+2] = cv0.z;
+        mkSeed[m] = Math.random();
+      }
+      var mkGeom = new THREE.BufferGeometry();
+      mkGeom.setAttribute('position', new THREE.BufferAttribute(mkPos, 3));
+      mkGeom.setAttribute('aSeed',    new THREE.BufferAttribute(mkSeed, 1));
+      var mkMat = new THREE.ShaderMaterial({
+        uniforms: { uTime:{value:0}, uPixel:{value:renderer.getPixelRatio()}, uFade:{value:1} },
+        transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+        vertexShader: [
+          'attribute float aSeed;',
+          'uniform float uTime; uniform float uPixel;',
+          'varying float vFace; varying float vPulse;',
+          'void main(){',
+          '  vec3 wN = normalize(mat3(modelMatrix) * normalize(position));',
+          '  vec4 wp = modelMatrix * vec4(position, 1.0);',
+          '  vec3 wV = normalize(cameraPosition - wp.xyz);',
+          '  vFace = smoothstep(-0.05, 0.30, dot(wN, wV));',
+          '  float pulse = 0.5 + 0.5 * sin(uTime * 2.2 + aSeed * 6.2831);',
+          '  vPulse = pulse;',
+          '  vec4 mv = modelViewMatrix * vec4(position, 1.0);',
+          '  gl_Position = projectionMatrix * mv;',
+          '  gl_PointSize = (5.0 + 2.6 * pulse) * uPixel * (12.0 / -mv.z);',
+          '}'
+        ].join('\n'),
+        fragmentShader: [
+          'uniform float uFade;',
+          'varying float vFace; varying float vPulse;',
+          'void main(){',
+          '  vec2 c = gl_PointCoord - vec2(0.5);',
+          '  float d = length(c);',
+          '  if (d > 0.5) discard;',
+          '  float core = smoothstep(0.5, 0.0, d);',
+          '  gl_FragColor = vec4(vec3(0.82, 0.98, 1.0), core * vFace * uFade * (0.55 + 0.45 * vPulse));',
+          '}'
+        ].join('\n')
+      });
+      var markers = new THREE.Points(mkGeom, mkMat);
+      group.add(markers);
+
+      // Signal pings — expanding cyan rings that ripple out from a random
+      // city every couple of seconds (a "signal firing to the community").
+      var ringTex = (function(){
+        var sz = 128, cc = document.createElement('canvas');
+        cc.width = sz; cc.height = sz;
+        var xx = cc.getContext('2d');
+        var rg = xx.createRadialGradient(sz/2, sz/2, sz*0.30, sz/2, sz/2, sz*0.5);
+        rg.addColorStop(0,    'rgba(122,224,255,0)');
+        rg.addColorStop(0.62, 'rgba(122,224,255,0.45)');
+        rg.addColorStop(0.86, 'rgba(180,242,255,0.95)');
+        rg.addColorStop(1,    'rgba(122,224,255,0)');
+        xx.fillStyle = rg;
+        xx.beginPath(); xx.arc(sz/2, sz/2, sz/2, 0, Math.PI*2); xx.fill();
+        xx.globalCompositeOperation = 'destination-out';
+        xx.beginPath(); xx.arc(sz/2, sz/2, sz*0.34, 0, Math.PI*2); xx.fill();
+        return new THREE.CanvasTexture(cc);
+      })();
+      var PING_DUR = 1.7;   // seconds per ping
+      var pings = [];
+      for (var pq = 0; pq < 6; pq++){
+        var sMatP = new THREE.SpriteMaterial({
+          map: ringTex, transparent: true, depthWrite: false,
+          blending: THREE.AdditiveBlending, opacity: 0
+        });
+        var spr = new THREE.Sprite(sMatP);
+        spr.visible = false;
+        group.add(spr);
+        pings.push({ sprite: spr, start: -1, city: 0 });
+      }
+      var pingNext = 0;     // performance.now() timestamp for the next ping
+
       // ---- State ----
       var clickTarget = 0;    // 0 together, 1 exploded
       var scrollProg  = 0;    // 0 at top of hero, 1 past hero bottom
@@ -5041,6 +5136,37 @@
 
         mat.uniforms.uExplode.value = curExplode;
         mat.uniforms.uTime.value    = now / 1000;
+
+        // Community markers: pulse + fade out on explode.
+        mkMat.uniforms.uTime.value = now / 1000;
+        mkMat.uniforms.uFade.value = 1 - curExplode;
+        markers.visible = curExplode < 0.98;
+
+        // Signal pings: schedule a new ripple from a random city while the
+        // globe is assembled, then animate each active ping outward.
+        if (curExplode < 0.3 && now > pingNext){
+          for (var pf = 0; pf < pings.length; pf++){
+            if (pings[pf].start < 0){
+              pings[pf].start = now;
+              pings[pf].city  = Math.floor(Math.random() * CITIES.length);
+              pings[pf].sprite.visible = true;
+              break;
+            }
+          }
+          pingNext = now + 850 + Math.random() * 1300;
+        }
+        for (var pi = 0; pi < pings.length; pi++){
+          var pg = pings[pi];
+          if (pg.start < 0) continue;
+          var pt = (now - pg.start) / (PING_DUR * 1000);
+          if (pt >= 1 || curExplode > 0.5){ pg.start = -1; pg.sprite.visible = false; continue; }
+          var pv = cityVec(CITIES[pg.city][0], CITIES[pg.city][1], RADIUS * 1.012);
+          pg.sprite.position.copy(pv);
+          pg.sprite.scale.setScalar(0.05 + pt * 0.55);
+          var wz = pv.clone().normalize().applyEuler(group.rotation).z;
+          var face = Math.max(0, Math.min(1, (wz + 0.1) / 0.4));
+          pg.sprite.material.opacity = (1 - pt) * face * (1 - curExplode) * 0.9;
+        }
 
         renderer.render(scene, camera);
         requestAnimationFrame(tick);
