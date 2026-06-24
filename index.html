@@ -5081,6 +5081,88 @@
       }
       var pingNext = 0;     // performance.now() timestamp for the next ping
 
+      // ---- Connection arcs between community cities ----
+      // A sparse network of arcs bowing off the surface, with a bright
+      // pellet travelling along each. Subtle, facing-faded, gone by the
+      // time the globe explodes.
+      var ARC_PAIRS = [[0,8],[8,5],[5,7],[7,3],[3,4],[0,10],[8,9],
+                       [5,11],[7,12],[0,1],[1,2],[11,8],[10,4],[5,6]];
+      var arcCurves = [];
+      var arcVerts  = [];
+      for (var a = 0; a < ARC_PAIRS.length; a++){
+        var A = cityVec(CITIES[ARC_PAIRS[a][0]][0], CITIES[ARC_PAIRS[a][0]][1], RADIUS);
+        var B = cityVec(CITIES[ARC_PAIRS[a][1]][0], CITIES[ARC_PAIRS[a][1]][1], RADIUS);
+        var lift = 1 + 0.10 + 0.26 * (A.distanceTo(B) / (2 * RADIUS));
+        var mid = A.clone().add(B).multiplyScalar(0.5).normalize().multiplyScalar(RADIUS * lift);
+        var curve = new THREE.QuadraticBezierCurve3(A, mid, B);
+        arcCurves.push(curve);
+        var apts = curve.getPoints(44);
+        for (var sgi = 0; sgi < apts.length - 1; sgi++){
+          arcVerts.push(apts[sgi].x, apts[sgi].y, apts[sgi].z,
+                        apts[sgi+1].x, apts[sgi+1].y, apts[sgi+1].z);
+        }
+      }
+      var facingVS = [
+        'varying float vFace;',
+        'void main(){',
+        '  vec3 wN = normalize(mat3(modelMatrix) * normalize(position));',
+        '  vec4 wp = modelMatrix * vec4(position, 1.0);',
+        '  vec3 wV = normalize(cameraPosition - wp.xyz);',
+        '  vFace = smoothstep(-0.05, 0.35, dot(wN, wV));'
+      ].join('\n');
+      var arcMat = new THREE.ShaderMaterial({
+        uniforms: { uFade:{value:1}, uColor:{value:new THREE.Color(0x7ae0ff)} },
+        transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+        vertexShader: facingVS + '\n  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n}',
+        fragmentShader: [
+          'uniform float uFade; uniform vec3 uColor;',
+          'varying float vFace;',
+          'void main(){ gl_FragColor = vec4(uColor, vFace * uFade * 0.26); }'
+        ].join('\n')
+      });
+      var arcs = new THREE.LineSegments(
+        new THREE.BufferGeometry().setAttribute('position',
+          new THREE.BufferAttribute(new Float32Array(arcVerts), 3)),
+        arcMat
+      );
+      group.add(arcs);
+
+      // Travelling pellets — one per arc, cycling along the curve.
+      var pelGeom = new THREE.BufferGeometry();
+      pelGeom.setAttribute('position', new THREE.BufferAttribute(new Float32Array(arcCurves.length * 3), 3));
+      var pelOff = new Float32Array(arcCurves.length);
+      for (var po = 0; po < arcCurves.length; po++) pelOff[po] = Math.random();
+      var pelMat = new THREE.ShaderMaterial({
+        uniforms: { uFade:{value:1}, uPixel:{value:renderer.getPixelRatio()} },
+        transparent: true, depthWrite: false, blending: THREE.AdditiveBlending,
+        vertexShader: [
+          'uniform float uPixel;',
+          'varying float vFace;',
+          'void main(){',
+          '  vec3 wN = normalize(mat3(modelMatrix) * normalize(position));',
+          '  vec4 wp = modelMatrix * vec4(position, 1.0);',
+          '  vec3 wV = normalize(cameraPosition - wp.xyz);',
+          '  vFace = smoothstep(-0.02, 0.30, dot(wN, wV));',
+          '  vec4 mv = modelViewMatrix * vec4(position, 1.0);',
+          '  gl_Position = projectionMatrix * mv;',
+          '  gl_PointSize = 3.2 * uPixel * (12.0 / -mv.z);',
+          '}'
+        ].join('\n'),
+        fragmentShader: [
+          'uniform float uFade;',
+          'varying float vFace;',
+          'void main(){',
+          '  vec2 c = gl_PointCoord - vec2(0.5);',
+          '  float d = length(c);',
+          '  if (d > 0.5) discard;',
+          '  float core = smoothstep(0.5, 0.0, d);',
+          '  gl_FragColor = vec4(vec3(0.85, 0.98, 1.0), core * vFace * uFade);',
+          '}'
+        ].join('\n')
+      });
+      var pellets = new THREE.Points(pelGeom, pelMat);
+      group.add(pellets);
+
       // ---- State ----
       var clickTarget = 0;    // 0 together, 1 exploded
       var scrollProg  = 0;    // 0 at top of hero, 1 past hero bottom
@@ -5168,6 +5250,25 @@
           // Ease the fade in then out so it's a soft breath, capped low.
           var env = Math.sin(Math.min(1, pt) * Math.PI);
           pg.sprite.material.opacity = env * face * (1 - curExplode) * 0.22;
+        }
+
+        // Connection arcs + pellets: fade out quickly as the globe explodes
+        // (gone by ~half explode); pellets travel along their curves.
+        var arcFade = Math.max(0, 1 - curExplode * 2.0);
+        arcMat.uniforms.uFade.value = arcFade;
+        pelMat.uniforms.uFade.value = arcFade;
+        arcs.visible = arcFade > 0.01;
+        pellets.visible = arcFade > 0.01;
+        if (pellets.visible){
+          var pelAttr = pellets.geometry.attributes.position;
+          for (var ci = 0; ci < arcCurves.length; ci++){
+            var ct = ((now / 2800) + pelOff[ci]) % 1;
+            var cp = arcCurves[ci].getPoint(ct);
+            pelAttr.array[ci*3]   = cp.x;
+            pelAttr.array[ci*3+1] = cp.y;
+            pelAttr.array[ci*3+2] = cp.z;
+          }
+          pelAttr.needsUpdate = true;
         }
 
         renderer.render(scene, camera);
