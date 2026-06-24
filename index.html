@@ -4819,7 +4819,7 @@
           '  gl_Position = projectionMatrix * mv;',
           '  // Land dots a touch larger than ocean; all grow when exploded.',
           '  // Smaller base sizes + higher dot density read as higher-res.',
-          '  float base = (aLand > 0.5 ? 2.6 : 1.9) + 1.6 * uExplode;',
+          '  float base = (aLand > 0.5 ? 2.0 : 1.5) + 1.7 * uExplode;',
           '  gl_PointSize = base * uPixel * (12.0 / -mv.z);',
           '  // Fade dots near the silhouette and on the back so the',
           '  // assembled globe has a soft edge instead of a hard circle.',
@@ -4896,7 +4896,7 @@
 
       // Build the dot field from a land test (lat,lng)->bool.
       function buildGlobe(isLand){
-        var CAND = 46000;     // candidate points; ocean ones mostly dropped
+        var CAND = 85000;     // candidate points; ocean ones mostly dropped
         var rest = [], target = [], seed = [], landArr = [];
         for (var i = 0; i < CAND; i++){
           var y  = 1 - (i / (CAND - 1)) * 2;
