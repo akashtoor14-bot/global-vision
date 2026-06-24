@@ -4782,41 +4782,13 @@
       }
       computeOffset();
 
-      // ---- Fibonacci sphere distribution ----
-      var DOT_COUNT = 2500;
+      // ---- Globe geometry ----
+      // Dots are placed by land/ocean so the continents are recognizable:
+      // land dots are bright cyan, ocean dots are dim deep-blue and sparse.
+      // Built once an Earth land map loads (sampled for land vs sea);
+      // falls back to a uniform sphere if the map can't be read.
       var RADIUS    = 0.85;
-      var rest      = new Float32Array(DOT_COUNT * 3);
-      var target    = new Float32Array(DOT_COUNT * 3);
-      var seed      = new Float32Array(DOT_COUNT);     // for per-dot wobble phase
-      var phi       = Math.PI * (3 - Math.sqrt(5));    // golden angle
-
-      for (var i = 0; i < DOT_COUNT; i++){
-        var y  = 1 - (i / (DOT_COUNT - 1)) * 2;
-        var r  = Math.sqrt(1 - y * y);
-        var th = phi * i;
-
-        var rx = Math.cos(th) * r * RADIUS;
-        var ry = y * RADIUS;
-        var rz = Math.sin(th) * r * RADIUS;
-
-        rest[i*3]   = rx;
-        rest[i*3+1] = ry;
-        rest[i*3+2] = rz;
-
-        // Target: same direction from origin but pushed outward,
-        // plus a random jitter so the explode field looks scattered.
-        var dist = 2.6 + Math.random() * 1.8;
-        target[i*3]   = rx * dist + (Math.random() - 0.5) * 0.9;
-        target[i*3+1] = ry * dist + (Math.random() - 0.5) * 0.9;
-        target[i*3+2] = rz * dist + (Math.random() - 0.5) * 0.9;
-
-        seed[i] = Math.random();
-      }
-
-      var geom = new THREE.BufferGeometry();
-      geom.setAttribute('position', new THREE.BufferAttribute(rest, 3));
-      geom.setAttribute('aTarget',  new THREE.BufferAttribute(target, 3));
-      geom.setAttribute('aSeed',    new THREE.BufferAttribute(seed, 1));
+      var goldenAng = Math.PI * (3 - Math.sqrt(5));    // golden angle
 
       var mat = new THREE.ShaderMaterial({
         uniforms: {
@@ -4826,14 +4798,17 @@
         },
         transparent: true,
         depthWrite: false,
+        depthTest: true,
         blending: THREE.AdditiveBlending,
         vertexShader: [
           'attribute vec3 aTarget;',
           'attribute float aSeed;',
+          'attribute float aLand;',
           'uniform float uExplode;',
           'uniform float uTime;',
           'uniform float uPixel;',
           'varying float vExp;',
+          'varying float vLand;',
           'void main(){',
           '  vec3 pos = mix(position, aTarget, uExplode);',
           '  // Subtle drift on each dot while exploded',
@@ -4841,33 +4816,116 @@
           '  pos += vec3(sin(w) * 0.025, cos(w * 1.3) * 0.025, sin(w * 0.8) * 0.025) * uExplode;',
           '  vec4 mv = modelViewMatrix * vec4(pos, 1.0);',
           '  gl_Position = projectionMatrix * mv;',
-          '  // Point size: a bit larger when exploded, attenuated by distance',
-          '  float base = 3.8 + 1.4 * uExplode;',
+          '  // Land dots a touch larger than ocean; all grow when exploded',
+          '  float base = (aLand > 0.5 ? 4.0 : 2.5) + 1.4 * uExplode;',
           '  gl_PointSize = base * uPixel * (12.0 / -mv.z);',
           '  vExp = uExplode;',
+          '  vLand = aLand;',
           '}'
         ].join('\n'),
         fragmentShader: [
           'varying float vExp;',
+          'varying float vLand;',
           'void main(){',
           '  vec2 c = gl_PointCoord - vec2(0.5);',
           '  float d = length(c);',
           '  if (d > 0.5) discard;',
           '  // Soft circular falloff so dots accumulate as glow',
           '  float a = smoothstep(0.5, 0.05, d);',
-          '  // Cyan core, slight cool-white shift when exploded',
-          '  vec3 cyan  = vec3(0.48, 0.88, 1.0);',
+          '  vec3 land  = vec3(0.42, 0.86, 1.0);',   // bright cyan land
+          '  vec3 ocean = vec3(0.07, 0.30, 0.55);',  // dim deep-blue ocean
           '  vec3 white = vec3(0.87, 0.98, 1.0);',
-          '  vec3 col   = mix(cyan, white, vExp * 0.25);',
-          '  gl_FragColor = vec4(col, a * (0.85 - vExp * 0.15));',
+          '  vec3 base  = mix(ocean, land, vLand);',
+          '  vec3 col   = mix(base, white, vExp * 0.25);',
+          '  float alpha = (vLand > 0.5 ? 0.92 : 0.42) * (1.0 - vExp * 0.15);',
+          '  gl_FragColor = vec4(col, a * alpha);',
           '}'
         ].join('\n')
       });
 
-      var points = new THREE.Points(geom, mat);
       var group  = new THREE.Group();
+      var points = new THREE.Points(new THREE.BufferGeometry(), mat);
       group.add(points);
+
+      // Dark translucent planet body. Writes depth so back-hemisphere
+      // dots are hidden → the assembled globe reads as a solid planet
+      // instead of a transparent dot cloud. Fades out as it explodes.
+      var planetMat = new THREE.MeshBasicMaterial({
+        color: 0x06223f, transparent: true, opacity: 0.55, depthWrite: true
+      });
+      var planet = new THREE.Mesh(new THREE.SphereGeometry(RADIUS * 0.985, 48, 48), planetMat);
+      planet.renderOrder = -1;
+      group.add(planet);
+
       scene.add(group);
+
+      // Build the dot field from a land test (lat,lng)->bool.
+      function buildGlobe(isLand){
+        var CAND = 18000;     // candidate points; ocean ones mostly dropped
+        var rest = [], target = [], seed = [], landArr = [];
+        for (var i = 0; i < CAND; i++){
+          var y  = 1 - (i / (CAND - 1)) * 2;
+          var rr = Math.sqrt(1 - y * y);
+          var th = goldenAng * i;
+          var ux = Math.cos(th) * rr, uy = y, uz = Math.sin(th) * rr;
+
+          var lat = Math.asin(uy) * 180 / Math.PI;
+          var lng = Math.atan2(uz, ux) * 180 / Math.PI;
+          var land = isLand ? isLand(lat, lng) : true;
+
+          // Keep every land dot; keep only ~20% of ocean dots as dim filler
+          if (!land && Math.random() > 0.20) continue;
+
+          var rx = ux * RADIUS, ry = uy * RADIUS, rz = uz * RADIUS;
+          rest.push(rx, ry, rz);
+          var dist = 2.6 + Math.random() * 1.8;
+          target.push(rx * dist + (Math.random() - 0.5) * 0.9,
+                      ry * dist + (Math.random() - 0.5) * 0.9,
+                      rz * dist + (Math.random() - 0.5) * 0.9);
+          seed.push(Math.random());
+          landArr.push(land ? 1 : 0);
+        }
+        var g = new THREE.BufferGeometry();
+        g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(rest), 3));
+        g.setAttribute('aTarget',  new THREE.BufferAttribute(new Float32Array(target), 3));
+        g.setAttribute('aSeed',    new THREE.BufferAttribute(new Float32Array(seed), 1));
+        g.setAttribute('aLand',    new THREE.BufferAttribute(new Float32Array(landArr), 1));
+        var old = points.geometry;
+        points.geometry = g;
+        if (old) old.dispose();
+      }
+
+      // Load an equirectangular Earth image and derive a land mask by
+      // sampling it. Ocean on the blue-marble image is blue-dominant;
+      // land (green / brown / desert / ice) has red >= blue-ish. Any
+      // load or CORS failure falls back to a uniform sphere.
+      (function loadEarth(){
+        var img = new Image();
+        img.crossOrigin = 'anonymous';
+        img.onload = function(){
+          try {
+            var W = 512, H = 256;
+            var cv = document.createElement('canvas');
+            cv.width = W; cv.height = H;
+            var cx = cv.getContext('2d');
+            cx.drawImage(img, 0, 0, W, H);
+            var data = cx.getImageData(0, 0, W, H).data;
+            buildGlobe(function(lat, lng){
+              var u  = (lng + 180) / 360;
+              var v  = (90 - lat) / 180;
+              var px = Math.min(W - 1, Math.max(0, Math.floor(u * W)));
+              var py = Math.min(H - 1, Math.max(0, Math.floor(v * H)));
+              var idx = (py * W + px) * 4;
+              var rC = data[idx], bC = data[idx + 2];
+              return rC >= bC * 0.92;
+            });
+          } catch (e) {
+            buildGlobe(null);
+          }
+        };
+        img.onerror = function(){ buildGlobe(null); };
+        img.src = 'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg';
+      })();
 
       // ---- Ambient particle field around the globe ----
       var STARS = 220;
@@ -4941,6 +4999,12 @@
         // Assembled globe sits on the right; as it explodes it slides to
         // center so the scattered dots spread across the whole section.
         group.position.x = rightOffset * (1 - curExplode);
+
+        // Planet body is solid when assembled (hides back-side dots) and
+        // fades + stops occluding as it explodes so every dot is visible.
+        planet.material.opacity   = 0.55 * (1 - curExplode);
+        planet.material.depthWrite = curExplode < 0.5;
+        planet.visible            = curExplode < 0.98;
 
         mat.uniforms.uExplode.value = curExplode;
         mat.uniforms.uTime.value    = now / 1000;
