@@ -4892,38 +4892,6 @@
       planet.renderOrder = -1;
       group.add(planet);
 
-      // ---- Atmosphere rim glow ----
-      // A backside fresnel sphere just outside the dots gives the soft
-      // cyan halo around the globe's edge. uOpacity fades it on explode.
-      var atmMat = new THREE.ShaderMaterial({
-        uniforms: {
-          uColor:   { value: new THREE.Color(0x7ae0ff) },
-          uOpacity: { value: 1.0 }
-        },
-        transparent: true, depthWrite: false,
-        side: THREE.BackSide, blending: THREE.AdditiveBlending,
-        vertexShader: [
-          'varying vec3 vN; varying vec3 vV;',
-          'void main(){',
-          '  vN = normalize(mat3(modelMatrix) * normal);',
-          '  vec4 mp = modelMatrix * vec4(position, 1.0);',
-          '  vV = normalize(cameraPosition - mp.xyz);',
-          '  gl_Position = projectionMatrix * viewMatrix * mp;',
-          '}'
-        ].join('\n'),
-        fragmentShader: [
-          'uniform vec3 uColor; uniform float uOpacity;',
-          'varying vec3 vN; varying vec3 vV;',
-          'void main(){',
-          '  float f = pow(1.0 - max(dot(vN, vV), 0.0), 2.8);',
-          '  gl_FragColor = vec4(uColor, f * 0.85 * uOpacity);',
-          '}'
-        ].join('\n')
-      });
-      var atm = new THREE.Mesh(new THREE.SphereGeometry(RADIUS * 1.14, 48, 48), atmMat);
-      atm.renderOrder = -2;
-      group.add(atm);
-
       scene.add(group);
 
       // Build the dot field from a land test (lat,lng)->bool.
@@ -5259,10 +5227,6 @@
         // Soft planet body fades out as the globe explodes.
         planet.material.uniforms.uOpacity.value = 0.55 * (1 - curExplode);
         planet.visible = curExplode < 0.98;
-
-        // Atmosphere rim glow fades with the globe.
-        atmMat.uniforms.uOpacity.value = 1 - curExplode;
-        atm.visible = curExplode < 0.98;
 
         mat.uniforms.uExplode.value = curExplode;
         mat.uniforms.uTime.value    = now / 1000;
