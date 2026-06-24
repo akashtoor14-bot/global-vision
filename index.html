@@ -2190,12 +2190,19 @@
       backdrop-filter:blur(10px);
     }
     .founder-avatar{
+      position:relative;overflow:hidden;
       width:88px;height:88px;border-radius:50%;
       margin:0 auto 1.1rem;display:flex;align-items:center;justify-content:center;
       background:linear-gradient(135deg,var(--cyan),var(--blue-soft));
       color:var(--navy-900);font-weight:800;font-size:26px;letter-spacing:.5px;
       box-shadow:0 14px 30px rgba(7,16,34,.5), inset 0 1px 0 rgba(255,255,255,.4), 0 0 26px rgba(122,224,255,.35);
       border:2px solid rgba(190,222,245,.25);
+    }
+    /* Headshot fills the circle; if it fails to load it's removed (JS)
+       and the initials behind it show as a fallback. */
+    .founder-photo{
+      position:absolute;inset:0;width:100%;height:100%;
+      object-fit:cover;border-radius:50%;
     }
     .founder-name{color:#fff;font-size:18px;font-weight:700;line-height:1.2;margin-bottom:.25rem}
     .founder-role{
@@ -3892,17 +3899,17 @@
 
       <div class="founder-grid">
         <div class="founder-card reveal">
-          <div class="founder-avatar">GV</div>
+          <div class="founder-avatar">GV<img class="founder-photo" src="headshots/Gio.jpg" alt="Gio Victorino" loading="lazy" onerror="this.remove()"></div>
           <div class="founder-name">Gio Victorino</div>
           <div class="founder-role">CEO</div>
         </div>
         <div class="founder-card reveal">
-          <div class="founder-avatar">DA</div>
+          <div class="founder-avatar">DA<img class="founder-photo" src="headshots/Darlyn.jpg" alt="Darlyn Abellar" loading="lazy" onerror="this.remove()"></div>
           <div class="founder-name">Darlyn Abellar</div>
           <div class="founder-role">President · COO</div>
         </div>
         <div class="founder-card reveal">
-          <div class="founder-avatar">AT</div>
+          <div class="founder-avatar">AT<img class="founder-photo" src="headshots/Akash.jpg" alt="Akash Toor" loading="lazy" onerror="this.remove()"></div>
           <div class="founder-name">Akash Toor</div>
           <div class="founder-role">CTO</div>
         </div>
