@@ -4987,14 +4987,26 @@
       scene.add(stars);
 
       // ---- Community markers + signal pings ----
-      // Cities weighted to GV's real audience: Philippines-heavy, then
-      // Canada + UAE, with a global spread. (No US members.)
+      // One city per region, spread evenly across the globe so the pins
+      // don't cluster. Keeps GV's core regions (Manila, Dubai, Toronto)
+      // with a clean global spread around them.
       var CITIES = [
-        [14.60, 121.00],[10.32, 123.90],[7.07, 125.61],  // Manila, Cebu, Davao
-        [43.65, -79.38],[49.28, -123.12],                 // Toronto, Vancouver
-        [25.20, 55.27],[24.45, 54.38],                    // Dubai, Abu Dhabi
-        [51.51, -0.13],[1.35, 103.82],[-33.87, 151.21],   // London, Singapore, Sydney
-        [35.68, 139.65],[19.07, 72.88],[-23.55, -46.63]   // Tokyo, Mumbai, Sao Paulo
+        [14.60, 121.00],   // 0  Manila
+        [35.68, 139.65],   // 1  Tokyo
+        [1.35, 103.82],    // 2  Singapore
+        [19.07, 72.88],    // 3  Mumbai
+        [25.20, 55.27],    // 4  Dubai
+        [-1.29, 36.82],    // 5  Nairobi
+        [30.04, 31.24],    // 6  Cairo
+        [6.52, 3.38],      // 7  Lagos
+        [51.51, -0.13],    // 8  London
+        [55.75, 37.62],    // 9  Moscow
+        [43.65, -79.38],   // 10 Toronto
+        [19.43, -99.13],   // 11 Mexico City
+        [-23.55, -46.63],  // 12 Sao Paulo
+        [-33.87, 151.21],  // 13 Sydney
+        [49.28, -123.12],  // 14 Vancouver
+        [-26.20, 28.05]    // 15 Johannesburg
       ];
       function cityVec(lat, lng, r){
         var la = lat * Math.PI / 180, lo = lng * Math.PI / 180;
@@ -5085,8 +5097,8 @@
       // A sparse network of arcs bowing off the surface, with a bright
       // pellet travelling along each. Subtle, facing-faded, gone by the
       // time the globe explodes.
-      var ARC_PAIRS = [[0,8],[8,5],[5,7],[7,3],[3,4],[0,10],[8,9],
-                       [5,11],[7,12],[0,1],[1,2],[11,8],[10,4],[5,6]];
+      var ARC_PAIRS = [[0,1],[0,2],[2,3],[3,4],[4,6],[6,8],[8,9],[8,10],
+                       [10,14],[10,11],[11,12],[5,15],[6,7],[2,13],[4,5]];
       var arcCurves = [];
       var arcVerts  = [];
       for (var a = 0; a < ARC_PAIRS.length; a++){
