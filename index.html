@@ -610,6 +610,9 @@
        ============================================================ */
     .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
     .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem}
+    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem}
+    @media (max-width:1024px){.grid-4{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:560px){.grid-4{grid-template-columns:1fr}}
 
     /* Futuristic glass card (dark sections) */
     .f-card{
@@ -3303,21 +3306,26 @@
         <p>A purpose-built toolkit that highlights opportunity, quantifies performance, and sharpens every decision you make at the chart.</p>
       </div>
 
-      <div class="grid-3">
+      <div class="grid-4">
         <div class="f-card tilt reveal">
-          <div class="icon">⟁</div>
-          <h3>Vision Scanner</h3>
-          <p>Adaptive market scanning that flags high-probability zones and shifts in order flow the moment they emerge.</p>
+          <div class="icon">◈</div>
+          <h3>Vision Edge Scanner</h3>
+          <p>Plots live order flow and high-probability supply and demand zones right on your chart — so you see where price is most likely to react.</p>
         </div>
         <div class="f-card tilt reveal">
-          <div class="icon">◇</div>
-          <h3>Smart Trade Journal</h3>
-          <p>Automated logging, tagging, and analytics that turn every trade into a measurable lever for improvement.</p>
+          <div class="icon">◉</div>
+          <h3>Vision Pulse Scanner</h3>
+          <p>Watches every pair around the clock and alerts you the moment a high-probability setup forms — so you never miss a move.</p>
         </div>
         <div class="f-card tilt reveal">
           <div class="icon">✦</div>
-          <h3>Edge Analytics</h3>
-          <p>Personal performance dashboards that surface the setups and sessions where you actually make money.</p>
+          <h3>Trade Ideas</h3>
+          <p>Hand-picked setups from the desk with clear entries, stops, and targets — plus the reasoning behind every call.</p>
+        </div>
+        <div class="f-card tilt reveal">
+          <div class="icon">▦</div>
+          <h3>Vision Sync Journal</h3>
+          <p>Log every trade, replay every move, and watch your edge compound — a premium trading journal, free forever.</p>
         </div>
       </div>
     </div>
