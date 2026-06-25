@@ -542,7 +542,9 @@
       /* Keep a full-height hero on phones so the globe has room to sit
          behind the centered copy. */
       .modal-hero{min-height:100vh}
-      .modal-hero-inner{padding:5rem 1rem 3rem;text-align:center}
+      /* Heavier bottom padding biases the vertically-centered copy
+         upward so it sits higher in the section. */
+      .modal-hero-inner{padding:2.5rem 1rem 10rem;text-align:center}
       /* Soft dark scrim behind the centered copy so the subhead stays
          readable over the bright dotted continents. Sits above the globe
          canvas (z-index:1) but below the text, and fades to transparent
