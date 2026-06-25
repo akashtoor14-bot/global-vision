@@ -539,8 +539,19 @@
     /* Headline scales via the generic h1 responsive rules already in
        place (88px @1100, 72px @1024, 60px @768). */
     @media (max-width:768px){
-      .modal-hero{min-height:auto}
+      /* Keep a full-height hero on phones so the globe has room to sit
+         behind the centered copy. */
+      .modal-hero{min-height:100vh}
       .modal-hero-inner{padding:5rem 1rem 3rem;text-align:center}
+      /* Soft dark scrim behind the centered copy so the subhead stays
+         readable over the bright dotted continents. Sits above the globe
+         canvas (z-index:1) but below the text, and fades to transparent
+         at the edges so the globe still shows through. */
+      .modal-hero-inner::before{
+        content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+        background:radial-gradient(ellipse 92% 56% at 50% 46%,
+          rgba(2,8,20,.80) 0%, rgba(2,8,20,.52) 46%, transparent 76%);
+      }
       .modal-hero-text{max-width:none;text-align:center}
       .modal-hero .sub{margin-left:auto;margin-right:auto}
       .modal-hero .hero-cta{justify-content:center}
@@ -2581,13 +2592,13 @@
       .modal h3{font-size:20px}
     }
   </style>
-  <!-- Three.js for the interactive dotted globe in the hero. Skipped
-       on touch devices and prefers-reduced-motion. The init function
-       below is idempotent and called both on script load and (if
-       three.js is already present) once the script section runs. -->
+  <!-- Three.js for the interactive dotted globe in the hero. Runs on
+       mobile too (with a lighter point count — see GVInitGlobe); only
+       skipped for prefers-reduced-motion. The init function below is
+       idempotent and called both on script load and (if three.js is
+       already present) once the script section runs. -->
   <script>
     (function(){
-      if (window.matchMedia('(max-width:768px)').matches) return;
       if (window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
       var s = document.createElement('script');
       s.src = 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js';
@@ -4490,11 +4501,15 @@
       if (!canvas || typeof THREE === 'undefined') return;
       window.__gvGlobeInited = true;
 
+      // Phones get a lighter globe: fewer dots and a lower pixel-ratio cap
+      // so it stays smooth on mid-range Android (most of our audience).
+      var isMobile = window.matchMedia('(max-width:768px)').matches;
+
       // Canvas is full-bleed across the hero section; scroll progress
       // is measured against that same section.
       var section = document.getElementById('hero') || canvas.parentElement;
-      var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: true });
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: !isMobile });
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, isMobile ? 1.5 : 2));
 
       function size(){ return { w: section.clientWidth, h: section.clientHeight }; }
       var s = size();
@@ -4631,7 +4646,7 @@
 
       // Build the dot field from a land test (lat,lng)->bool.
       function buildGlobe(isLand){
-        var CAND = 85000;     // candidate points; ocean ones mostly dropped
+        var CAND = isMobile ? 42000 : 85000;     // candidate points; ocean ones mostly dropped
         var rest = [], target = [], seed = [], landArr = [];
         for (var i = 0; i < CAND; i++){
           var y  = 1 - (i / (CAND - 1)) * 2;
