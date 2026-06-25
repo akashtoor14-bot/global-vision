@@ -1805,11 +1805,12 @@
     @keyframes db-fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 
     /* Mobile: collapse sidebar to a horizontal scroll strip of nav items,
-       hide brand + locked + footer. Keep a fixed height (like desktop) so
-       the box stays one consistent size across tabs — taller panes (e.g.
-       the trade log) scroll internally instead of stretching the page. */
+       hide brand + locked + footer. Fixed height sized to fit the default
+       Calendar pane in full, so the box stays one consistent size across
+       tabs — taller panes (e.g. the trade log) scroll internally instead
+       of stretching the page. */
     @media (max-width:820px){
-      .vs-app{grid-template-columns:1fr;grid-template-rows:auto 1fr;height:540px}
+      .vs-app{grid-template-columns:1fr;grid-template-rows:auto 1fr;height:805px}
       .vs-sidebar{
         border-right:none;border-bottom:1px solid rgba(190,222,245,.08);
         padding:.55rem .65rem;flex-direction:row;align-items:center;
