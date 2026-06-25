@@ -1817,7 +1817,10 @@
       .vs-brand,.vs-sidefoot,.vs-nav-divider{display:none}
       .vs-navitem.locked{display:none}
       .vs-nav{flex-direction:row;gap:.2rem;flex-shrink:0}
-      .vs-navitem{flex-shrink:0;padding:.7rem .8rem;font-size:11.5px}
+      /* width:auto resets the base width:100% so each tab sizes to its
+         label instead of filling the strip — otherwise only the first
+         tab shows and the rest sit off-screen, hiding the demo nav. */
+      .vs-navitem{flex-shrink:0;width:auto;padding:.7rem .8rem;font-size:11.5px;white-space:nowrap}
       .vs-navitem.active{box-shadow:inset 0 -2px 0 var(--cyan);background:transparent}
       .vs-main{padding:.85rem .9rem 1rem}
       .db-pane.active{flex:none;overflow-y:visible;padding-right:0}
@@ -2420,6 +2423,12 @@
       .footer-grid{grid-template-columns:1fr 1fr;gap:2rem}
       .cta-banner{padding:3.5rem 1rem}
       .site-footer{padding:3.5rem 1rem 1.75rem}
+      /* Let the Vision Sync dashboard use the full mobile width: cancel
+         the .container 2rem gutters and trim its own padding so the demo
+         panes (trade log, leaderboard) aren't crushed into a narrow
+         column where text collides with the stat columns. */
+      .demo-grid{margin-inline:-2rem}
+      .dashboard{padding:1rem .85rem}
       .cal-d .pnl{display:none}
       .cal-d .num{font-size:10px}
       .cal-bar{flex-direction:column;align-items:flex-start;gap:.4rem}
