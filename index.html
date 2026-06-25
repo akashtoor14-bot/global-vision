@@ -4981,8 +4981,14 @@
         group.rotation.x = Math.sin(now / 9000) * 0.08;
         stars.rotation.y -= dt * 0.012;
 
-        // Click toggle dampened by scroll: scroll always pulls toward 0
-        var tgt = clickTarget * (1 - scrollProg);
+        // Explosion target.
+        // Mobile: scroll drives it on its own — the globe explodes as you
+        //   scroll down through the hero and reassembles as you scroll back
+        //   up. A tap still forces a full explode (whichever is greater wins).
+        // Desktop: tap explodes; scrolling always pulls it back toward 0.
+        var tgt = isMobile
+          ? Math.max(clickTarget, scrollProg)
+          : clickTarget * (1 - scrollProg);
         curExplode += (tgt - curExplode) * Math.min(1, dt * 4.5);
 
         // Assembled globe sits on the right; as it explodes it slides to
