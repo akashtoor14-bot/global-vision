@@ -2423,12 +2423,11 @@
       .footer-grid{grid-template-columns:1fr 1fr;gap:2rem}
       .cta-banner{padding:3.5rem 1rem}
       .site-footer{padding:3.5rem 1rem 1.75rem}
-      /* Let the Vision Sync dashboard use the full mobile width: cancel
-         the .container 2rem gutters and trim its own padding so the demo
-         panes (trade log, leaderboard) aren't crushed into a narrow
-         column where text collides with the stat columns. */
-      .demo-grid{margin-inline:-2rem}
-      .dashboard{padding:1rem .85rem}
+      /* Give ONLY the dashboard mockup more width on mobile: cancel the
+         .container 2rem gutters for the card alone (so its demo panes
+         aren't crushed) while the heading/description copy keeps the
+         site's normal gutters like every other section. */
+      .dashboard{margin-inline:-1rem;padding:1rem .85rem}
       .cal-d .pnl{display:none}
       .cal-d .num{font-size:10px}
       .cal-bar{flex-direction:column;align-items:flex-start;gap:.4rem}
