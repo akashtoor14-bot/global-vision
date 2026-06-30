@@ -538,6 +538,14 @@
     @keyframes hintFadeIn{to{opacity:.9}}
     /* Headline scales via the generic h1 responsive rules already in
        place (88px @1100, 72px @1024, 60px @768). */
+    /* The two-line headline ("Trade With Purpose." / "Grow With Vision.")
+       is longer than the old one, so on desktop scale the hero H1 down a
+       touch and widen its column so each line stays on a single line.
+       Mobile keeps the generic responsive sizes below. */
+    @media (min-width:769px){
+      .modal-hero h1{font-size:clamp(58px,5.6vw,84px);line-height:1.05;letter-spacing:-.01em}
+      .modal-hero-text{max-width:880px}
+    }
     @media (max-width:768px){
       /* Keep a full-height hero on phones so the globe has room to sit
          behind the centered copy. */
