@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0b1626">
+<meta name="description" content="Product requirements for the Global Vision app. Internal.">
+<link rel="icon" href="/favicon.png">
+<title>Global Vision App Requirements</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#f7f8fa; --surface:#ffffff; --sunk:#eef1f6;
+  --ink:#0b1626; --ink-2:#2c3c52; --muted:#5a6a80; --faint:#8595a8;
+  --rule:#dfe4ec; --rule-2:#c9d2df;
+  --accent:#0d6d8c; --accent-soft:#e2f2f7;
+  --ship:#0a7d55; --ship-soft:#e2f4ec;
+  --warn:#8a6100; --warn-soft:#f9efdc;
+  --stop:#a52a4a; --stop-soft:#fbe7ec;
+  --sans:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --serif:'IBM Plex Serif',Georgia,'Times New Roman',serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0a1220; --surface:#101c2e; --sunk:#0d1728;
+    --ink:#e8edf5; --ink-2:#c4d0e0; --muted:#93a3b8; --faint:#6d7f96;
+    --rule:#1e2d42; --rule-2:#2b3d56;
+    --accent:#7ae0ff; --accent-soft:#0f2c3d;
+    --ship:#6cf3b4; --ship-soft:#0d2b21;
+    --warn:#ffcb6b; --warn-soft:#2e2410;
+    --stop:#ff7a9b; --stop-soft:#2e131c;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0a1220; --surface:#101c2e; --sunk:#0d1728;
+  --ink:#e8edf5; --ink-2:#c4d0e0; --muted:#93a3b8; --faint:#6d7f96;
+  --rule:#1e2d42; --rule-2:#2b3d56;
+  --accent:#7ae0ff; --accent-soft:#0f2c3d;
+  --ship:#6cf3b4; --ship-soft:#0d2b21;
+  --warn:#ffcb6b; --warn-soft:#2e2410;
+  --stop:#ff7a9b; --stop-soft:#2e131c;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--serif);
+  font-size:17px;line-height:1.62;margin:0;-webkit-font-smoothing:antialiased}
+.page{max-width:1000px;margin:0 auto;padding:0 28px 120px}
+
+/* ---- masthead ---- */
+.mast{padding:72px 0 30px;border-bottom:2px solid var(--ink)}
+.kicker{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--sans);font-size:clamp(34px,6vw,52px);font-weight:700;line-height:1.06;
+  letter-spacing:-.02em;margin:16px 0 0;text-wrap:balance}
+.standfirst{font-size:19px;line-height:1.55;color:var(--ink-2);max-width:64ch;margin:20px 0 0}
+.meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:28px;font-family:var(--mono);
+  font-size:12px;color:var(--muted)}
+.meta b{font-weight:600;color:var(--ink-2)}
+
+/* ---- toc ---- */
+.toc{margin:34px 0 0;padding:22px 0 4px;border-bottom:1px solid var(--rule)}
+.toc ol{list-style:none;margin:0;padding:0;display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:2px 30px;counter-reset:t}
+.toc li{counter-increment:t}
+.toc a{display:flex;gap:11px;padding:6px 0;font-family:var(--sans);font-size:14px;
+  color:var(--ink-2);text-decoration:none;border-bottom:1px solid transparent}
+.toc a:hover,.toc a:focus-visible{color:var(--accent);border-bottom-color:var(--accent)}
+.toc a::before{content:counter(t,decimal-leading-zero);font-family:var(--mono);font-size:11.5px;
+  color:var(--faint);padding-top:2px}
+
+/* ---- sections ---- */
+section{padding-top:56px;scroll-margin-top:20px}
+h2{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 6px;display:flex;align-items:baseline;gap:12px}
+h2 .n{font-family:var(--mono);color:var(--faint);font-weight:500;letter-spacing:.04em}
+h3{font-family:var(--sans);font-size:clamp(23px,3.4vw,30px);font-weight:600;line-height:1.18;
+  letter-spacing:-.015em;margin:0 0 18px;color:var(--ink);text-wrap:balance}
+h4{font-family:var(--sans);font-size:16px;font-weight:600;margin:36px 0 12px;color:var(--ink);
+  letter-spacing:-.005em}
+p{margin:0 0 16px;max-width:68ch}
+a{color:var(--accent)}
+strong{font-weight:600;color:var(--ink)}
+em{font-style:italic}
+code{font-family:var(--mono);font-size:.88em;background:var(--sunk);padding:1px 5px;
+  border-radius:3px;color:var(--ink-2)}
+
+/* ---- lead paragraph ---- */
+.lead{font-size:19px;line-height:1.55;color:var(--ink-2);max-width:64ch}
+
+/* ---- principle / plain lists ---- */
+ul.plain{list-style:none;margin:0 0 16px;padding:0;max-width:68ch}
+ul.plain li{position:relative;padding:0 0 0 22px;margin-bottom:9px}
+ul.plain li::before{content:"";position:absolute;left:2px;top:.72em;width:7px;height:1.5px;
+  background:var(--rule-2)}
+
+/* ---- requirement blocks: hanging id gutter ---- */
+.reqs{border-top:1px solid var(--rule)}
+.req{display:grid;grid-template-columns:96px 1fr;gap:0 24px;padding:15px 0;
+  border-bottom:1px solid var(--rule);align-items:start}
+.req .gut{display:flex;flex-direction:column;gap:7px;align-items:flex-start;padding-top:2px}
+.req .rid{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--ink-2);
+  font-variant-numeric:tabular-nums}
+.req .txt{font-size:16px;line-height:1.55;color:var(--ink-2);max-width:66ch}
+.req .txt b{color:var(--ink);font-weight:600}
+.chips{display:flex;gap:5px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.07em;
+  text-transform:uppercase;padding:2px 6px;border-radius:3px;white-space:nowrap}
+.c-must{color:var(--stop);background:var(--stop-soft)}
+.c-should{color:var(--warn);background:var(--warn-soft)}
+.c-later{color:var(--muted);background:var(--sunk)}
+.c-p{color:var(--accent);background:var(--accent-soft)}
+
+/* ---- callout ---- */
+.note{border-left:2px solid var(--accent);background:var(--surface);padding:14px 18px;
+  margin:20px 0;max-width:68ch}
+.note.warn{border-left-color:var(--warn)}
+.note p{font-size:15.5px;margin:0;color:var(--ink-2)}
+.note .lbl{font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--accent);display:block;margin-bottom:6px}
+.note.warn .lbl{color:var(--warn)}
+
+/* ---- tables ---- */
+.tw{overflow-x:auto;margin:22px 0;border:1px solid var(--rule);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-family:var(--sans);font-size:14.5px;min-width:560px}
+th{text-align:left;font-weight:600;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);padding:12px 16px;border-bottom:1px solid var(--rule-2);white-space:nowrap}
+td{padding:12px 16px;border-bottom:1px solid var(--rule);color:var(--ink-2);vertical-align:top}
+tbody tr:last-child td{border-bottom:none}
+td.mono,th.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ---- phases ---- */
+.phase{display:grid;grid-template-columns:96px 1fr;gap:0 24px;padding:18px 0;
+  border-bottom:1px solid var(--rule);align-items:start}
+.phase:first-child{border-top:1px solid var(--rule)}
+.pnum{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--accent);padding-top:2px}
+.phase h5{font-family:var(--sans);font-size:16.5px;font-weight:600;margin:0 0 5px;color:var(--ink)}
+.phase p{font-size:15.5px;margin:0;color:var(--ink-2);max-width:64ch}
+
+/* ---- risk grid ---- */
+.risks{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:22px 0}
+.risk{background:var(--surface);padding:16px 18px}
+.risk .rh{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.risk .rid{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--stop)}
+.risk h5{font-family:var(--sans);font-size:15.5px;font-weight:600;margin:0;color:var(--ink)}
+.risk p{font-size:15px;margin:0;color:var(--ink-2);max-width:74ch}
+
+/* ---- questions ---- */
+ol.q{list-style:none;counter-reset:q;margin:20px 0;padding:0}
+ol.q li{counter-increment:q;display:grid;grid-template-columns:96px 1fr;gap:0 24px;
+  padding:13px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+ol.q li::before{content:"Q" counter(q);font-family:var(--mono);font-size:12.5px;font-weight:600;
+  color:var(--accent)}
+ol.q li span{font-size:16px;color:var(--ink-2);max-width:66ch}
+ol.q li:first-child{border-top:1px solid var(--rule)}
+
+footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
+  font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;
+  flex-wrap:wrap;gap:6px 24px}
+
+@media (max-width:640px){
+  body{font-size:16px}
+  .page{padding:0 20px 80px}
+  .mast{padding-top:44px}
+  .req,.phase,ol.q li{grid-template-columns:1fr;gap:8px}
+  .req .gut{flex-direction:row;align-items:center;gap:9px}
+  ol.q li::before{display:block}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="page">
+
+<header class="mast">
+  <div class="kicker">Product requirements &middot; Draft v1</div>
+  <h1>Global Vision App</h1>
+  <p class="standfirst">One app that replaces Telegram outright and puts signals, the trade journal, the Academy and the community in a single place &mdash; with one-tap execution to MT5 as the flagship.</p>
+  <div class="meta">
+    <span><b>Owner</b> Akash Toor, CTO</span>
+    <span><b>Stakeholders</b> Gio Victorino &middot; Darlyn Abellar</span>
+    <span><b>Date</b> 23 August 2026</span>
+    <span><b>Status</b> Draft for review</span>
+    <span style="color:var(--stop)"><b style="color:var(--stop)">Confidential</b> Internal &mdash; do not forward</span>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Contents">
+  <ol>
+    <li><a href="#problem">The problem</a></li>
+    <li><a href="#vision">Vision and principles</a></li>
+    <li><a href="#users">Who it's for</a></li>
+    <li><a href="#goals">Goals and metrics</a></li>
+    <li><a href="#nongoals">Non-goals</a></li>
+    <li><a href="#ia">Information architecture</a></li>
+    <li><a href="#req">Requirements</a></li>
+    <li><a href="#tech">Technical approach</a></li>
+    <li><a href="#release">Release plan</a></li>
+    <li><a href="#risks">Risks</a></li>
+    <li><a href="#questions">Open questions</a></li>
+    <li><a href="#today">What exists today</a></li>
+  </ol>
+</nav>
+
+<section id="problem">
+  <h2><span class="n">01</span> The problem</h2>
+  <h3>Global Vision runs on four platforms that don't talk to each other</h3>
+  <p class="lead">Members are asked to hold the whole community in their head across Telegram, GoHighLevel, a journal website and a marketing site. Three specific things break because of it.</p>
+
+  <h4>The signal-to-execution gap</h4>
+  <p>A desk posts a setup to Telegram. The member reads it on their phone, switches to MetaTrader 5, retypes the entry, stop and targets, and works out a lot size by hand. Minutes pass and the price moves. Plenty of members simply miss the trade &mdash; the signal was good and the outcome was nothing.</p>
+
+  <h4>The signal-to-journal gap</h4>
+  <p>Nothing connects what a desk posted to what the member actually did. The two records live in different systems, so Global Vision cannot answer the one question that would teach the most: <em>the signal won &mdash; did you?</em></p>
+
+  <h4>The platform tax</h4>
+  <p>Telegram is not ours. No control over the experience, no data, no gate on who sees what, and our signals sit on a member's phone next to everything else in their life. Courses live in GoHighLevel, the journal is a separate website, and a new member is onboarded onto three logins before they have done anything.</p>
+</section>
+
+<section id="vision">
+  <h2><span class="n">02</span> Vision and principles</h2>
+  <h3>One hub. Every Global Vision product inside it. No external platforms.</h3>
+  <p>These are decision rules, not slogans. When a design or engineering call is contested, it should be settled against this list.</p>
+  <ul class="plain">
+    <li><strong>Free forever.</strong> No paywall on any core surface. This is a standing constraint on the product, not an opening position.</li>
+    <li><strong>The desks stay human.</strong> Automation and AI exist to support educators, never to replace them. Any feature that makes a desk less valuable is wrong by default.</li>
+    <li><strong>Honesty over hype.</strong> A signal counts as a win when the market printed the take-profit &mdash; not when somebody marked it closed. This is the difference between us and the trackers members already distrust.</li>
+    <li><strong>Education before execution.</strong> Every fast path &mdash; Tap to Trade, Vision AI &mdash; has to end by teaching something, not just doing something.</li>
+    <li><strong>Mobile-first, Android-equal.</strong> The community is concentrated in the Philippines. Android is not a follow-up release.</li>
+  </ul>
+</section>
+
+<section id="users">
+  <h2><span class="n">03</span> Who it's for</h2>
+  <h3>Three audiences, one of which is much larger than the others</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Audience</th><th>Size</th><th>What they need from the app</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Member</strong><br><span style="color:var(--muted)">primary</span></td>
+            <td class="mono">~2,600<br><span style="color:var(--muted);font-size:12px">GHL, May 2026 &mdash; confirm</span></td>
+            <td>Get the signal fast, act on it, and record what happened. Learns in the Academy, talks in the community. Trades on a phone, often on mobile data, often on a mid-range Android.</td></tr>
+        <tr><td><strong>Educator</strong><br><span style="color:var(--muted)">desk operator</span></td>
+            <td class="mono">8 desks</td>
+            <td>Post a structured signal from a phone in seconds, update it as levels hit, and see honest performance for their own desk.</td></tr>
+        <tr><td><strong>Founder / admin</strong></td>
+            <td class="mono">3</td>
+            <td>See who is active, moderate the community, and read desk performance without anyone grading their own homework.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Geography drives real technical decisions: the community is Philippines-heavy with Canada and the UAE secondary, and there are no US members. Hosting regions default to Singapore or Tokyo, never Virginia.</p>
+</section>
+
+<section id="goals">
+  <h2><span class="n">04</span> Goals and metrics</h2>
+  <h3>Five goals, each with something we can actually count</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th class="mono">#</th><th>Goal</th><th>How we know</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">G1</td><td>Replace Telegram</td><td>Share of active members who opened a desk in-app in the last 7 days. Telegram groups retired within 90 days of general availability.</td></tr>
+        <tr><td class="mono">G2</td><td>Close the execution gap</td><td>Median time from a signal being posted to the member's order being placed, for Tap to Trade users. Target under 60 seconds.</td></tr>
+        <tr><td class="mono">G3</td><td>Close the journal gap</td><td>Share of desk-followed trades that appear in the member's journal with the source signal attached.</td></tr>
+        <tr><td class="mono">G4</td><td>Make journaling a habit</td><td>Weekly active journalers, and the share of members holding a 7-day reflection streak.</td></tr>
+        <tr><td class="mono">G5</td><td>One identity</td><td>Every app user authenticates through Supabase and reconciles to a GoHighLevel contact. No orphan accounts.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note">
+    <span class="lbl">Deliberately not a metric</span>
+    <p>Revenue. The app is free forever and is not monetised. If a decision is being justified by what it earns, it is being justified wrongly.</p>
+  </div>
+</section>
+
+<section id="nongoals">
+  <h2><span class="n">05</span> Non-goals</h2>
+  <h3>What version one is not</h3>
+  <ul class="plain">
+    <li>A desktop or web version of the app. <code>journal.globalv.me</code> stays live and unchanged.</li>
+    <li>Monetisation, subscriptions, or in-app purchases of any kind.</li>
+    <li>Copy-trading between members. Tap to Trade copies a <em>desk</em> signal to your own account; it does not mirror another member.</li>
+    <li>Open public registration. Membership stays gated on GoHighLevel.</li>
+    <li>Brokers other than MetaTrader 5.</li>
+    <li>Replacing the marketing site or the client portal.</li>
+  </ul>
+</section>
+
+<section id="ia">
+  <h2><span class="n">06</span> Information architecture</h2>
+  <h3>Five tabs, and two things that deliberately are not tabs</h3>
+  <p><strong>Tabs:</strong> Home &middot; Signals &middot; Journal &middot; Academy &middot; Profile.</p>
+  <p><strong>Vision AI is not a tab.</strong> It lives as a Vision Core button in the header of every screen, plus a card on Home. A sixth tab would dilute navigation for a feature that is a companion to everything rather than a destination. A floating bubble was considered and rejected: the bottom-right corner is already occupied across the app by send buttons, the last row of every list, and the log-trade action, and a floating bubble reads as a website support widget &mdash; the exact feel the app is moving away from.</p>
+  <p><strong>Community chat is not a tab either.</strong> It sits inside the Signals tab, beneath the eight desks, mirroring how a chat list works in Telegram. Signals and conversation stay visually separate but one tap apart, and it costs no navigation slot.</p>
+</section>
+
+<section id="req">
+  <h2><span class="n">07</span> Requirements</h2>
+  <h3>What has to be true for each surface</h3>
+  <p>Priority is <span class="chip c-must">Must</span> (version one does not ship without it), <span class="chip c-should">Should</span> (ships unless something has to give), <span class="chip c-later">Later</span> (deliberately deferred). Phase tags map to the release plan in section 09.</p>
+  <h4>F1 &mdash; Identity and access</h4>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F1.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Members sign in with the same Supabase magic-link and 8-digit code already used by the journal and the indicator portal. No new password, no separate app account.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F1.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt"><b>Account creation is gated on an existing GoHighLevel contact.</b> Today the journal's <code>/api/auth/exchange</code> runs with <code>shouldCreateUser: true</code>, so any email that completes a magic link gets in. This must be closed before the app launches &mdash; see R6.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F1.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">One identity across app, journal and indicator portal. GoHighLevel stays master; Supabase is the shared front door.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F1.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Sign-in works inside in-app browsers. The journal already hit a PKCE failure in that context; the app must not repeat it.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F1.5</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">Face ID or fingerprint unlock for returning sessions, so opening the app during a session is instant.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F1.6</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Account deletion from inside the app, with a clear account-data export first. Apple requires this of apps that create accounts.</div></div>
+  </div>
+  <h4>F2 &mdash; Signals</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">Eight desks, broadcast-only, plus the one room where the community talks.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F2.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Eight signal desks, each a broadcast channel. Members read; they cannot post or reply.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F2.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Desk list shows, per desk: last signal, relative time, unread count, and whether a trade is live right now.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F2.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">A signal carries instrument, direction, entry, stop, and a take-profit ladder of up to three levels, each with its own state &mdash; filled, hit, running, or missed.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F2.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt"><b>A level is only marked hit when the market actually printed it.</b> No manually-graded wins. This is the honesty claim the whole product rests on and it is not negotiable.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F2.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Per-desk follow toggle, which is what drives push notifications for that desk.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F2.6</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">In a desk, the message composer is replaced by a locked strip stating that only educators post there. The rule should be visible, not just enforced.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F2.7</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Community Chat: one room, every member, text and images, with a pinned message.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F2.8</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt"><b>Moderation before launch.</b> Report a message, mute a member, admin delete, and ban. Chat cannot ship without these &mdash; see R3.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F2.9</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">A broadcast-only Announcements channel, separate from chat.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F2.10</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Educator posting flow on mobile: a structured composer for a new signal, and a way to update levels as they hit.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F2.11</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">Desk performance visible to members &mdash; win rate and results per desk, computed the same verified way as F2.4.</div></div>
+  </div>
+  <h4>F3 &mdash; Tap to Trade</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">The flagship. Blocked on a regulatory answer &mdash; see R1.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F3.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Connect a MetaTrader 5 account, and support more than one.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F3.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">From a live signal, one confirmation sheet shows the desk's levels alongside the member's own execution: account, balance, risk percentage, lot size, dollar risk, dollar target and R multiple.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F3.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt"><b>Lot size is computed from the member's own balance and chosen risk, never copied from the desk.</b> Two members following one signal should send different sizes appropriate to their accounts.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F3.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Default risk percentage is a member setting and is editable on any individual trade.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F3.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">An "adjust manually" path is always available and never presented as the lesser option.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F3.6</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">The resulting position is written into the member's journal with the source signal attached &mdash; this is what makes G3 true.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F3.7</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">Open positions are visible in the app and closable from it.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F3.8</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Plain risk disclosure on the confirmation sheet, in the member's line of sight, not buried in settings.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F3.9</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">A global kill switch so admins can disable Tap to Trade for everyone without shipping a release.</div></div>
+  </div>
+  <h4>F4 &mdash; Journal</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">Everything currently on journal.globalv.me, rebuilt as native screens. No feature is dropped in translation.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F4.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Dashboard with the six existing indicators: Balance, Trade win percentage, Peak day, Low day, Average risk-reward (displayed as a ratio, e.g. <code>1 : 2.4</code>) and Total P&amp;L.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F4.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Calendar: month heatmap with per-day P&amp;L and trade count, a weekly totals column, and month-level days, wins and profit.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F4.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Daily: per-session cards showing trades, executions, wins, losses and fees, with Trades and Blotter views, and per-trade rating, tags and screenshot.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F4.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Trade detail: entry, exit, stop, size, risk taken, maximum adverse and favourable excursion, P&amp;L per second, rating, tags, screenshot, notes &mdash; and the linked signal where there is one.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F4.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Trade Replay: candles with the member's entry and exit marked, play, pause and reset, timeframes of 1m, 5m, 30m and 1h, and speeds of real, 2&times;, 5&times; and 10&times;.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F4.6</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Reflection: streak, pre-market prompt and answer, mindset check-in (mood, hours slept, stress 1&ndash;10), post-market prompt and answer, optional gratitude, and past entries.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F4.7</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Analytics: daily P&amp;L, performance by symbol, and account balance over time.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F4.8</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Hall of Gains: monthly leaderboard by P&amp;L percentage, minimum ten trades to qualify, opt-in only, with podium, ranked rows and the member's own rank pinned.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F4.9</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Notes: Diary, Playbook and Screenshots.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F4.10</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Accounts: several MT5 accounts, a starting balance per account, CSV and .xlsx import with deduplication, and import history.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F4.11</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Journal settings: default starting balance, leaderboard opt-in and display name, and export to CSV or JSON. The member's data stays theirs.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F4.12</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Import must work on iPhone from Files &rarr; On My iPhone &rarr; Downloads, which is where Safari puts a broker download. This is the most common point of failure today.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F4.13</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">Automatic MT5 sync, retiring manual CSV import. The likely path is the investor password rather than a broker partnership.</div></div>
+  </div>
+  <h4>F5 &mdash; Academy</h4>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F5.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Course list with modules, lesson counts, running time, progress and locked state.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F5.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">A continue-where-you-left-off entry point on both Home and Academy.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F5.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Video playback that remembers position across sessions and devices.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F5.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Lesson progress written back to the member's record so it survives a reinstall.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F5.5</span><span class="chips"><span class="chip c-later">Later</span><span class="chip c-p">P2</span></span></div><div class="txt">Download a lesson for offline viewing &mdash; valuable on mobile data, not required for launch.</div></div>
+  </div>
+  <h4>F6 &mdash; Vision AI</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">A tutor scoped to Global Vision, reachable from every screen.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F6.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Answers are scoped to Global Vision: how the platform works, troubleshooting, course content, and our own trading framework.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F6.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Off-topic questions are declined, and the decline says what Vision AI <em>does</em> cover rather than leaving a dead end.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F6.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt"><b>Vision AI does not call the market or tell a member what to trade.</b> It redirects to the framework and to the desks. This keeps Global Vision clear of giving financial advice.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F6.4</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">Context-aware: when asked, it can reference the member's own journal statistics &mdash; but only when asked.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F6.5</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">Chart screenshot reading: a member uploads a chart and gets a structured read &mdash; bias, confluence, the structure, imbalance and liquidity it found, and zone, invalidation and target levels drawn back onto their own chart.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F6.6</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Every chart read is labelled a practice read, not a Global Vision signal. Required if F6.5 ships &mdash; see R2.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F6.7</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">"Compare with the desk": set the member's read beside what the desk actually posted, name the trade-off between them, and point at the lesson that teaches it.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F6.8</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">Answers link into the app &mdash; open a desk, a lesson, or a journal screen &mdash; rather than describing where to go.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F6.9</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Reachable from the header of every screen. Never a tab.</div></div>
+  </div>
+  <h4>F7 &mdash; Home</h4>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F7.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Balance, today's P&amp;L and a short performance trend, above the fold.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F7.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">The live signal from a followed desk, with a direct route into Tap to Trade.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F7.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Win rate, average risk-reward and current journaling streak.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F7.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">A nudge when trades are closed but not yet journaled.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F7.5</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">Continue-learning card for the current Academy lesson.</div></div>
+  </div>
+  <h4>F8 &mdash; Notifications</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">The thing Telegram currently does well. Parity here is a launch requirement.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F8.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Push when a followed desk posts a new signal. Delivery speed is the whole point &mdash; this is measured by G2.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F8.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Push when a target or stop is hit on a signal the member took.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F8.3</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">Push on a mention in community chat.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F8.4</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">A daily journaling reminder at a time the member chooses.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F8.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Per-category controls, so a member can keep signals loud and everything else quiet.</div></div>
+  </div>
+  <h4>F9 &mdash; Profile</h4>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F9.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Membership status, member-since date, and the free-forever standing.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F9.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Connected trading accounts and their state.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F9.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Tap to Trade defaults, including default risk.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F9.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Notification settings and desk subscriptions.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F9.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Help and support, and sign out.</div></div>
+  </div>
+</section>
+
+<section id="tech">
+  <h2><span class="n">08</span> Technical approach</h2>
+  <h3>Reuse what already works; build only what doesn't exist</h3>
+  <p>Two of the four surfaces already have production systems behind them. The app should consume those rather than fork them.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Layer</th><th>Choice</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Client</strong></td><td class="mono">React Native + Expo</td>
+            <td>One codebase for iPhone and Android. Android parity is a requirement because of where the community actually is, and a separate native Android build later would leave most members waiting.</td></tr>
+        <tr><td><strong>Authentication</strong></td><td class="mono">Supabase</td>
+            <td>Already the front door for the journal and the indicator portal. Magic link plus 8-digit code. GoHighLevel contacts stay master.</td></tr>
+        <tr><td><strong>Journal data</strong></td><td class="mono">existing journal API</td>
+            <td>Parse Server and MongoDB Atlas on Fly.io in Singapore, already live. The app calls the same API; the data model is not duplicated.</td></tr>
+        <tr><td><strong>Signals</strong></td><td class="mono">new service</td>
+            <td>Nothing exists yet. Needs a desk model, a signal model with per-level ladder state, and a worker that verifies a level against real price data before marking it hit.</td></tr>
+        <tr><td><strong>Execution</strong></td><td class="mono">MetaApi <span style="color:var(--muted)">(candidate)</span></td>
+            <td>Already the intended path for journal broker sync. Sending orders is a larger commitment than reading history and needs its own evaluation.</td></tr>
+        <tr><td><strong>Push</strong></td><td class="mono">Expo push</td>
+            <td>Comes with the client choice and covers both platforms.</td></tr>
+        <tr><td><strong>Vision AI</strong></td><td class="mono">Claude + retrieval</td>
+            <td>Retrieval over course content, platform documentation and the framework, with scope and refusal rules enforced in the system prompt. Image input for chart reads.</td></tr>
+        <tr><td><strong>Hosting region</strong></td><td class="mono">Singapore / Tokyo</td>
+            <td>The community is Philippines-heavy with no US members. Every region default should follow that, not the usual Virginia.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="release">
+  <h2><span class="n">09</span> Release plan</h2>
+  <h3>Six phases, ordered by what hurts most today</h3>
+  <div class="phase"><div class="pnum">P0</div><div>
+    <h5>Foundations</h5>
+    <p>Authentication with the GoHighLevel gate closed, the app shell and tab structure, Profile, and push infrastructure. Nothing member-visible ships in this phase, and skipping it is how the identity model gets broken later.</p></div></div>
+  <div class="phase"><div class="pnum">P1</div><div>
+    <h5>Signals and community &mdash; the phase that kills Telegram</h5>
+    <p>Eight desks, the educator posting flow, community chat with moderation, and signal notifications. This goes first because Telegram is the platform we do not own and the one members touch every day. Everything else can wait; this cannot.</p></div></div>
+  <div class="phase"><div class="pnum">P2</div><div>
+    <h5>Journal</h5>
+    <p>Full parity with <code>journal.globalv.me</code>, per section F4. Second rather than first because the journal already works on the web, so members are not blocked while we build it.</p></div></div>
+  <div class="phase"><div class="pnum">P3</div><div>
+    <h5>Academy</h5>
+    <p>Courses, progress and playback. Gated on the hosting decision in Q3.</p></div></div>
+  <div class="phase"><div class="pnum">P4</div><div>
+    <h5>Tap to Trade</h5>
+    <p>Account connection, the approve sheet, execution and write-back to the journal. Deliberately after the journal and after accounts are connected, and gated on R1.</p></div></div>
+  <div class="phase"><div class="pnum">P5</div><div>
+    <h5>Vision AI</h5>
+    <p>The scoped tutor first. Chart reads and desk comparison follow once the tutor is behaving and the framing in F6.6 has held up in practice.</p></div></div>
+</section>
+
+<section id="risks">
+  <h2><span class="n">10</span> Risks</h2>
+  <h3>Six things that could stop this, in the order they'd hurt</h3>
+  <div class="risks">
+    <div class="risk"><div class="rh"><span class="rid">R1</span><h5>Tap to Trade may be a regulated activity</h5></div>
+      <p>Placing orders on a member's trading account is a different legal proposition from publishing a signal, and the answer varies across the Philippines, Canada and the UAE. This blocks phase four and needs a real answer from someone qualified &mdash; not an engineering judgement call. It does not block phases zero through three, which is part of why the order is what it is. <strong>Owner: founders.</strong></p></div>
+    <div class="risk"><div class="rh"><span class="rid">R2</span><h5>Vision AI could devalue the desks</h5></div>
+      <p>An AI that issues free signals makes eight human desks look redundant, and the desks are the reason people are in the community. The mitigation is the practice-read framing in F6.6, which ends every chart read by pointing at what the desk actually did. If that framing is ever dropped, this risk comes straight back.</p></div>
+    <div class="risk"><div class="rh"><span class="rid">R3</span><h5>Bringing chat in-house makes us responsible for it</h5></div>
+      <p>On Telegram, content moderation is somebody else's problem. In our app it is ours &mdash; including the parts nobody enjoys. Named moderators and the tooling in F2.8 have to exist before phase one ships, not after the first incident.</p></div>
+    <div class="risk"><div class="rh"><span class="rid">R4</span><h5>App store review is stricter for trading apps</h5></div>
+      <p>Apps that touch trading and execution attract extra scrutiny: financial disclosures, clarity about what the app does and does not promise, and in-app account deletion (F1.6). Budget for more than one review round on the release that introduces Tap to Trade.</p></div>
+    <div class="risk"><div class="rh"><span class="rid">R5</span><h5>The baseline device is not a new iPhone</h5></div>
+      <p>A mid-range Android on mobile data is the device to design and test against. Charts, replay and image uploads are the features most likely to fall over there, and they are core to the product.</p></div>
+    <div class="risk"><div class="rh"><span class="rid">R6</span><h5>The membership gate is currently open</h5></div>
+      <p>Journal registration accepts any email that completes a magic link. Every product built on that identity inherits the hole, so it has to close before the app opens to the community &mdash; see F1.2.</p></div>
+  </div>
+</section>
+
+<section id="questions">
+  <h2><span class="n">11</span> Open questions</h2>
+  <h3>Answers needed before the phases they affect</h3>
+  <ol class="q">
+    <li><span>What is the current member count, and how many are active in a given week? The last confirmed figure is roughly 2,600 GoHighLevel contacts from May 2026, which is a mailing list rather than an activity measure.</span></li>
+    <li><span>Who operates each of the eight desks, and will they post from the app? The educator flow in F2.10 depends on knowing who is actually posting and on what device.</span></li>
+    <li><span>Academy: embed the existing GoHighLevel courses, or move the content into the app? This changes the size of phase three considerably.</span></li>
+    <li><span>Which MetaTrader 5 brokers do members actually use? Import formats and execution both depend on the real spread of brokers, not the ones we assume.</span></li>
+    <li><span>Is there a target launch date or a hard external deadline &mdash; an event, a campaign, a cohort intake?</span></li>
+    <li><span>Who moderates community chat day to day, and what are the rules they enforce? R3 stays open until this has a name attached.</span></li>
+  </ol>
+</section>
+
+<section id="today">
+  <h2><span class="n">12</span> What exists today</h2>
+  <h3>The four systems this app consolidates</h3>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Product</th><th>Where it lives</th><th>Built on</th><th>Becomes</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Marketing funnel</strong></td><td class="mono">globalv.me</td><td>GoHighLevel funnel</td><td>Unchanged &mdash; stays the front door for new members.</td></tr>
+        <tr><td><strong>Client portal &amp; courses</strong></td><td class="mono">portal.globalv.me</td><td>GoHighLevel</td><td>The Academy tab. See Q3.</td></tr>
+        <tr><td><strong>Trade journal</strong></td><td class="mono">journal.globalv.me</td><td>Vue 3, Parse Server, MongoDB Atlas, Fly.io Singapore</td><td>The Journal tab. Same API, native screens. Web version stays live.</td></tr>
+        <tr><td><strong>Signals &amp; community</strong></td><td class="mono">Telegram</td><td>Not ours</td><td>The Signals tab. Retired within 90 days of general availability.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="note warn">
+    <span class="lbl">Reading this alongside the designs</span>
+    <p>Every requirement here has a screen behind it &mdash; twenty-seven of them, covering the five tabs, the full journal, and Vision AI. Where this document and the mockups disagree, the mockups are the more recent thinking and this document should be corrected.</p>
+  </div>
+</section>
+
+<footer>
+  <span>Global Vision &middot; Product requirements</span>
+  <span>Draft v1 &middot; 23 August 2026</span>
+  <span>Akash Toor, CTO</span>
+</footer>
+
+</div>
+</body>
+</html>
