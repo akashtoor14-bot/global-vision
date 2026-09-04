@@ -289,7 +289,8 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
 <section id="ia">
   <h2><span class="n">06</span> Information architecture</h2>
   <h3>Five tabs, and two things that deliberately are not tabs</h3>
-  <p><strong>Tabs:</strong> Home &middot; Signals &middot; Journal &middot; Academy &middot; Profile.</p>
+  <p><strong>Tabs:</strong> Home &middot; Signals &middot; Charts &middot; Journal &middot; Academy.</p>
+  <p><strong>Profile is not a tab.</strong> iOS caps a tab bar at five before it forces a &ldquo;More&rdquo; tab, and Charts earns a slot more than Profile does. Profile moves behind the avatar on Home, where it already had an entry point.</p>
   <p><strong>Vision AI is not a tab.</strong> It lives as a Vision Core button in the header of every screen, plus a card on Home. A sixth tab would dilute navigation for a feature that is a companion to everything rather than a destination. A floating bubble was considered and rejected: the bottom-right corner is already occupied across the app by send buttons, the last row of every list, and the log-trade action, and a floating bubble reads as a website support widget &mdash; the exact feel the app is moving away from.</p>
   <p><strong>Community chat is not a tab either.</strong> It sits inside the Signals tab, beneath the eight desks, mirroring how a chat list works in Telegram. Signals and conversation stay visually separate but one tap apart, and it costs no navigation slot.</p>
 </section>
@@ -398,6 +399,22 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
     <div class="req"><div class="gut"><span class="rid">F9.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Notification settings and desk subscriptions.</div></div>
     <div class="req"><div class="gut"><span class="rid">F9.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Help and support, and sign out.</div></div>
   </div>
+  <h4>F10 &mdash; Charts</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">A TradingView-grade chart inside the app, and the one place Global Vision sells something.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F10.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Full-screen candlestick chart with real-time price, price axis, volume, and timeframes of 1m, 5m, 15m, 1h, 4h and 1D.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>Gold first.</b> XAUUSD is the only pair the desks trade, so it is the default symbol and the only one shown as having active desks.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.3</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">Symbol switcher with a watchlist of other instruments, clearly marked charting-only.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>A live desk signal draws onto the chart as a position</b> &mdash; entry, stop and take-profit levels with price tags, shaded risk below the entry and shaded target above it.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Tap to Trade is reachable directly from the chart, not only from the desk feed. Same confirmation sheet, same member-sized risk (F3.2, F3.3).</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.6</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Vision Edge and Vision Pulse run inside the app. A member should never need a TradingView account or an invite-only request to use them.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.7</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>Both indicators are gated on a $1,000 minimum deposit</b> in the member's trading account. Everything else in Global Vision stays free.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.8</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Locked indicators are <em>visible</em>, not hidden. A member without access sees the indicator listed, marked locked, with the deposit requirement on the row.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.9</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Tapping a locked indicator opens an explanation: what it does, the $1,000 requirement, and that access is lifetime once verified.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.10</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">The locked state offers a preview of the indicator running on the member's own chart, so the upsell shows the value rather than describing it.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.11</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Deposit verification is manual today (a coach confirms it). The copy must not promise instant automatic unlocking.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.12</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P3</span></span></div><div class="txt">Standard indicators &mdash; moving averages, RSI, volume &mdash; free to everyone, toggled per chart.</div></div>
+  </div>
 </section>
 
 <section id="tech">
@@ -442,8 +459,8 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
     <h5>Journal</h5>
     <p>Full parity with <code>journal.globalv.me</code>, per section F4. Second rather than first because the journal already works on the web, so members are not blocked while we build it.</p></div></div>
   <div class="phase"><div class="pnum">P3</div><div>
-    <h5>Academy</h5>
-    <p>Courses, progress and playback. Gated on the hosting decision in Q3.</p></div></div>
+    <h5>Academy and Charts</h5>
+    <p>Courses, progress and playback, gated on the hosting decision in Q3. Charts ships alongside it: the chart itself, the symbol switcher, and the two indicators behind the deposit gate. Signal-on-chart (F10.4) and chart-side Tap to Trade (F10.5) follow in phase four with the rest of execution.</p></div></div>
   <div class="phase"><div class="pnum">P4</div><div>
     <h5>Tap to Trade</h5>
     <p>Account connection, the approve sheet, execution and write-back to the journal. Deliberately after the journal and after accounts are connected, and gated on R1.</p></div></div>
