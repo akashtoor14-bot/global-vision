@@ -288,12 +288,13 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
 
 <section id="ia">
   <h2><span class="n">06</span> Information architecture</h2>
-  <h3>Five tabs, and two things that deliberately are not tabs</h3>
-  <p><strong>Tabs:</strong> Home &middot; Signals &middot; Charts &middot; Journal &middot; Academy.</p>
-  <p><strong>Profile is not a tab.</strong> iOS caps a tab bar at five before it forces a &ldquo;More&rdquo; tab, and Charts earns a slot more than Profile does. Profile moves behind the avatar on Home, where it already had an entry point.</p>
-  <p><strong>Vision AI is not a tab.</strong> It lives as a Vision Core button in the header of every screen, plus a card on Home. A sixth tab would dilute navigation for a feature that is a companion to everything rather than a destination. A floating bubble was considered and rejected: the bottom-right corner is already occupied across the app by send buttons, the last row of every list, and the log-trade action, and a floating bubble reads as a website support widget &mdash; the exact feel the app is moving away from.</p>
-  <p><strong>Community chat is not a tab either.</strong> It sits inside the Signals tab, beneath the eight desks, mirroring how a chat list works in Telegram. Signals and conversation stay visually separate but one tap apart, and it costs no navigation slot.</p>
-</section>
+  <h3>Five tabs, a drawer, and one floating button</h3>
+  <p><strong>Tabs:</strong> Home &middot; Signals &middot; Charts &middot; Community &middot; Journal.</p>
+  <p><strong>Community had to be a tab.</strong> Burying it in the drawer would work directly against the notification strategy in F8 &mdash; there is no point pulling someone back into the app if the thing you pulled them to is three taps deep. Academy moved to the drawer instead, with a card on Home: courses are binge-then-leave, community is daily.</p>
+  <p><strong>The drawer</strong> (top-left) holds Academy, Products, Founders, Educators, Notifications, Settings, Help and Sign out &mdash; everything secondary, nothing daily.</p>
+  <p><strong>Products sits in the header</strong> (top-right) on every tab root, permanently. Members currently ask admins what is for sale because they never find it; a static header icon fixes that without another floating element.</p>
+  <p><strong>One floating button only:</strong> the support bubble, bottom-right, offering Vision AI or a human. Two floating elements would be the clutter this app is trying to avoid.</p>
+  </section>
 
 <section id="req">
   <h2><span class="n">07</span> Requirements</h2>
@@ -338,7 +339,7 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
     <div class="req"><div class="gut"><span class="rid">F3.9</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">A global kill switch so admins can disable Tap to Trade for everyone without shipping a release.</div></div>
   </div>
   <h4>F4 &mdash; Journal</h4>
-  <p style="color:var(--muted);font-size:16px;margin-top:-4px">Everything currently on journal.globalv.me, rebuilt as native screens. No feature is dropped in translation.</p>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">Only what reviews and improves trading: Calendar, Daily, Replay, Reflection, Analytics, Notes. Accounts moved to Settings, journal preferences moved to Settings, and Hall of Gains moved to Community.</p>
   <div class="reqs">
     <div class="req"><div class="gut"><span class="rid">F4.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Dashboard with the six existing indicators: Balance, Trade win percentage, Peak day, Low day, Average risk-reward (displayed as a ratio, e.g. <code>1 : 2.4</code>) and Total P&amp;L.</div></div>
     <div class="req"><div class="gut"><span class="rid">F4.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Calendar: month heatmap with per-day P&amp;L and trade count, a weekly totals column, and month-level days, wins and profit.</div></div>
@@ -391,6 +392,10 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
     <div class="req"><div class="gut"><span class="rid">F8.3</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">Push on a mention in community chat.</div></div>
     <div class="req"><div class="gut"><span class="rid">F8.4</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">A daily journaling reminder at a time the member chooses.</div></div>
     <div class="req"><div class="gut"><span class="rid">F8.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Per-category controls, so a member can keep signals loud and everything else quiet.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F8.6</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt"><b>Community activity must generate notifications.</b> This is the single biggest gap in the current GoHighLevel setup &mdash; posts happen and nobody hears about them. New posts, wins shared, replies to your post, reactions to your post, and mentions.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F8.7</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt"><b>Grouped, never per-event.</b> "4 members shared wins today" as one push, not four. Ungrouped community notifications get muted in week one, which is worse than none.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F8.8</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Never notify a member about their own actions, and respect quiet hours based on the member&rsquo;s timezone.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F8.9</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">A notifications inbox in-app, so activity is recoverable when a push is missed or dismissed.</div></div>
   </div>
   <h4>F9 &mdash; Profile</h4>
   <div class="reqs">
@@ -399,6 +404,51 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
     <div class="req"><div class="gut"><span class="rid">F9.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Tap to Trade defaults, including default risk.</div></div>
     <div class="req"><div class="gut"><span class="rid">F9.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Notification settings and desk subscriptions.</div></div>
     <div class="req"><div class="gut"><span class="rid">F9.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Help and support, and sign out.</div></div>
+  </div>
+  <h4>F13 &mdash; Community</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">The tab that has to earn its slot: leaderboard, composer, feed &mdash; in that order.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F13.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Hall of Gains sits at the <em>top</em> of Community, showing the current podium and the member&rsquo;s own rank. Seeing who is winning is what makes people want to post.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F13.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">A "What&rsquo;s on your mind?" composer directly under the leaderboard, with text and image.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F13.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">The feed below: posts, wins and updates from every member, newest first, with likes and comments.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F13.4</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">A win post can attach a trade from the journal &mdash; instrument, direction, result, R multiple &mdash; so wins are specific rather than screenshots of numbers.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F13.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt"><b>Announcements live here, not in Signals.</b> Pinned at the top of Community, with important ones surfacing as a banner on Home.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F13.6</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Moderation applies to the feed as it does to chat (F2.8): report, mute, admin delete, ban.</div></div>
+  </div>
+  <h4>F14 &mdash; Products</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">Members ask admins what we sell because they cannot find it.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F14.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">A dedicated Products section listing everything Global Vision offers &mdash; currently Risk Calculator, Vision Edge and Vision Pulse.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F14.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>A Products icon in the header of every tab root</b>, permanently. Repeated, subtle visibility rather than a page members must go looking for.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F14.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>The Risk Calculator is marked FREE</b> and listed first, as the easy way into the section.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F14.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">The Risk Calculator works natively: balance, risk percentage, entry and stop in; lot size, dollar risk and target out. It should pull the live balance from the connected account rather than asking the member to type it.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F14.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Products opens by restating that the platform is free forever and that only the two indicators are gated &mdash; so the section reads as discovery, not a sales page.</div></div>
+  </div>
+  <h4>F15 &mdash; Founders &amp; Educators</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">Who is behind this, and how their results are graded.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F15.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">A Founders page: Gio, Darlyn and Akash, with role and a short bio each.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F15.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">An Educators page covering the eight desks and who runs them.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F15.3</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">The Educators page restates the verification rule &mdash; a target counts when the market printed it. Publishing that next to the people it judges is the point.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F15.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Both live in the drawer, not the tab bar.</div></div>
+  </div>
+  <h4>F16 &mdash; Broker connection</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">Connect once. Manual CSV uploads become the fallback, not the default.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F16.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>A member connects their MT5 account once and the journal fills itself</b> &mdash; entry, exit, size and fees, without a monthly upload.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F16.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>Read-only by default.</b> Trading permission, which Tap to Trade needs, is a separate and separately revocable grant. The member must be able to see which they have given.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F16.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Credentials are encrypted at rest, never displayed again after entry, and wiped immediately on disconnect.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F16.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>Be honest in the interface:</b> there is no OAuth "Sign in with MT5". This is an investor-password connection via MetaApi, and the copy should not imply otherwise.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F16.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">CSV and .xlsx import remain available as a fallback for brokers or members that cannot connect.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F16.6</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">The connected balance feeds position sizing everywhere &mdash; the chart order ticket, Tap to Trade and the Risk Calculator all use the real number.</div></div>
+  </div>
+  <h4>F17 &mdash; Support bubble</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">Help is always there, and never in the way.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F17.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">One floating button, present on every tab root, opening a choice of <b>Vision AI</b> or <b>VIP support</b> (a real person).</div></div>
+    <div class="req"><div class="gut"><span class="rid">F17.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Vision AI hands off to a human the moment it cannot help, rather than dead-ending.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F17.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>The bubble must never sit on top of a control.</b> It hides on scroll-down, returns on scroll-up, lifts above message composers, and content reserves space for it.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F17.4</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">VIP support shows a realistic response expectation rather than implying instant replies.</div></div>
   </div>
   <h4>F11 &mdash; Vision Pulse signals</h4>
   <p style="color:var(--muted);font-size:16px;margin-top:-4px">A ninth signal source that is a machine, and is labelled as one.</p>
@@ -434,6 +484,10 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
     <div class="req"><div class="gut"><span class="rid">F10.10</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">The locked state offers a preview of the indicator running on the member's own chart, so the upsell shows the value rather than describing it.</div></div>
     <div class="req"><div class="gut"><span class="rid">F10.11</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Deposit verification is manual today (a coach confirms it). The copy must not promise instant automatic unlocking.</div></div>
     <div class="req"><div class="gut"><span class="rid">F10.12</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P3</span></span></div><div class="txt">Standard indicators &mdash; moving averages, RSI, volume &mdash; free to everyone, toggled per chart.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.13</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>A trade cannot be placed from the chart without the lot size visible.</b> The order ticket shows size, risk percentage, stop, target, the dollar amount at risk and the R:R before the button &mdash; and the button itself states what it will do ("Buy 0.12 &middot; risk $52.40").</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.14</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Chart trading is separate from Tap to Trade and has no desk signal behind it. It carries the same regulatory exposure as F3 and must be covered by the same review (R1) &mdash; arguably a larger surface, since nothing constrains what the member enters.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.15</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">RSI and Stochastic free for everyone, computed from the same price data. They are generic oscillators, so they cost Vision Edge and Pulse nothing and make the free tier genuinely useful.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.16</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P3</span></span></div><div class="txt">Chart tools: pinch zoom, crosshair with price and time readout, and a measure tool.</div></div>
   </div>
 </section>
 
@@ -473,14 +527,14 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
     <h5>Foundations</h5>
     <p>Authentication with the GoHighLevel gate closed, the app shell and tab structure, Profile, and push infrastructure. Nothing member-visible ships in this phase, and skipping it is how the identity model gets broken later.</p></div></div>
   <div class="phase"><div class="pnum">P1</div><div>
-    <h5>Signals and community &mdash; the phase that kills Telegram</h5>
-    <p>Eight desks, the educator posting flow, community chat with moderation, and signal notifications. This goes first because Telegram is the platform we do not own and the one members touch every day. Everything else can wait; this cannot.</p></div></div>
+    <h5>Signals, Community and notifications &mdash; the phase that kills Telegram</h5>
+    <p>Eight gold desks, the educator posting flow, community chat and feed with moderation, Hall of Gains, and the grouped notification system (F8.6&ndash;F8.9). This goes first because Telegram is the platform we do not own and the one members touch every day. Notifications belong in this phase rather than later &mdash; a community nobody hears about is the problem we are solving.</p></div></div>
   <div class="phase"><div class="pnum">P2</div><div>
     <h5>Journal</h5>
     <p>Full parity with <code>journal.globalv.me</code>, per section F4. Second rather than first because the journal already works on the web, so members are not blocked while we build it.</p></div></div>
   <div class="phase"><div class="pnum">P3</div><div>
-    <h5>Academy and Charts</h5>
-    <p>Courses, progress and playback, gated on the hosting decision in Q3. Charts ships alongside it: the chart itself, the symbol switcher, and the two indicators behind the deposit gate. Signal-on-chart (F10.4) and chart-side Tap to Trade (F10.5) follow in phase four with the rest of execution.</p></div></div>
+    <h5>Academy, Charts, Products and the broker connection</h5>
+    <p>Courses, progress and playback, gated on the hosting decision in Q3. Charts ships alongside: the chart, the symbol switcher, the free oscillators, and the two indicators behind the deposit gate with their trials. Products, Founders, Educators and the broker connection land here too. Signal-on-chart (F10.4), the order ticket (F10.13) and chart-side Tap to Trade (F10.5) follow in phase four with the rest of execution, since they all place real orders.</p></div></div>
   <div class="phase"><div class="pnum">P4</div><div>
     <h5>Tap to Trade</h5>
     <p>Account connection, the approve sheet, execution and write-back to the journal. Deliberately after the journal and after accounts are connected, and gated on R1.</p></div></div>
