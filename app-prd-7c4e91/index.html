@@ -168,19 +168,18 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
 }
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
 </style>
-</head>
-<body>
+
 <div class="page">
 
 <header class="mast">
-  <div class="kicker">Product requirements &middot; Draft v1</div>
+  <div class="kicker">Product requirements &middot; Draft v2</div>
   <h1>Global Vision App</h1>
   <p class="standfirst">One app that replaces Telegram outright and puts signals, the trade journal, the Academy and the community in a single place &mdash; with one-tap execution to MT5 as the flagship.</p>
   <div class="meta">
     <span><b>Owner</b> Akash Toor, CTO</span>
     <span><b>Stakeholders</b> Gio Victorino &middot; Darlyn Abellar</span>
-    <span><b>Date</b> 23 August 2026</span>
-    <span><b>Status</b> Draft for review</span>
+    <span><b>Date</b> 8 September 2026</span>
+    <span><b>Status</b> Draft for review &middot; rev 2</span>
     <span style="color:var(--stop)"><b style="color:var(--stop)">Confidential</b> Internal &mdash; do not forward</span>
   </div>
 </header>
@@ -193,6 +192,7 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
     <li><a href="#goals">Goals and metrics</a></li>
     <li><a href="#nongoals">Non-goals</a></li>
     <li><a href="#ia">Information architecture</a></li>
+      <li><a href="#design">Design system</a></li>
     <li><a href="#req">Requirements</a></li>
     <li><a href="#tech">Technical approach</a></li>
     <li><a href="#release">Release plan</a></li>
@@ -291,15 +291,103 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
   <h3>Five tabs, a drawer, and one floating button</h3>
   <p><strong>Tabs:</strong> Home &middot; Signals &middot; Charts &middot; Community &middot; Journal.</p>
   <p><strong>Community had to be a tab.</strong> Burying it in the drawer would work directly against the notification strategy in F8 &mdash; there is no point pulling someone back into the app if the thing you pulled them to is three taps deep. Academy moved to the drawer instead, with a card on Home: courses are binge-then-leave, community is daily.</p>
-  <p><strong>The drawer</strong> (top-left) holds Academy, Products, Founders, Educators, Notifications, Settings, Help and Sign out &mdash; everything secondary, nothing daily.</p>
+  <p><strong>The drawer</strong> (top-right, under the menu button) holds Academy, Products, Founders, Educators, Notifications, Settings, Help and Sign out &mdash; everything secondary, nothing daily.</p>
   <p><strong>Products sits in the header</strong> (top-right) on every tab root, permanently. Members currently ask admins what is for sale because they never find it; a static header icon fixes that without another floating element.</p>
   <p><strong>One floating button only:</strong> the support bubble, bottom-right, offering Vision AI or a human. Two floating elements would be the clutter this app is trying to avoid.</p>
   </section>
 
+<section id="design">
+  <h2><span class="n">07</span> Design system</h2>
+  <h3>One reference, measured rather than eyeballed</h3>
+  <p class="lead">Every colour in the app was sampled from a single reference image at pixel level. Nothing was matched by eye. The loop that produced the current build is: crop the reference, sample it, apply, render, measure the render, compare, repeat.</p>
+
+  <p>The reference is a published mobile-UI concept (Nexora Trading, by Design Kit Central). What we take from it is the <em>visual language</em> &mdash; the gradient system, card treatment, control geometry and type ramp &mdash; applied over Global Vision's own information architecture, content and brand mark. None of its copy, naming or screen structure is reproduced.</p>
+
+  <h4>Why this reference</h4>
+  <p>A trading app has to read as serious without reading as bleak. The reference solves that with one vertical sweep from near-white down to deep navy: the top of a screen is bright and open, the bottom is dark enough that figures and charts sit on it cleanly. Depth without darkness. That sweep, rather than any single colour, is the thing being copied.</p>
+
+  <h4>Foundations</h4>
+  <p>Two screen backgrounds. The light sweep is opt-in, used only where the body is entirely cards &mdash; Home, Journal, Community. Applying it everywhere was tried and reverted: on list and chat screens it put pale blue behind body text.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Token</th><th class="mono">Value</th><th>Where</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Screen sweep</strong><br><span style="color:var(--muted)">default</span></td>
+            <td class="mono">#1d4677 &rarr; #12315e 13% &rarr; #0c2851 30% &rarr; #071d40 58% &rarr; #061839 82% &rarr; #05142f</td>
+            <td>Every screen that is not in the light set.</td></tr>
+        <tr><td><strong>Screen sweep</strong><br><span style="color:var(--muted)">light</span></td>
+            <td class="mono">#cfe6fb &rarr; #a8cff2 8% &rarr; #83baf0 15% &rarr; #548fd1 22% &rarr; #2d60a2 28% &rarr; #153d78 34% &rarr; #0c2851 45% &rarr; #05142f</td>
+            <td>Home, Journal, Community only.</td></tr>
+        <tr><td><strong>Header band</strong></td>
+            <td class="mono">#d3eafa &rarr; #c6e3f9 38% &rarr; #a9d4f6 66% &rarr; #8fbfea 86% &rarr; transparent</td>
+            <td>Bound to the header element, never to the screen. Binding it to the screen bled pale blue onto body content on every flush list screen.</td></tr>
+        <tr><td><strong>Hero card</strong></td>
+            <td class="mono">#c2e5ff &rarr; #92c1ed 8% &rarr; #71aeed 24% &rarr; #3d78bc 42% &rarr; #305e9a 52% &rarr; #174078 64% &rarr; #0a2550</td>
+            <td>The account-value card on Home.</td></tr>
+        <tr><td><strong>Card</strong></td>
+            <td class="mono">#0a264e &rarr; #123462 52% &rarr; #1b447c</td>
+            <td>Vertical, and it gets <em>lighter</em> downward &mdash; sampled, and the opposite of the usual instinct.</td></tr>
+        <tr><td><strong>Ink</strong></td>
+            <td class="mono">#ffffff &middot; #0f2744 &middot; #aec4e2 &middot; #a1bad9</td>
+            <td>White on dark; #0f2744 inside the light header zone; then muted and faint.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Controls</h4>
+  <p>Control geometry is measured against the reference in device points, not guessed from a screenshot at arbitrary zoom.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Control</th><th class="mono">Spec</th><th>Note</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Header button</strong></td>
+            <td class="mono">45px disc &middot; rgba(255,255,255,.26) &middot; no border<br>glyph 56% of disc &middot; stroke 1.9</td>
+            <td>The disc is nearly invisible by design. An icon helper emitting an inline <code>width:100%</code> silently overrode every CSS rule here and rendered glyphs at full disc width &mdash; 29px where the reference is 16px.</td></tr>
+        <tr><td><strong>Menu glyph</strong></td>
+            <td class="mono">11 / 15 / 11 wide, 6px apart</td>
+            <td>Tapered and centred, not three equal bars.</td></tr>
+        <tr><td><strong>Tab bar</strong></td>
+            <td class="mono">66px &middot; radius 999px &middot; #2b4973<br>icon 24px &middot; label 11.5px<br>#a8c0de inactive, #ffffff active</td>
+            <td>A stadium pill, full radius. Verified at 8x against the reference.</td></tr>
+        <tr><td><strong>Primary CTA</strong></td>
+            <td class="mono">#5aa0e6 &rarr; #2f6fb8 &middot; white label</td>
+            <td>See the accessibility exception below.</td></tr>
+        <tr><td><strong>List row</strong></td>
+            <td class="mono">45px avatar &middot; name 17px uppercase<br>sub 12.5px &middot; figure 18px</td>
+            <td>The reference's holdings-row treatment, reused for signal desks.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Type</h4>
+  <p>Plus Jakarta Sans throughout. Every figure &mdash; prices, P&amp;L, percentages, counts &mdash; sets in <code>tabular-nums</code> so digits do not shift width as values tick. On a screen where numbers update live, proportional figures read as jitter.</p>
+
+  <h4>Accessibility</h4>
+  <p>The target is WCAG 2.1 AA: <strong>4.5:1</strong> for body text, <strong>3:1</strong> for large text. This is checked by an automated pass over all 49 artboards, currently 1,536 text elements.</p>
+  <p>The check has to be position-aware to be worth anything. Text over a gradient must be scored against the gradient <em>at that element's position</em> &mdash; a naive check scores white text against the pale end of a sweep it is nowhere near and reports hundreds of failures that do not exist. The light header band is also a pseudo-element, invisible to the DOM, so it has to be modelled explicitly. Without both, the pass reported 301 failures where 234 were real.</p>
+  <p>The last run: <strong>50 known exceptions</strong>, each one deliberate.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Exception</th><th class="mono">Count</th><th>Reasoning</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Primary CTAs</strong><br><span style="color:var(--muted)">white on brand blue</span></td><td class="mono">22<br><span style="color:var(--muted);font-size:12px">~3.7:1</span></td>
+            <td>Reaching 4.5:1 needs <code>#3772ae</code>, which visibly dulls every primary action in the app. iOS system blue with white text is ~3.6:1. Accepted.</td></tr>
+        <tr><td><strong>Home hero</strong></td><td class="mono">3<br><span style="color:var(--muted);font-size:12px">1.78&ndash;2.64:1</span></td>
+            <td><b>Inherited from the reference</b>, whose own hero measures about the same. Exact-replica and readability genuinely conflict here. Open decision &mdash; see Q7.</td></tr>
+        <tr><td><strong>Decorative</strong></td><td class="mono">5</td>
+            <td>Leaderboard podium numerals and two small journal labels.</td></tr>
+        <tr><td><strong>Borderline</strong></td><td class="mono">20</td>
+            <td>4.0&ndash;4.47:1, within a few percent of threshold.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>Anything not on this list is a regression and should fail review.</p>
+</section>
+
 <section id="req">
-  <h2><span class="n">07</span> Requirements</h2>
+  <h2><span class="n">08</span> Requirements</h2>
   <h3>What has to be true for each surface</h3>
-  <p>Priority is <span class="chip c-must">Must</span> (version one does not ship without it), <span class="chip c-should">Should</span> (ships unless something has to give), <span class="chip c-later">Later</span> (deliberately deferred). Phase tags map to the release plan in section 09.</p>
+  <p>Priority is <span class="chip c-must">Must</span> (version one does not ship without it), <span class="chip c-should">Should</span> (ships unless something has to give), <span class="chip c-later">Later</span> (deliberately deferred). Phase tags map to the release plan in section 10.</p>
   <h4>F1 &mdash; Identity and access</h4>
   <div class="reqs">
     <div class="req"><div class="gut"><span class="rid">F1.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Members sign in with the same Supabase magic-link and 8-digit code already used by the journal and the indicator portal. No new password, no separate app account.</div></div>
@@ -405,6 +493,45 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
     <div class="req"><div class="gut"><span class="rid">F9.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Notification settings and desk subscriptions.</div></div>
     <div class="req"><div class="gut"><span class="rid">F9.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Help and support, and sign out.</div></div>
   </div>
+  <h4>F10 &mdash; Charts</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">A TradingView-grade chart inside the app, and the one place Global Vision sells something.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F10.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Full-screen candlestick chart with real-time price, price axis, volume, and timeframes of 1m, 5m, 15m, 1h, 4h and 1D.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>Gold first.</b> XAUUSD is the only pair the desks trade, so it is the default symbol and the only one shown as having active desks.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.3</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">Symbol switcher with a watchlist of other instruments, clearly marked charting-only.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>A live desk signal draws onto the chart as a position</b> &mdash; entry, stop and take-profit levels with price tags, shaded risk below the entry and shaded target above it.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Tap to Trade is reachable directly from the chart, not only from the desk feed. Same confirmation sheet, same member-sized risk (F3.2, F3.3).</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.6</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Vision Edge and Vision Pulse run inside the app. A member should never need a TradingView account or an invite-only request to use them.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.7</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>Both indicators are gated on a $1,000 minimum deposit</b> in the member's trading account. Everything else in Global Vision stays free.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.8</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Locked indicators are <em>visible</em>, not hidden. A member without access sees the indicator listed, marked locked, with the deposit requirement on the row.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.9</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Tapping a locked indicator opens an explanation: what it does, the $1,000 requirement, and that access is lifetime once verified.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.10</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">The locked state offers a preview of the indicator running on the member's own chart, so the upsell shows the value rather than describing it.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.11</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Deposit verification is manual today (a coach confirms it). The copy must not promise instant automatic unlocking.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.12</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P3</span></span></div><div class="txt">Standard indicators &mdash; moving averages, RSI, volume &mdash; free to everyone, toggled per chart.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.13</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>A trade cannot be placed from the chart without the lot size visible.</b> The order ticket shows size, risk percentage, stop, target, the dollar amount at risk and the R:R before the button &mdash; and the button itself states what it will do ("Buy 0.12 &middot; risk $52.40").</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.14</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Chart trading is separate from Tap to Trade and has no desk signal behind it. It carries the same regulatory exposure as F3 and must be covered by the same review (R1) &mdash; arguably a larger surface, since nothing constrains what the member enters.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.15</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">RSI and Stochastic free for everyone, computed from the same price data. They are generic oscillators, so they cost Vision Edge and Pulse nothing and make the free tier genuinely useful.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F10.16</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P3</span></span></div><div class="txt">Chart tools: pinch zoom, crosshair with price and time readout, and a measure tool.</div></div>
+  </div>
+  <h4>F11 &mdash; Vision Pulse signals</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">A ninth signal source that is a machine, and is labelled as one.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F11.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>Vision Pulse publishes its own gold signals</b>, generated by the indicator rather than posted by an educator. It appears in the Signals tab under its own Automated heading, separate from the eight desks.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F11.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Pulse signals carry the same structure and the same verification rule as desk signals &mdash; a target counts only when the market printed it (F2.3, F2.4).</div></div>
+    <div class="req"><div class="gut"><span class="rid">F11.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Pulse signals are visibly machine-generated. A member should never mistake one for an educator's call.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F11.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Tap to Trade works from a Pulse signal exactly as it does from a desk signal.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F11.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">The Pulse feed is gated on the same $1,000 deposit as the indicators. Locked members see the feed exists and how many signals it posted today.</div></div>
+  </div>
+  <h4>F12 &mdash; Trials</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">The only thing Global Vision sells, so the way in matters more than the price.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F12.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>A 7-day free trial is the primary way in</b> for Vision Edge, Vision Pulse and the Pulse signal feed. Locked surfaces lead with the trial, not the price.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F12.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">The trial needs no card and no deposit, and ends by itself. Nothing to cancel, and the copy must say so.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F12.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">One trial per member, enforced server-side rather than by hiding the button.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F12.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">While a trial runs, every gated surface shows days remaining and a route to keep access permanently.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F12.5</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">When a trial ends the member returns to the locked state with their trial history visible &mdash; what fired during their seven days, and what it did.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F12.6</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Trial state is per member and survives reinstall, since it is tied to the Supabase identity (F1.3).</div></div>
+  </div>
   <h4>F13 &mdash; Community</h4>
   <p style="color:var(--muted);font-size:16px;margin-top:-4px">The tab that has to earn its slot: leaderboard, composer, feed &mdash; in that order.</p>
   <div class="reqs">
@@ -450,49 +577,24 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
     <div class="req"><div class="gut"><span class="rid">F17.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>The bubble must never sit on top of a control.</b> It hides on scroll-down, returns on scroll-up, lifts above message composers, and content reserves space for it.</div></div>
     <div class="req"><div class="gut"><span class="rid">F17.4</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">VIP support shows a realistic response expectation rather than implying instant replies.</div></div>
   </div>
-  <h4>F11 &mdash; Vision Pulse signals</h4>
-  <p style="color:var(--muted);font-size:16px;margin-top:-4px">A ninth signal source that is a machine, and is labelled as one.</p>
+  <h4>F18 &mdash; Design system and accessibility</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">The rules that keep 49 screens looking like one app. Full specification in section 07.</p>
   <div class="reqs">
-    <div class="req"><div class="gut"><span class="rid">F11.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>Vision Pulse publishes its own gold signals</b>, generated by the indicator rather than posted by an educator. It appears in the Signals tab under its own Automated heading, separate from the eight desks.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F11.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Pulse signals carry the same structure and the same verification rule as desk signals &mdash; a target counts only when the market printed it (F2.3, F2.4).</div></div>
-    <div class="req"><div class="gut"><span class="rid">F11.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Pulse signals are visibly machine-generated. A member should never mistake one for an educator's call.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F11.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Tap to Trade works from a Pulse signal exactly as it does from a desk signal.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F11.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">The Pulse feed is gated on the same $1,000 deposit as the indicators. Locked members see the feed exists and how many signals it posted today.</div></div>
-  </div>
-  <h4>F12 &mdash; Trials</h4>
-  <p style="color:var(--muted);font-size:16px;margin-top:-4px">The only thing Global Vision sells, so the way in matters more than the price.</p>
-  <div class="reqs">
-    <div class="req"><div class="gut"><span class="rid">F12.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>A 7-day free trial is the primary way in</b> for Vision Edge, Vision Pulse and the Pulse signal feed. Locked surfaces lead with the trial, not the price.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F12.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">The trial needs no card and no deposit, and ends by itself. Nothing to cancel, and the copy must say so.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F12.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">One trial per member, enforced server-side rather than by hiding the button.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F12.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">While a trial runs, every gated surface shows days remaining and a route to keep access permanently.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F12.5</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">When a trial ends the member returns to the locked state with their trial history visible &mdash; what fired during their seven days, and what it did.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F12.6</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Trial state is per member and survives reinstall, since it is tied to the Supabase identity (F1.3).</div></div>
-  </div>
-  <h4>F10 &mdash; Charts</h4>
-  <p style="color:var(--muted);font-size:16px;margin-top:-4px">A TradingView-grade chart inside the app, and the one place Global Vision sells something.</p>
-  <div class="reqs">
-    <div class="req"><div class="gut"><span class="rid">F10.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Full-screen candlestick chart with real-time price, price axis, volume, and timeframes of 1m, 5m, 15m, 1h, 4h and 1D.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F10.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>Gold first.</b> XAUUSD is the only pair the desks trade, so it is the default symbol and the only one shown as having active desks.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F10.3</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">Symbol switcher with a watchlist of other instruments, clearly marked charting-only.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F10.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>A live desk signal draws onto the chart as a position</b> &mdash; entry, stop and take-profit levels with price tags, shaded risk below the entry and shaded target above it.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F10.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Tap to Trade is reachable directly from the chart, not only from the desk feed. Same confirmation sheet, same member-sized risk (F3.2, F3.3).</div></div>
-    <div class="req"><div class="gut"><span class="rid">F10.6</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Vision Edge and Vision Pulse run inside the app. A member should never need a TradingView account or an invite-only request to use them.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F10.7</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>Both indicators are gated on a $1,000 minimum deposit</b> in the member's trading account. Everything else in Global Vision stays free.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F10.8</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Locked indicators are <em>visible</em>, not hidden. A member without access sees the indicator listed, marked locked, with the deposit requirement on the row.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F10.9</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Tapping a locked indicator opens an explanation: what it does, the $1,000 requirement, and that access is lifetime once verified.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F10.10</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">The locked state offers a preview of the indicator running on the member's own chart, so the upsell shows the value rather than describing it.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F10.11</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Deposit verification is manual today (a coach confirms it). The copy must not promise instant automatic unlocking.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F10.12</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P3</span></span></div><div class="txt">Standard indicators &mdash; moving averages, RSI, volume &mdash; free to everyone, toggled per chart.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F10.13</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>A trade cannot be placed from the chart without the lot size visible.</b> The order ticket shows size, risk percentage, stop, target, the dollar amount at risk and the R:R before the button &mdash; and the button itself states what it will do ("Buy 0.12 &middot; risk $52.40").</div></div>
-    <div class="req"><div class="gut"><span class="rid">F10.14</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Chart trading is separate from Tap to Trade and has no desk signal behind it. It carries the same regulatory exposure as F3 and must be covered by the same review (R1) &mdash; arguably a larger surface, since nothing constrains what the member enters.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F10.15</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">RSI and Stochastic free for everyone, computed from the same price data. They are generic oscillators, so they cost Vision Edge and Pulse nothing and make the free tier genuinely useful.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F10.16</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P3</span></span></div><div class="txt">Chart tools: pinch zoom, crosshair with price and time readout, and a measure tool.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F18.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Every colour comes from the token set in section 07. No screen introduces a one-off value; a colour that is needed twice becomes a token.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F18.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">The light screen sweep stays opt-in &mdash; Home, Journal and Community. Applying it globally puts pale blue behind body text on list and chat screens.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F18.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">The light header band is bound to the header element, never to the screen. Binding it to the screen makes it bleed onto body content wherever the header height varies.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F18.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt"><b>Text meets WCAG 2.1 AA</b> &mdash; 4.5:1 body, 3:1 large &mdash; except the exceptions listed in section 07. Anything else failing is a regression.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F18.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">The contrast check runs over every screen and is position-aware: gradients are sampled at each element's own position, and the header band is modelled explicitly. A naive check reports hundreds of failures that do not exist and hides the ones that do.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F18.6</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Touch targets are at least 44 x 44 points, including tab bar items and header buttons.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F18.7</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">All figures set in <code>tabular-nums</code>. Proportional digits shift width as live values tick and read as jitter.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F18.8</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">The app respects the system text-size setting. A trading figure the member cannot read is worse than one they have to scroll to.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F18.9</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">Profit and loss is never signalled by colour alone. Green and red carry a sign or an arrow as well, for the roughly one in twelve men with a colour vision deficiency.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F18.10</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">Motion respects <code>prefers-reduced-motion</code>; push, pop and sheet transitions become instant.</div></div>
   </div>
 </section>
 
 <section id="tech">
-  <h2><span class="n">08</span> Technical approach</h2>
+  <h2><span class="n">09</span> Technical approach</h2>
   <h3>Reuse what already works; build only what doesn't exist</h3>
   <p>Two of the four surfaces already have production systems behind them. The app should consume those rather than fork them.</p>
   <div class="tw">
@@ -521,7 +623,7 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
 </section>
 
 <section id="release">
-  <h2><span class="n">09</span> Release plan</h2>
+  <h2><span class="n">10</span> Release plan</h2>
   <h3>Six phases, ordered by what hurts most today</h3>
   <div class="phase"><div class="pnum">P0</div><div>
     <h5>Foundations</h5>
@@ -544,7 +646,7 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
 </section>
 
 <section id="risks">
-  <h2><span class="n">10</span> Risks</h2>
+  <h2><span class="n">11</span> Risks</h2>
   <h3>Six things that could stop this, in the order they'd hurt</h3>
   <div class="risks">
     <div class="risk"><div class="rh"><span class="rid">R1</span><h5>Tap to Trade may be a regulated activity</h5></div>
@@ -563,7 +665,7 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
 </section>
 
 <section id="questions">
-  <h2><span class="n">11</span> Open questions</h2>
+  <h2><span class="n">12</span> Open questions</h2>
   <h3>Answers needed before the phases they affect</h3>
   <ol class="q">
     <li><span>What is the current member count, and how many are active in a given week? The last confirmed figure is roughly 2,600 GoHighLevel contacts from May 2026, which is a mailing list rather than an activity measure.</span></li>
@@ -572,11 +674,12 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
     <li><span>Which MetaTrader 5 brokers do members actually use? Import formats and execution both depend on the real spread of brokers, not the ones we assume.</span></li>
     <li><span>Is there a target launch date or a hard external deadline &mdash; an event, a campaign, a cohort intake?</span></li>
     <li><span>Who moderates community chat day to day, and what are the rules they enforce? R3 stays open until this has a name attached.</span></li>
+    <li><span>Home's hero card is copied faithfully from the reference, and the reference's own hero is low contrast &mdash; the account value measures 2.64:1 against a 3:1 target. Do we keep the exact replica, or darken the card behind the figure? This is the one place where matching the reference and readability genuinely conflict.</span></li>
   </ol>
 </section>
 
 <section id="today">
-  <h2><span class="n">12</span> What exists today</h2>
+  <h2><span class="n">13</span> What exists today</h2>
   <h3>The four systems this app consolidates</h3>
   <div class="tw">
     <table>
