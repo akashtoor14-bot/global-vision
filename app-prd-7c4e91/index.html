@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#0b1626">
 <meta name="description" content="Product requirements for the Global Vision app. Internal.">
 <link rel="icon" href="/favicon.png">
-<title>Global Vision App Requirements</title>
+<title>Global Vision Platform Requirements</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
 :root{
@@ -172,14 +172,14 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
 <div class="page">
 
 <header class="mast">
-  <div class="kicker">Product requirements &middot; Draft v2</div>
-  <h1>Global Vision App</h1>
-  <p class="standfirst">One app that replaces Telegram outright and puts signals, the trade journal, the Academy and the community in a single place &mdash; with one-tap execution to MT5 as the flagship.</p>
+  <div class="kicker">Product requirements &middot; Draft v3</div>
+  <h1>Global Vision Platform</h1>
+  <p class="standfirst">One ecosystem: a member app with a full desktop counterpart, and a CRM behind both that decides who gets in, tracks every client, and runs the team. The app replaces Telegram outright; the CRM replaces GoHighLevel.</p>
   <div class="meta">
     <span><b>Owner</b> Akash Toor, CTO</span>
     <span><b>Stakeholders</b> Gio Victorino &middot; Darlyn Abellar</span>
     <span><b>Date</b> 8 September 2026</span>
-    <span><b>Status</b> Draft for review &middot; rev 2</span>
+    <span><b>Status</b> Draft for review &middot; rev 3</span>
     <span style="color:var(--stop)"><b style="color:var(--stop)">Confidential</b> Internal &mdash; do not forward</span>
   </div>
 </header>
@@ -288,7 +288,31 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
 
 <section id="ia">
   <h2><span class="n">06</span> Information architecture</h2>
-  <h3>Five tabs, a drawer, and one floating button</h3>
+  <h3>Three surfaces, one system behind them</h3>
+  <p class="lead">The platform is a member app, a desktop site that does everything the app does, and a CRM that sits behind both. The CRM is not a back office bolted on afterwards &mdash; it is the thing that decides who gets into the app at all.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Surface</th><th>Who</th><th>What it is for</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Member app</strong><br><span style="color:var(--muted)">iOS, then desktop web</span></td>
+            <td>Verified clients</td>
+            <td>Signals, Tap to Trade, the journal, Academy, community. Replaces Telegram outright.</td></tr>
+        <tr><td><strong>CRM</strong><br><span style="color:var(--muted)">corporate view</span></td>
+            <td>Corporate</td>
+            <td>Screening and verification, every client detail, conversation history, prospects, marketing, audit trail.</td></tr>
+        <tr><td><strong>CRM</strong><br><span style="color:var(--muted)">admin view</span></td>
+            <td>Admins</td>
+            <td>A restricted slice of the same CRM, plus the workforce module: attendance, leave, contracts, benefits, training, internal chat.</td></tr>
+        <tr><td><strong>CRM</strong><br><span style="color:var(--muted)">IB view</span></td>
+            <td>Introducing brokers</td>
+            <td>Their own clients only. Pipeline, activity, deposits, and participation in verification.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><b>Nobody self-registers into the app.</b> A prospect is screened in the CRM and only becomes able to create login credentials once verified. This inverts the usual order and has a consequence worth stating plainly: <b>the CRM has to exist before the app can launch</b>, because without it there is no way for anyone to get in.</p>
+  <p>The CRM duplicates what GoHighLevel does today &mdash; which the team is happy with &mdash; and adds what it cannot do: scoped access for admins and IBs, a full audit trail, and the workforce module. GoHighLevel is a closed product, so this is a rebuild of its behaviour rather than a fork of its code.</p>
+
+  <h4>Inside the app</h4>
   <p><strong>Tabs:</strong> Home &middot; Signals &middot; Charts &middot; Community &middot; Journal.</p>
   <p><strong>Community had to be a tab.</strong> Burying it in the drawer would work directly against the notification strategy in F8 &mdash; there is no point pulling someone back into the app if the thing you pulled them to is three taps deep. Academy moved to the drawer instead, with a card on Home: courses are binge-then-leave, community is daily.</p>
   <p><strong>The drawer</strong> (top-right, under the menu button) holds Academy, Products, Founders, Educators, Notifications, Settings, Help and Sign out &mdash; everything secondary, nothing daily.</p>
@@ -388,10 +412,11 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
   <h2><span class="n">08</span> Requirements</h2>
   <h3>What has to be true for each surface</h3>
   <p>Priority is <span class="chip c-must">Must</span> (version one does not ship without it), <span class="chip c-should">Should</span> (ships unless something has to give), <span class="chip c-later">Later</span> (deliberately deferred). Phase tags map to the release plan in section 10.</p>
+  <p>The letter says which surface a requirement belongs to. <b>F</b> is the member app and its desktop counterpart. <b>C</b> is the CRM. <b>W</b> is the workforce module inside the admin experience. <b>S</b> is what an introducing broker sees. C, W and S are one system with role-scoped access, not three products &mdash; see C10.</p>
   <h4>F1 &mdash; Identity and access</h4>
   <div class="reqs">
     <div class="req"><div class="gut"><span class="rid">F1.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Members sign in with the same Supabase magic-link and 8-digit code already used by the journal and the indicator portal. No new password, no separate app account.</div></div>
-    <div class="req"><div class="gut"><span class="rid">F1.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt"><b>Account creation is gated on an existing GoHighLevel contact.</b> Today the journal's <code>/api/auth/exchange</code> runs with <code>shouldCreateUser: true</code>, so any email that completes a magic link gets in. This must be closed before the app launches &mdash; see R6.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F1.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt"><b>Account creation is gated on verification in the CRM</b> (C2.2, F19.1). Today the journal's <code>/api/auth/exchange</code> runs with <code>shouldCreateUser: true</code>, so any email that completes a magic link gets in. This must be closed before the app launches &mdash; see R6.</div></div>
     <div class="req"><div class="gut"><span class="rid">F1.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">One identity across app, journal and indicator portal. GoHighLevel stays master; Supabase is the shared front door.</div></div>
     <div class="req"><div class="gut"><span class="rid">F1.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Sign-in works inside in-app browsers. The journal already hit a PKCE failure in that context; the app must not repeat it.</div></div>
     <div class="req"><div class="gut"><span class="rid">F1.5</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">Face ID or fingerprint unlock for returning sessions, so opening the app during a session is instant.</div></div>
@@ -591,6 +616,201 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
     <div class="req"><div class="gut"><span class="rid">F18.9</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">Profit and loss is never signalled by colour alone. Green and red carry a sign or an arrow as well, for the roughly one in twelve men with a colour vision deficiency.</div></div>
     <div class="req"><div class="gut"><span class="rid">F18.10</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">Motion respects <code>prefers-reduced-motion</code>; push, pop and sheet transitions become instant.</div></div>
   </div>
+  <h4>F19 &mdash; Registration, verification and access</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">Nobody self-registers. Screening happens in the CRM; verification is what unlocks the app.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F19.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt"><b>Downloading the app is not access.</b> A prospect is screened and verified inside the CRM (C2) before they can create login credentials. There is no open sign-up path.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F19.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Entry requires a broker account with a minimum <b>$300 deposit</b>, confirmed against the broker UID. This is an entry condition, not a maintained balance &mdash; <b>losing money trading must never revoke access.</b> The platform is free; the deposit is how the introducing-broker relationship funds it.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F19.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">The broker UID is mandatory and is the join between the app account and the CRM record. Every other client-side feature keys off it.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F19.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt"><b>Sponsor is mandatory and locks on registration.</b> Only an admin can change it, and the change is written to the audit trail (C4) with the admin who made it.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F19.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">The sponsor field must capture <b>the person who actually invited them</b>. Free text alone has already failed &mdash; members enter things like "my wife". The field needs inline guidance, a name format, and ideally a lookup against existing members, with anything unmatched queued for an admin rather than accepted silently.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F19.6</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Registration collects, at minimum: full name, email, phone, country, broker name, broker UID, MT5 account details, sponsor. All of it lands on the CRM record (C1) rather than in a form submission somewhere.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F19.7</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Access is revoked after <b>30 days with no trade</b> on any linked live account. Restoring it goes through an admin and is logged.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F19.8</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">The member is warned before revocation, not after. <b>Open decision:</b> the original notes describe a notification telling the member to place a trade. Enforcing an activity condition is ordinary; prompting somebody to trade in order to keep a benefit is a different thing and belongs in the R1 review. See Q8.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F19.9</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Country is captured at registration and drives nothing silently &mdash; it is there so the platform can be reasoned about jurisdiction by jurisdiction.</div></div>
+  </div>
+  <h4>F20 &mdash; Multiple trading accounts</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">Members hold a demo and several live accounts. Switching between them has to be trivial.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F20.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">A member can link more than one MT5 account: one or more live, and a demo.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F20.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">The active account is switchable wherever the account matters, and in particular from inside the Tap to Trade ticket &mdash; not buried in settings.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F20.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt"><b>Demo accounts are visibly marked everywhere they appear</b>, including on the order ticket and in the journal. A member must never be able to mistake a demo fill for a live one.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F20.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Members can run a product on demo before running it live. This is the stated reason they keep demo accounts, and it is the safest possible on-ramp to Tap to Trade.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F20.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">The 30-day activity rule (F19.7) counts activity across all linked <b>live</b> accounts. Demo activity does not keep an account alive.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F20.6</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">Journal entries record which account a trade was taken on, so demo and live performance never mix in the analytics.</div></div>
+  </div>
+  <h4>F21 &mdash; Desktop web</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">The same product, reachable on a desktop browser.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">F21.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Every member-facing feature reachable on the phone is reachable on desktop. This is one product on two form factors, not a cut-down web version.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F21.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">One identity, one session model, shared with the app. A member signing in on desktop is the same account, subject to the same verification and the same 30-day rule.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F21.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt"><b>Build approach is an open decision.</b> The app is React Native and Expo, so Expo Web can produce the desktop site from one codebase &mdash; far less work, with a ceiling on how desktop-native it feels. A separate web build is a second product with its own timeline. See Q9.</div></div>
+    <div class="req"><div class="gut"><span class="rid">F21.4</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">Layouts that genuinely benefit from width &mdash; charts, the journal calendar, analytics &mdash; use it rather than rendering a stretched phone screen.</div></div>
+  </div>
+  <h4>C1 &mdash; Client record</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">One record per client, holding everything anyone would otherwise have to ask for.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">C1.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Every client has a single record keyed on broker UID, carrying: name, email, phone, country, broker name, broker UID, MT5 account details (all linked accounts), sponsor, and registration date.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C1.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">The record shows <b>current pipeline stage</b> and how it got there &mdash; not just where the client is now.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C1.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">The record shows activity: last trade, trade frequency, days idle, and deposit total. These are the numbers that decide access, so they belong on the record rather than in a report.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C1.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">The record shows <b>who last replied to this client and when</b>, so no client sits unanswered because each admin assumed another had it.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C1.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Sponsor is displayed on the record and is only editable by an admin, with the change logged (C4).</div></div>
+    <div class="req"><div class="gut"><span class="rid">C1.6</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">The record links to the client&rsquo;s journal activity and Academy progress, so a support conversation can start from what they have actually been doing.</div></div>
+  </div>
+  <h4>C2 &mdash; Verification and pipelines</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">The screening path that decides who gets into the app.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">C2.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">A configurable pipeline with named stages, from first contact through to verified. Clients move between stages, and every move is logged with who moved them (C4).</div></div>
+    <div class="req"><div class="gut"><span class="rid">C2.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt"><b>Verification is the gate on app access.</b> Reaching the verified stage is what lets a client create login credentials (F19.1). Nothing else grants access.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C2.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Verification records the evidence it was based on &mdash; UID confirmed, deposit confirmed, sponsor confirmed &mdash; not just a status flag. A verified client should be answerable to the question "on what basis?"</div></div>
+    <div class="req"><div class="gut"><span class="rid">C2.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">An IB can propose a client as verified, but <b>corporate performs the final verification</b>. The IB&rsquo;s steps are visible to corporate before that call is made (S3).</div></div>
+    <div class="req"><div class="gut"><span class="rid">C2.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Access revocation (F19.7) is a pipeline state, not a deletion. A revoked client keeps their record and history.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C2.6</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">The pipeline supports rejection with a reason, so a declined prospect is distinguishable from one still in progress.</div></div>
+  </div>
+  <h4>C3 &mdash; Re-verification</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">A standing queue rather than a periodic scramble.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">C3.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">A dedicated section listing every client currently due for re-verification, with why they are in the queue and how long they have been there.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C3.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Re-verification carries the same evidence requirement and the same audit trail as first verification (C2.3, C4).</div></div>
+    <div class="req"><div class="gut"><span class="rid">C3.3</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">The queue is workable by more than one admin without collisions &mdash; claiming a client, or at minimum showing who is already on it.</div></div>
+  </div>
+  <h4>C4 &mdash; Audit trail</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">The requirement that makes every other CRM requirement trustworthy.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">C4.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt"><b>Every write is logged</b>: who, what changed, from what to what, and when. Field edits, pipeline moves, verifications, sponsor changes, access revocations and restorations.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C4.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Every admin has their own login. Shared accounts defeat the entire purpose of C4.1 and must not be possible.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C4.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">The trail is readable from the client record &mdash; the history of one client, in order &mdash; not only as a global log to be searched.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C4.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">The trail is append-only. Admins cannot edit or delete history, including their own.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C4.5</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">The trail is filterable by admin, so a suspected pattern of errors can be traced to a person and a period.</div></div>
+  </div>
+  <h4>C5 &mdash; Conversations</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">Support history that survives the admin who handled it.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">C5.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Every conversation with a client or prospect is stored against their record, with the admin who handled it and timestamps.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C5.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">History is complete and permanent. Any admin picking up a client can see what was said before, by whom.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C5.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Idle time per conversation is tracked and visible &mdash; how long since the client wrote, how long since anyone replied.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C5.4</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">Conversations can be assigned and reassigned, with the change logged.</div></div>
+  </div>
+  <h4>C6 &mdash; Prospects</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">People who are interested but not on the platform. Today this audience lives in a Telegram channel.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">C6.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">A contact route for people who are not clients &mdash; a way to reach an admin without an app account.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C6.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">First contact captures name, email and phone, and creates a record immediately. A prospect who is never captured cannot be followed up.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C6.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Prospect records carry the same conversation history and assigned-admin model as clients (C5), so a returning prospect is recognised rather than restarted.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C6.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt"><b>Flagging</b>, with a reason and the admin who set it: high risk, poacher, and whatever else the team needs. Flags are visible before an admin opens a conversation, not after.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C6.5</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">A prospect converts into a client record without losing history &mdash; the conversation from before they joined stays attached.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C6.6</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">Prospect source is captured where it is knowable, so the funnel can be reasoned about rather than guessed at.</div></div>
+  </div>
+  <h4>C7 &mdash; Broadcast and marketing</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">The second Telegram replacement. The app replaces Telegram for members; this replaces it for everyone else.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">C7.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Email marketing to segments of clients and prospects, sent from the platform, with delivery and open tracking against the record.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C7.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">A broadcast channel reaching prospects who are not in the app &mdash; upcoming events, community news, the material currently pushed through the Telegram channel.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C7.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Segmentation by the fields that matter: pipeline stage, country, sponsor, activity, flags.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C7.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">Unsubscribe handling that actually works, per channel, respected everywhere. This is a legal requirement in most of the jurisdictions the audience sits in, not a courtesy.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C7.5</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt"><b>Open question.</b> Replacing a Telegram channel with email is a downgrade in reach and immediacy. Push notification to a lightweight prospect surface, or a web push, may hold the audience better. See Q10.</div></div>
+  </div>
+  <h4>C8 &mdash; Integrations</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">One portal to manage the platforms, rather than one tab per platform.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">C8.1</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">Meta API: ad performance and conversions visible inside the CRM, tied to prospect records where attribution allows.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C8.2</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">Gmail API: corporate email in and out, threaded against client and prospect records, including inbound job applications.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C8.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">MT5 / broker data: deposits, trade activity and account status, which C1.3 and F19.7 both depend on. This is not optional &mdash; the access model does not function without it.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C8.4</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P2</span></span></div><div class="txt">Integrations fail visibly. A silent sync failure on C8.3 would revoke access from active traders, which is the worst outcome in this document.</div></div>
+  </div>
+  <h4>C9 &mdash; Client activity tracking</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">The data behind the access rule.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">C9.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Trading activity per linked live account, refreshed often enough that the 30-day rule is accurate on the day it fires.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C9.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">A view of every client approaching the 30-day threshold, ordered by urgency, so admins can act before access is cut rather than field complaints after.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C9.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Deposit totals per client, and confirmation of the $300 entry condition (F19.2).</div></div>
+    <div class="req"><div class="gut"><span class="rid">C9.4</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P1</span></span></div><div class="txt">Trade frequency over time, so "active" can be understood as a trend rather than a single flag.</div></div>
+  </div>
+  <h4>C10 &mdash; Roles and access scoping</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">One CRM, three audiences. This is access control, not three products.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">C10.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Role-based access with at least three tiers: corporate (everything), admin (a restricted slice), and IB (their own clients only).</div></div>
+    <div class="req"><div class="gut"><span class="rid">C10.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt"><b>An IB can only ever see clients attributed to them.</b> Scoping is enforced server-side, on every query, not by hiding elements in the interface.</div></div>
+    <div class="req"><div class="gut"><span class="rid">C10.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P0</span></span></div><div class="txt">Roles are assignable and revocable by corporate, and every change is logged (C4).</div></div>
+    <div class="req"><div class="gut"><span class="rid">C10.4</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P1</span></span></div><div class="txt">A sub-IB&rsquo;s registered admins inherit a scope no wider than that sub-IB&rsquo;s own (S4).</div></div>
+  </div>
+  <h4>W1 &mdash; Time and attendance</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">Admin-only. Note that W1 to W4 are an HR system, not a CRM &mdash; see the build-or-buy decision in Q11.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">W1.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Clock in, clock out, and break states. An admin sets their own status; the timestamps are recorded, not self-reported after the fact.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W1.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Named status tags &mdash; available, busy, on break, lunch, offline &mdash; visible to other admins, so a slow reply has an explanation before anyone chases it.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W1.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Corporate view of attendance: hours worked, number and length of breaks, and how they compare across the team and over time.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W1.4</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P3</span></span></div><div class="txt">Status changes are logged and cannot be back-edited by the admin they belong to.</div></div>
+  </div>
+  <h4>W2 &mdash; Scheduling and leave</h4>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">W2.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">A team calendar carrying every admin&rsquo;s schedule, so cover is visible rather than assumed.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W2.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Leave requests &mdash; vacation and sick days &mdash; submitted in the portal, routed for approval, and logged with timestamps.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W2.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Approved leave lands on the calendar automatically. Sick days are logged even when taken at short notice.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W2.4</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P3</span></span></div><div class="txt">Supporting evidence can be attached to a request where the policy requires it.</div></div>
+  </div>
+  <h4>W3 &mdash; Contracts and pay</h4>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">W3.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Each admin&rsquo;s contract is available to them in the portal, so contract questions do not have to go through a manager.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W3.2</span><span class="chips"><span class="chip c-later">Later</span><span class="chip c-p">P3</span></span></div><div class="txt"><b>Pay deduction for leave is specified but deliberately not designed here.</b> Automatically deducting pay by days requested has employment-law consequences that differ by jurisdiction, and the team is largely in the Philippines. This requires proper advice before it is built, and it should not be inferred from a feature list. See Q12.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W3.3</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P3</span></span></div><div class="txt">Leave balances are visible to the admin at all times &mdash; days taken, days remaining, by category.</div></div>
+  </div>
+  <h4>W4 &mdash; Benefits and claims</h4>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">W4.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P3</span></span></div><div class="txt">A benefits section covering what each admin is entitled to: dental, paid vacation, maternity leave, and anything else in their contract.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W4.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P3</span></span></div><div class="txt">Claims are submitted in the portal with receipts uploaded as proof, and routed for approval.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W4.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P3</span></span></div><div class="txt">Remaining entitlement is visible per category &mdash; vacation days left, dental coverage remaining &mdash; without asking anyone.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W4.4</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P3</span></span></div><div class="txt">Claim history and status are visible to the admin who filed them.</div></div>
+  </div>
+  <h4>W5 &mdash; Performance</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">Measuring whether admins are doing the job they were hired for.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">W5.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Per-admin metrics: conversations handled, issues resolved, response rate, average response time, idle time.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W5.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Corporate can compare admins over a chosen period, and see trend rather than a single snapshot.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W5.3</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P3</span></span></div><div class="txt">Metrics are visible to the admin themselves. People manage what they can see, and a metric used only for review is a worse tool than one used daily.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W5.4</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P3</span></span></div><div class="txt">Response-time measurement accounts for status (W1.2) so an admin is not penalised for a scheduled break.</div></div>
+  </div>
+  <h4>W6 &mdash; Internal communication</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">Currently Discord: chat, voice and video.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">W6.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Admin-to-admin chat inside the portal, with history that corporate can review.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W6.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">A direct channel between each admin and the head manager for requests &mdash; days off, job matters &mdash; with timestamps and a permanent record, so requests cannot be disputed later.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W6.3</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P3</span></span></div><div class="txt">Voice and video calling. <b>Buy, do not build.</b> This is a solved problem with mature providers, and building WebRTC in-house would consume more engineering than the rest of W combined.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W6.4</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P3</span></span></div><div class="txt">Chat history is searchable and retained; it is part of the same record-keeping principle as C4.</div></div>
+  </div>
+  <h4>W7 &mdash; Training and onboarding</h4>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">W7.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">An onboarding path a new admin works through, with completion tracked.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W7.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">A permanent reference library: best practice, how to handle specific client situations, and troubleshooting for the broker portal. This is a reference, not a course &mdash; it is read mid-conversation, under time pressure.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W7.3</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P3</span></span></div><div class="txt">Content is searchable and versioned, so an admin can trust that what they are reading is current.</div></div>
+  </div>
+  <h4>W8 &mdash; Vision AI for admins</h4>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">W8.1</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P3</span></span></div><div class="txt">Vision AI answers admin questions about their own contract, leave process and benefits claims, so routine questions do not queue behind the head manager.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W8.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P3</span></span></div><div class="txt">Scoped to the asking admin. It must never surface another admin&rsquo;s contract, pay or leave. This is the same scoping discipline as C10.2 and is not negotiable.</div></div>
+    <div class="req"><div class="gut"><span class="rid">W8.3</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P3</span></span></div><div class="txt">It answers from the training library (W7.2) as well, so client-handling questions get the same treatment.</div></div>
+  </div>
+  <h4>S1 &mdash; IB access</h4>
+  <p style="color:var(--muted);font-size:16px;margin-top:-4px">IBs run their own businesses on top of the platform. They need our systems, scoped to their clients.</p>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">S1.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">An IB sees their own clients and nothing else, enforced by C10.2.</div></div>
+    <div class="req"><div class="gut"><span class="rid">S1.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Per client, an IB sees activity, deposit total, and pipeline position &mdash; the same operational picture corporate has, narrowed to their book.</div></div>
+    <div class="req"><div class="gut"><span class="rid">S1.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">An IB can see why a client is verified, and why a client who no longer qualifies still has access or has lost it. This is the transparency the notes ask for: a way to check our work as well as their own.</div></div>
+  </div>
+  <h4>S2 &mdash; Verification participation</h4>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">S2.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">An IB can move their clients through the pipeline and propose them as verified.</div></div>
+    <div class="req"><div class="gut"><span class="rid">S2.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Corporate sees the steps the IB took, then makes the final verification decision (C2.4). The IB proposes; corporate decides.</div></div>
+    <div class="req"><div class="gut"><span class="rid">S2.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P2</span></span></div><div class="txt">Every IB action is written to the same audit trail as corporate actions (C4). There is one history per client, not one per audience.</div></div>
+  </div>
+  <h4>S3 &mdash; A sub-IB&rsquo;s own admins</h4>
+  <div class="reqs">
+    <div class="req"><div class="gut"><span class="rid">S3.1</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P3</span></span></div><div class="txt">A sub-IB can register their own admins, who receive their own logins.</div></div>
+    <div class="req"><div class="gut"><span class="rid">S3.2</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P3</span></span></div><div class="txt">Those admins inherit a scope no wider than the sub-IB who registered them (C10.4).</div></div>
+    <div class="req"><div class="gut"><span class="rid">S3.3</span><span class="chips"><span class="chip c-must">Must</span><span class="chip c-p">P3</span></span></div><div class="txt">Support from a sub-IB&rsquo;s client routes to that sub-IB&rsquo;s admins, not to the corporate queue.</div></div>
+    <div class="req"><div class="gut"><span class="rid">S3.4</span><span class="chips"><span class="chip c-should">Should</span><span class="chip c-p">P3</span></span></div><div class="txt">Corporate retains visibility of those conversations. Scoping controls who can act, not what corporate can audit.</div></div>
+  </div>
+
 </section>
 
 <section id="tech">
@@ -675,6 +895,12 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
     <li><span>Is there a target launch date or a hard external deadline &mdash; an event, a campaign, a cohort intake?</span></li>
     <li><span>Who moderates community chat day to day, and what are the rules they enforce? R3 stays open until this has a name attached.</span></li>
     <li><span>Home's hero card is copied faithfully from the reference, and the reference's own hero is low contrast &mdash; the account value measures 2.64:1 against a 3:1 target. Do we keep the exact replica, or darken the card behind the figure? This is the one place where matching the reference and readability genuinely conflict.</span></li>
+    <li><span><b>Does the member get warned before access is revoked?</b> Enforcing a 30-day activity condition is ordinary. A notification telling somebody to place a trade so they keep a benefit is a different act, and it belongs in the R1 review before it is built. See F19.8.</span></li>
+    <li><span><b>Is the desktop site built from the app codebase or separately?</b> Expo Web gives it from one codebase for a fraction of the effort, with a ceiling on how desktop-native it feels. A separate build is a second product with its own timeline. This is the largest single scope decision in the document. See F21.3.</span></li>
+    <li><span><b>What actually replaces the Telegram prospect channel?</b> Email is a real downgrade in reach and immediacy for an audience that currently gets instant broadcasts. Worth deciding deliberately rather than defaulting to a mailing list. See C7.5.</span></li>
+    <li><span><b>Is the workforce module (W1&ndash;W4) built or bought?</b> Attendance, leave, contracts, benefits and claims are a solved commercial problem. Building them in-house is plausibly larger than the CRM itself and delays everything behind it. This is the difference between launching this year and not.</span></li>
+    <li><span><b>What is the actual rule for pay deduction on leave?</b> W3.2 is specified but deliberately undesigned. Automatic deduction has employment-law consequences that vary by jurisdiction, and the team is largely in the Philippines. This needs proper advice before anyone writes it.</span></li>
+    <li><span><b>Where do the Academy courses live once GoHighLevel goes?</b> GoHighLevel hosts them today. Nothing in the current plan replaces that, and it is a gap rather than a disagreement.</span></li>
   </ol>
 </section>
 

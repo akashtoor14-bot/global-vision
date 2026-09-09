@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#0b1626">
+<meta name="description" content="Product requirements for the Global Vision app. Internal.">
+<link rel="icon" href="/favicon.png">
+<title>Global Vision Platform &mdash; Minimum Viable Product</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#f7f8fa; --surface:#ffffff; --sunk:#eef1f6;
+  --ink:#0b1626; --ink-2:#2c3c52; --muted:#5a6a80; --faint:#8595a8;
+  --rule:#dfe4ec; --rule-2:#c9d2df;
+  --accent:#0d6d8c; --accent-soft:#e2f2f7;
+  --ship:#0a7d55; --ship-soft:#e2f4ec;
+  --warn:#8a6100; --warn-soft:#f9efdc;
+  --stop:#a52a4a; --stop-soft:#fbe7ec;
+  --sans:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  --serif:'IBM Plex Serif',Georgia,'Times New Roman',serif;
+  --mono:'IBM Plex Mono',ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --ground:#0a1220; --surface:#101c2e; --sunk:#0d1728;
+    --ink:#e8edf5; --ink-2:#c4d0e0; --muted:#93a3b8; --faint:#6d7f96;
+    --rule:#1e2d42; --rule-2:#2b3d56;
+    --accent:#7ae0ff; --accent-soft:#0f2c3d;
+    --ship:#6cf3b4; --ship-soft:#0d2b21;
+    --warn:#ffcb6b; --warn-soft:#2e2410;
+    --stop:#ff7a9b; --stop-soft:#2e131c;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0a1220; --surface:#101c2e; --sunk:#0d1728;
+  --ink:#e8edf5; --ink-2:#c4d0e0; --muted:#93a3b8; --faint:#6d7f96;
+  --rule:#1e2d42; --rule-2:#2b3d56;
+  --accent:#7ae0ff; --accent-soft:#0f2c3d;
+  --ship:#6cf3b4; --ship-soft:#0d2b21;
+  --warn:#ffcb6b; --warn-soft:#2e2410;
+  --stop:#ff7a9b; --stop-soft:#2e131c;
+}
+*{box-sizing:border-box}
+body{background:var(--ground);color:var(--ink);font-family:var(--serif);
+  font-size:17px;line-height:1.62;margin:0;-webkit-font-smoothing:antialiased}
+.page{max-width:1000px;margin:0 auto;padding:0 28px 120px}
+
+/* ---- masthead ---- */
+.mast{padding:72px 0 30px;border-bottom:2px solid var(--ink)}
+.kicker{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--sans);font-size:clamp(34px,6vw,52px);font-weight:700;line-height:1.06;
+  letter-spacing:-.02em;margin:16px 0 0;text-wrap:balance}
+.standfirst{font-size:19px;line-height:1.55;color:var(--ink-2);max-width:64ch;margin:20px 0 0}
+.meta{display:flex;flex-wrap:wrap;gap:8px 26px;margin-top:28px;font-family:var(--mono);
+  font-size:12px;color:var(--muted)}
+.meta b{font-weight:600;color:var(--ink-2)}
+
+/* ---- toc ---- */
+.toc{margin:34px 0 0;padding:22px 0 4px;border-bottom:1px solid var(--rule)}
+.toc ol{list-style:none;margin:0;padding:0;display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:2px 30px;counter-reset:t}
+.toc li{counter-increment:t}
+.toc a{display:flex;gap:11px;padding:6px 0;font-family:var(--sans);font-size:14px;
+  color:var(--ink-2);text-decoration:none;border-bottom:1px solid transparent}
+.toc a:hover,.toc a:focus-visible{color:var(--accent);border-bottom-color:var(--accent)}
+.toc a::before{content:counter(t,decimal-leading-zero);font-family:var(--mono);font-size:11.5px;
+  color:var(--faint);padding-top:2px}
+
+/* ---- sections ---- */
+section{padding-top:56px;scroll-margin-top:20px}
+h2{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--accent);margin:0 0 6px;display:flex;align-items:baseline;gap:12px}
+h2 .n{font-family:var(--mono);color:var(--faint);font-weight:500;letter-spacing:.04em}
+h3{font-family:var(--sans);font-size:clamp(23px,3.4vw,30px);font-weight:600;line-height:1.18;
+  letter-spacing:-.015em;margin:0 0 18px;color:var(--ink);text-wrap:balance}
+h4{font-family:var(--sans);font-size:16px;font-weight:600;margin:36px 0 12px;color:var(--ink);
+  letter-spacing:-.005em}
+p{margin:0 0 16px;max-width:68ch}
+a{color:var(--accent)}
+strong{font-weight:600;color:var(--ink)}
+em{font-style:italic}
+code{font-family:var(--mono);font-size:.88em;background:var(--sunk);padding:1px 5px;
+  border-radius:3px;color:var(--ink-2)}
+
+/* ---- lead paragraph ---- */
+.lead{font-size:19px;line-height:1.55;color:var(--ink-2);max-width:64ch}
+
+/* ---- principle / plain lists ---- */
+ul.plain{list-style:none;margin:0 0 16px;padding:0;max-width:68ch}
+ul.plain li{position:relative;padding:0 0 0 22px;margin-bottom:9px}
+ul.plain li::before{content:"";position:absolute;left:2px;top:.72em;width:7px;height:1.5px;
+  background:var(--rule-2)}
+
+/* ---- requirement blocks: hanging id gutter ---- */
+.reqs{border-top:1px solid var(--rule)}
+.req{display:grid;grid-template-columns:96px 1fr;gap:0 24px;padding:15px 0;
+  border-bottom:1px solid var(--rule);align-items:start}
+.req .gut{display:flex;flex-direction:column;gap:7px;align-items:flex-start;padding-top:2px}
+.req .rid{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--ink-2);
+  font-variant-numeric:tabular-nums}
+.req .txt{font-size:16px;line-height:1.55;color:var(--ink-2);max-width:66ch}
+.req .txt b{color:var(--ink);font-weight:600}
+.chips{display:flex;gap:5px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.07em;
+  text-transform:uppercase;padding:2px 6px;border-radius:3px;white-space:nowrap}
+.c-must{color:var(--stop);background:var(--stop-soft)}
+.c-should{color:var(--warn);background:var(--warn-soft)}
+.c-later{color:var(--muted);background:var(--sunk)}
+.c-p{color:var(--accent);background:var(--accent-soft)}
+
+/* ---- callout ---- */
+.note{border-left:2px solid var(--accent);background:var(--surface);padding:14px 18px;
+  margin:20px 0;max-width:68ch}
+.note.warn{border-left-color:var(--warn)}
+.note p{font-size:15.5px;margin:0;color:var(--ink-2)}
+.note .lbl{font-family:var(--sans);font-size:11px;font-weight:600;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--accent);display:block;margin-bottom:6px}
+.note.warn .lbl{color:var(--warn)}
+
+/* ---- tables ---- */
+.tw{overflow-x:auto;margin:22px 0;border:1px solid var(--rule);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-family:var(--sans);font-size:14.5px;min-width:560px}
+th{text-align:left;font-weight:600;font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--muted);padding:12px 16px;border-bottom:1px solid var(--rule-2);white-space:nowrap}
+td{padding:12px 16px;border-bottom:1px solid var(--rule);color:var(--ink-2);vertical-align:top}
+tbody tr:last-child td{border-bottom:none}
+td.mono,th.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+/* ---- phases ---- */
+.phase{display:grid;grid-template-columns:96px 1fr;gap:0 24px;padding:18px 0;
+  border-bottom:1px solid var(--rule);align-items:start}
+.phase:first-child{border-top:1px solid var(--rule)}
+.pnum{font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--accent);padding-top:2px}
+.phase h5{font-family:var(--sans);font-size:16.5px;font-weight:600;margin:0 0 5px;color:var(--ink)}
+.phase p{font-size:15.5px;margin:0;color:var(--ink-2);max-width:64ch}
+
+/* ---- risk grid ---- */
+.risks{display:grid;gap:1px;background:var(--rule);border:1px solid var(--rule);margin:22px 0}
+.risk{background:var(--surface);padding:16px 18px}
+.risk .rh{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.risk .rid{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--stop)}
+.risk h5{font-family:var(--sans);font-size:15.5px;font-weight:600;margin:0;color:var(--ink)}
+.risk p{font-size:15px;margin:0;color:var(--ink-2);max-width:74ch}
+
+/* ---- questions ---- */
+ol.q{list-style:none;counter-reset:q;margin:20px 0;padding:0}
+ol.q li{counter-increment:q;display:grid;grid-template-columns:96px 1fr;gap:0 24px;
+  padding:13px 0;border-bottom:1px solid var(--rule);align-items:baseline}
+ol.q li::before{content:"Q" counter(q);font-family:var(--mono);font-size:12.5px;font-weight:600;
+  color:var(--accent)}
+ol.q li span{font-size:16px;color:var(--ink-2);max-width:66ch}
+ol.q li:first-child{border-top:1px solid var(--rule)}
+
+footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
+  font-family:var(--mono);font-size:12px;color:var(--muted);display:flex;
+  flex-wrap:wrap;gap:6px 24px}
+
+@media (max-width:640px){
+  body{font-size:16px}
+  .page{padding:0 20px 80px}
+  .mast{padding-top:44px}
+  .req,.phase,ol.q li{grid-template-columns:1fr;gap:8px}
+  .req .gut{flex-direction:row;align-items:center;gap:9px}
+  ol.q li::before{display:block}
+}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="page">
+
+<header class="mast">
+  <div class="kicker">Minimum viable product &middot; Draft v1</div>
+  <h1>What ships first, and what does not</h1>
+  <p class="standfirst">The requirements document describes roughly 240 things the platform should do. This one describes the smallest set that can go live, and argues for everything it leaves out.</p>
+  <div class="meta">
+    <span><b>Owner</b> Akash Toor, CTO</span>
+    <span><b>Stakeholders</b> Gio Victorino &middot; Darlyn Abellar</span>
+    <span><b>Date</b> 8 September 2026</span>
+    <span><b>Status</b> Draft for review</span>
+    <span><b>Companion</b> Platform requirements, rev 3</span>
+    <span style="color:var(--stop)"><b style="color:var(--stop)">Confidential</b> Internal &mdash; do not forward</span>
+  </div>
+</header>
+
+<nav class="toc" aria-label="Contents">
+  <ol>
+    <li><a href="#premise">The premise</a></li>
+    <li><a href="#critical">The critical path</a></li>
+    <li><a href="#in">What is in</a></li>
+    <li><a href="#out">What is out</a></li>
+    <li><a href="#sequence">Sequence</a></li>
+    <li><a href="#ready">What launch ready means</a></li>
+    <li><a href="#risks">What could break this</a></li>
+  </ol>
+</nav>
+
+<section id="premise">
+  <h2><span class="n">01</span> The premise</h2>
+  <h3>The instinct to launch everything at once is right, and it is also the thing most likely to stop this shipping</h3>
+  <p class="lead">The stated position is that nothing launches until the backend, the CRM and the app are all ready. That instinct is correct &mdash; a half-built platform in front of paying members is worse than no platform. But taken literally it describes four products shipping simultaneously, and that is not a plan anyone can execute.</p>
+  <p>This document takes the instinct seriously and asks a narrower question: <b>what is the smallest complete thing?</b> Not the smallest set of features, but the smallest arrangement where every member and every admin has a coherent experience with no dead ends. Something can be missing without being broken. A member who cannot find a feature is fine. A member who is stopped halfway through something is not.</p>
+  <p>The cuts below are made against one test: <b>does its absence stop somebody, or merely inconvenience them?</b></p>
+</section>
+
+<section id="critical">
+  <h2><span class="n">02</span> The critical path</h2>
+  <h3>The CRM is the blocker, not the app</h3>
+  <p class="lead">This is the single most important conclusion in the document, and it inverts the natural order of work.</p>
+  <p>The app is the visible product and the one furthest along &mdash; designed, prototyped, and largely specified. It is also the one that cannot launch on its own. Access is gated on verification inside the CRM, so <b>on the day the app goes live, there must already be a working CRM with verified clients in it.</b> Without that, nobody can log in. Not fewer people &mdash; nobody.</p>
+  <p>That reorders everything. The CRM is not the back office to be built once the app is done; it is the dependency the app is waiting on. Engineering attention should follow that, and the first milestone worth celebrating is not a screen &mdash; it is the first client verified end to end.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Layer</th><th>Blocks launch?</th><th>Why</th></tr></thead>
+      <tbody>
+        <tr><td><strong>CRM &mdash; verification</strong></td><td class="mono">Yes</td><td>Nobody can enter the app without it. Hard dependency.</td></tr>
+        <tr><td><strong>CRM &mdash; client records</strong></td><td class="mono">Yes</td><td>Verification has nothing to write to without them.</td></tr>
+        <tr><td><strong>CRM &mdash; audit trail</strong></td><td class="mono">Yes</td><td>Retrofitting history is impossible. Every unlogged edit before it exists is permanently lost.</td></tr>
+        <tr><td><strong>Broker data feed</strong></td><td class="mono">Yes</td><td>Deposits and activity drive both the entry condition and the 30-day rule.</td></tr>
+        <tr><td><strong>App &mdash; core</strong></td><td class="mono">Yes</td><td>The product members were promised.</td></tr>
+        <tr><td><strong>Desktop web</strong></td><td class="mono">No</td><td>Members trade on phones. Desktop is an addition, not the entry point.</td></tr>
+        <tr><td><strong>IB views</strong></td><td class="mono">No</td><td>Corporate can verify centrally at current volume. Painful, not blocking.</td></tr>
+        <tr><td><strong>Workforce module</strong></td><td class="mono">No</td><td>Admins are working today without it.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><b>The audit trail is the one easily-cut item that must not be cut.</b> Every other omission can be added later at normal cost. History cannot be backfilled &mdash; an edit made before logging exists is gone permanently, and the first thing anyone will want when something goes wrong is the record of what happened before it did.</p>
+</section>
+
+<section id="in">
+  <h2><span class="n">03</span> What is in</h2>
+  <h3>Four blocks, and nothing that is not load-bearing</h3>
+
+  <h4>Block 1 &mdash; CRM core</h4>
+  <p>Enough CRM to get a person from first contact to a working app login, and to know what happened to them along the way.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Requirement</th><th>What it covers</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">C1.1&ndash;C1.5</td><td>Client record: identity, broker UID, MT5 accounts, sponsor, country, pipeline stage, activity, last responder.</td></tr>
+        <tr><td class="mono">C2.1&ndash;C2.5</td><td>Pipeline and verification, with recorded evidence. Revocation as a state, not a deletion.</td></tr>
+        <tr><td class="mono">C4.1&ndash;C4.4</td><td>Audit trail, individual admin logins, append-only, readable per client.</td></tr>
+        <tr><td class="mono">C5.1&ndash;C5.2</td><td>Conversation history attached to the record, with the admin who handled it.</td></tr>
+        <tr><td class="mono">C8.3</td><td>Broker and MT5 data feed. Deposits and trading activity.</td></tr>
+        <tr><td class="mono">C9.1&ndash;C9.3</td><td>Activity tracking, the 30-day view, deposit confirmation.</td></tr>
+        <tr><td class="mono">C10.1&ndash;C10.3</td><td>Roles: corporate and admin. Server-side scoping.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Block 2 &mdash; App access</h4>
+  <p>The path from verified record to a member using the product.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Requirement</th><th>What it covers</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">F19.1&ndash;F19.7</td><td>Verification-gated registration, broker UID, locked sponsor, full data capture, 30-day revocation.</td></tr>
+        <tr><td class="mono">F1.1&ndash;F1.4, F1.6</td><td>Sign-in, one identity across products, in-app browser support, account deletion.</td></tr>
+        <tr><td class="mono">F20.1&ndash;F20.3, F20.5</td><td>Multiple MT5 accounts, switching, demo clearly marked, live-only activity counting.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Block 3 &mdash; App core</h4>
+  <p>The reason a member opens it at all. This is the existing PRD, unchanged: the eight desks, Tap to Trade, the journal, community, Academy, Vision AI, and the F18 design and accessibility standard.</p>
+  <p>One judgement here. <b>Tap to Trade should ship in the MVP, not after it.</b> It is the flagship and the clearest reason to move off Telegram. Holding it back would launch a product whose main argument is missing &mdash; but it carries the R1 regulatory dependency, which is on the critical path in a way no engineering task is.</p>
+
+  <h4>Block 4 &mdash; Admin minimum</h4>
+  <p>Not the workforce module. Only what an admin needs to do the verification job in Block 1.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Requirement</th><th>What it covers</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">C4.2</td><td>Individual logins. No shared accounts, ever.</td></tr>
+        <tr><td class="mono">C3.1&ndash;C3.2</td><td>Re-verification queue, since existing members need re-verifying at launch.</td></tr>
+        <tr><td class="mono">C6.1&ndash;C6.4</td><td>Prospect capture and flagging &mdash; the pipeline has to start somewhere.</td></tr>
+        <tr><td class="mono">W5.1</td><td>Basic per-admin metrics. Cheap now, expensive to backfill later, same as the audit trail.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="out">
+  <h2><span class="n">04</span> What is out</h2>
+  <h3>Each of these is a real requirement, deliberately not in version one</h3>
+  <p class="lead">Cutting is the point of this document. Everything below stays in the requirements document and stays committed &mdash; it is sequencing, not cancellation.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Cut</th><th class="mono">Refs</th><th>Why it is safe to cut</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Workforce module</strong><br><span style="color:var(--muted)">attendance, leave, contracts, benefits</span></td><td class="mono">W1&ndash;W4</td>
+            <td><b>The single largest cut, and the one that saves the most time.</b> This is an HR platform, not a CRM feature. Admins are working today without it. It should almost certainly be bought rather than built &mdash; and if it is bought, it may never need to be in a release plan at all.</td></tr>
+        <tr><td><strong>Voice and video</strong></td><td class="mono">W6.3</td>
+            <td>Discord works. Building WebRTC in-house would cost more than the rest of the workforce module combined, to replace something that is not broken.</td></tr>
+        <tr><td><strong>IB portal</strong></td><td class="mono">S1&ndash;S3</td>
+            <td>At current volume corporate can verify centrally. This becomes necessary when IB volume makes central verification the bottleneck &mdash; which is a good problem and a visible one.</td></tr>
+        <tr><td><strong>Sub-IB admins</strong></td><td class="mono">S3.1&ndash;S3.4</td>
+            <td>Depends on the IB portal existing. Second-order.</td></tr>
+        <tr><td><strong>Desktop web</strong></td><td class="mono">F21</td>
+            <td>Members trade on phones, often on mobile data. Desktop is a real requirement and not an entry point. Also gated on an unmade decision (Q9).</td></tr>
+        <tr><td><strong>Meta and Gmail</strong></td><td class="mono">C8.1, C8.2</td>
+            <td>Convenience consolidation. Both tools work today in their own tabs.</td></tr>
+        <tr><td><strong>Email marketing</strong></td><td class="mono">C7.1&ndash;C7.4</td>
+            <td>Prospect nurture matters, but it does not block a single member from using the platform. Telegram continues to serve this audience until it is ready.</td></tr>
+        <tr><td><strong>Admin training module</strong></td><td class="mono">W7</td>
+            <td>Needed as the team grows. A document serves the current team.</td></tr>
+        <tr><td><strong>Vision AI for admins</strong></td><td class="mono">W8</td>
+            <td>Depends on the contract and benefits content existing, which is itself cut.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><b>One cut deserves argument rather than assertion.</b> Dropping the IB portal means IBs keep asking corporate for information about their own clients, which is the friction this platform exists to remove, and it asks the people bringing in business to wait. It is cut because central verification works at today&rsquo;s volume, not because it is unimportant &mdash; and it should be the first thing built after launch.</p>
+</section>
+
+<section id="sequence">
+  <h2><span class="n">05</span> Sequence</h2>
+  <h3>Ordered by dependency, not by visibility</h3>
+  <p class="lead">The uncomfortable property of this order is that the first two stages produce nothing a member can see. That is the correct order anyway, and worth defending when it starts to feel slow.</p>
+  <div class="phase"><div class="pnum">M1</div><div>
+    <h5>Client record and audit trail</h5>
+    <p>The data model, individual admin logins, and logging from the first write. Everything else attaches to this. Building it second means losing history permanently.</p></div></div>
+  <div class="phase"><div class="pnum">M2</div><div>
+    <h5>Broker data and verification</h5>
+    <p>The MT5 and broker feed, deposit confirmation, activity tracking, the pipeline. <b>Milestone: the first client verified end to end.</b> This is the first moment the platform does something real.</p></div></div>
+  <div class="phase"><div class="pnum">M3</div><div>
+    <h5>Access bridge</h5>
+    <p>Verified record becomes an app login. Broker UID, locked sponsor, multiple MT5 accounts, the 30-day rule enforced in both directions. The CRM and the app become one system here.</p></div></div>
+  <div class="phase"><div class="pnum">M4</div><div>
+    <h5>App core</h5>
+    <p>Desks, Tap to Trade, journal, community, Academy, Vision AI. Largely specified already. <b>R1 must be resolved before this ships, and it does not move faster because engineering is ready.</b></p></div></div>
+  <div class="phase"><div class="pnum">M5</div><div>
+    <h5>Migration and launch</h5>
+    <p>Re-verify the existing community, move them across, retire the Telegram desks. The riskiest stage: it is the one with real people in it and the one no amount of internal testing rehearses.</p></div></div>
+  <div class="phase"><div class="pnum">M6</div><div>
+    <h5>After launch</h5>
+    <p>IB portal first, then desktop web, then the workforce decision, then marketing and integrations.</p></div></div>
+</section>
+
+<section id="ready">
+  <h2><span class="n">06</span> What launch ready means</h2>
+  <h3>A checklist, so the decision is not a matter of opinion on the day</h3>
+  <p class="lead">The stated position is that nothing launches until everything is ready. That only works if <em>ready</em> is written down in advance. These are pass or fail.</p>
+  <ul class="plain">
+    <li>A new client can go from first contact to trading in the app without anyone touching a database by hand.</li>
+    <li>Every existing member has been re-verified, or has been told exactly what they need to do and by when.</li>
+    <li>The audit trail answers "who changed this and when" for every record, going back to the first write.</li>
+    <li>The 30-day rule has been tested in both directions: revoking an idle account, and restoring one.</li>
+    <li>The broker feed has run for a full month without a silent failure. <b>A sync failure here revokes access from active traders</b> &mdash; the worst outcome in either document.</li>
+    <li>R1 is closed, in writing, by someone qualified to close it.</li>
+    <li>Every admin has their own login and has been trained on the verification path.</li>
+    <li>Tap to Trade has been run on demo accounts by people who did not build it.</li>
+    <li>The rollback plan is written: if the app has to be pulled after launch, members know where to go.</li>
+  </ul>
+  <p>The last one gets skipped most often and matters most. Telegram is being switched off as part of this. If the app fails in week one and the desks are gone, the community has nowhere to go &mdash; so <b>the Telegram desks should stay dormant rather than deleted until the app has held for a defined period.</b></p>
+</section>
+
+<section id="risks">
+  <h2><span class="n">07</span> What could break this</h2>
+  <h3>Four things, in the order they would hurt</h3>
+  <div class="risks">
+    <div class="risk"><div class="rh"><span class="rid">M1</span><h5>Scope returns through the back door</h5></div>
+      <p>Every cut in section 04 is a real requirement someone wants. They will come back one at a time, each individually reasonable. The workforce module is the most likely, because it is the most personally felt by the people asking. <b>Mitigation:</b> cuts are reopened at milestone boundaries, not in the middle of one.</p></div>
+    <div class="risk"><div class="rh"><span class="rid">M2</span><h5>Verification does not scale on launch day</h5></div>
+      <p>Every existing member needs re-verifying at once. If that takes an admin ten minutes per client, the community size decides how long launch takes, and it is likely to be weeks. <b>Mitigation:</b> measure the per-client time during M2, before it is a launch-day discovery, and stage migration in cohorts.</p></div>
+    <div class="risk"><div class="rh"><span class="rid">M3</span><h5>The broker feed is less reliable than assumed</h5></div>
+      <p>Access, the entry condition and the 30-day rule all depend on C8.3. If it is slow, incomplete, or quietly stale, the platform revokes access from people who are trading. <b>Mitigation:</b> C8.4 &mdash; fail loudly, and never revoke on stale data. Build the fallback before the feature.</p></div>
+    <div class="risk"><div class="rh"><span class="rid">M4</span><h5>R1 arrives late and blocks a finished product</h5></div>
+      <p>Tap to Trade is the flagship and carries regulatory exposure. Legal review does not move faster because engineering is done. <b>Mitigation:</b> start R1 now, in parallel with M1, not when M4 is ready.</p></div>
+  </div>
+</section>
+
+<footer style="margin-top:80px;padding-top:24px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:12px;color:var(--faint)">
+  Companion to the platform requirements document, rev 3. Cuts recorded here remain committed requirements there.
+</footer>
+
+</div>
+</body>
+</html>
