@@ -319,8 +319,10 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
       </tbody>
     </table>
   </div>
-  <p><b>W6.3 is the one to be careful about.</b> Voice and video is the only requirement in this document that would mean building real-time infrastructure from scratch. It should be bought. Building it would cost more than the rest of the admin portal put together, to reproduce something Discord already does well.</p>
-  <p><b>And W1&ndash;W4 is where the schedule is decided.</b> Attendance, leave, contracts and benefits are a solved commercial problem sold by several vendors. Buying it is the fastest route to having it before launch; building it means the launch date moves to accommodate an HR system. This is now the most consequential open decision in either document.</p>
+  <p><b>W6.3 is the one to be careful about.</b> Voice and video is the only requirement here that is real-time media infrastructure rather than an application, and "build our own" means something different for it. Writing a media layer from scratch is a specialist problem measured in years. <b>Self-hosting an open-source stack &mdash; LiveKit and similar &mdash; is owned, runs on Global Vision infrastructure, and is very likely what is intended.</b> That keeps the ownership principle without spending the rest of the admin portal&rsquo;s budget reproducing something Discord already does well.</p>
+  <p><b>W1&ndash;W4 is built in-house.</b> That is decided, and it follows from the point of the whole project: this is one platform Global Vision owns, and an embedded third-party HR tool would be the single part of the business still running on somebody else&rsquo;s product. The cost is schedule &mdash; the build now sits on the launch critical path rather than beside it.</p>
+  <p>With the vendor question closed, <b>depth is the only schedule lever left</b>, and it is a real one. W1 and W2 are what admins touch every day and should ship complete. W4 can launch as a benefits list, a receipt upload and a manual approval, with automated entitlement calculation following later &mdash; nobody is blocked by somebody doing that arithmetic by hand for a few months. See W1.6 and W4.7.</p>
+  <p><b>Building it also means owning obligations a vendor would have carried.</b> Dental and medical receipts are health data, not ordinary records: encrypted, visible only to the claimant and the approver, kept out of search and exports, and deleted on a schedule. Contract and pay data gets the tightest access scope in the platform &mdash; not visible to other admins, and not to corporate generally. W3.4, W4.5 and W4.6 cover this, and they are the requirements most likely to be skipped under time pressure and most expensive to retrofit.</p>
 </section>
 
 <section id="out">
@@ -370,7 +372,7 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
     <p>Desks, Tap to Trade, journal, community, Academy, Vision AI. Largely specified already. <b>R1 must be resolved before this ships, and it does not move faster because engineering is ready.</b></p></div></div>
   <div class="phase"><div class="pnum">M5</div><div>
     <h5>Admin portal</h5>
-    <p>Attendance, leave, contracts, benefits, KPIs, chat, and the Discord replacement. <b>Runs in parallel with M3 and M4 rather than after them</b> &mdash; it shares almost no code with the client path, so sequencing it late would add its full duration to the schedule for no reason. If W1&ndash;W4 is bought rather than built, most of this milestone becomes configuration and it stops being a constraint at all.</p></div></div>
+    <p>Attendance, leave, contracts, benefits, KPIs, chat, and the Discord replacement. <b>Runs in parallel with M3 and M4 rather than after them</b> &mdash; it shares almost no code with the client path, so sequencing it late would add its full duration to the schedule for no reason. It is built in-house, so this milestone has real duration and cannot be compressed by a purchase order. The lever is depth: ship W1 and W2 complete, W4 thin.</p></div></div>
   <div class="phase"><div class="pnum">M6</div><div>
     <h5>Migration rehearsal</h5>
     <p>Export everything from GoHighLevel, map it, load it into the new CRM against real data, and reconcile. Then do it again. <b>This is a full stage, not a task inside launch week.</b> The first rehearsal is where you find out what does not map, and finding that out during cut-over is the failure this whole document exists to avoid. The Academy destination (C11.7) has to be settled before this stage can finish.</p></div></div>
@@ -396,6 +398,8 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
     <li>Every admin has their own login and has been trained on the verification path.</li>
     <li>Admins can clock in, request leave, see their contract and file a claim &mdash; the things they will do in week one.</li>
     <li>Admin chat, voice and video work well enough that nobody reopens Discord out of habit.</li>
+    <li>Claim receipts are encrypted, out of search and exports, and have a working deletion schedule &mdash; not a planned one.</li>
+    <li>No admin can see another admin&rsquo;s contract, pay or claims. Tested by trying it, not by reading the code.</li>
     <li>Messenger conversations have arrived in the CRM, or the team knows which history did not survive.</li>
     <li>Tap to Trade has been run on demo accounts by people who did not build it.</li>
     <li>The migration has been run against real data and reconciled, at least twice, with the report kept.</li>
@@ -412,8 +416,8 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
   <div class="risks">
     <div class="risk"><div class="rh"><span class="rid">L1</span><h5>The migration loses something nobody notices until later</h5></div>
       <p>GoHighLevel is switched off at launch, so anything not carried across is gone. The dangerous failures are the quiet ones &mdash; a custom field nobody mapped, conversation history that came across truncated, membership state that looked fine in a spot check. <b>Mitigation:</b> C11.3 and C11.4 &mdash; rehearse twice against real data, reconcile by count rather than by eye, and keep GoHighLevel readable afterwards so a late discovery is recoverable rather than fatal.</p></div>
-    <div class="risk"><div class="rh"><span class="rid">L2</span><h5>The admin portal is built rather than bought, and sets the launch date</h5></div>
-      <p>W1&ndash;W4 is an HR system. Built in-house it is plausibly comparable in size to the CRM, and because it now blocks launch, its duration becomes the launch date rather than a parallel workstream that can slip quietly. <b>Mitigation:</b> settle build-or-buy before M5 starts, not during it. If it is bought, this risk disappears entirely.</p></div>
+    <div class="risk"><div class="rh"><span class="rid">L2</span><h5>The admin portal build expands and takes the launch date with it</h5></div>
+      <p>W1&ndash;W4 is an HR system, it is being built in-house, and it blocks launch &mdash; so its duration is the launch date, not a parallel workstream that can slip quietly. HR features are also unusually prone to growth, because every person using them has a personal stake in one of them. <b>Mitigation:</b> fix the launch depth of each group in writing before M5 opens (W1.6, W4.7), and treat additions as post-launch by default rather than debating each on merit.</p></div>
     <div class="risk"><div class="rh"><span class="rid">L3</span><h5>Four platforms are switched off on one day</h5></div>
       <p>GoHighLevel, Telegram, Discord and Messenger all go together. Any one replacement being weak sends people straight back to the tool they know, and once a team is back on Discord it is hard to move them twice. <b>Mitigation:</b> keep every old platform dormant and readable rather than deleted, and treat a return to an old tool as a defect report rather than a discipline problem.</p></div>
     <div class="risk"><div class="rh"><span class="rid">L4</span><h5>Verification does not scale on launch day</h5></div>
