@@ -174,7 +174,7 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
 <header class="mast">
   <div class="kicker">Product requirements &middot; Draft v3</div>
   <h1>Global Vision Platform</h1>
-  <p class="standfirst">One ecosystem: a member app with a full desktop counterpart, and a CRM behind both that decides who gets in, tracks every client, and runs the team. The app replaces Telegram outright; the CRM replaces GoHighLevel.</p>
+  <p class="standfirst">One ecosystem, launched in one day: a member app, a full desktop counterpart, a CRM behind both, an admin portal, and scoped access for introducing brokers. It replaces GoHighLevel, Telegram, Discord and Messenger together, with nothing left running on any of them.</p>
   <div class="meta">
     <span><b>Owner</b> Akash Toor, CTO</span>
     <span><b>Stakeholders</b> Gio Victorino &middot; Darlyn Abellar</span>
@@ -411,7 +411,8 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
 <section id="req">
   <h2><span class="n">08</span> Requirements</h2>
   <h3>What has to be true for each surface</h3>
-  <p>Priority is <span class="chip c-must">Must</span> (version one does not ship without it), <span class="chip c-should">Should</span> (ships unless something has to give), <span class="chip c-later">Later</span> (deliberately deferred). Phase tags map to the release plan in section 10.</p>
+  <p>Priority is <span class="chip c-must">Must</span> (version one does not ship without it), <span class="chip c-should">Should</span> (ships unless something has to give), <span class="chip c-later">Later</span> (deliberately deferred).</p>
+  <p><b>Version one is the whole platform.</b> The app, the desktop site, the CRM, the admin portal and the IB portal launch together, and nothing runs on GoHighLevel, Telegram, Discord or Messenger afterwards. Phase tags therefore describe <em>build order inside one launch</em>, not release waves &mdash; a P3 requirement ships on the same day as a P0 one. Sequencing lives in the launch scope document.</p>
   <p><b>This document records what the platform has to do, not how it gets built.</b> Where an approach is named it is because it constrains the requirement, not because the decision is made &mdash; technology choices, and whether a capability is built or integrated from an existing service, are build-time decisions.</p>
   <p>The letter says which surface a requirement belongs to. <b>F</b> is the member app and its desktop counterpart. <b>C</b> is the CRM. <b>W</b> is the admin portal. <b>S</b> is what an introducing broker sees. C, W and S are one system with role-scoped access, not three products &mdash; see C10.</p>
   <h4>F1 &mdash; Identity and access</h4>
@@ -867,7 +868,7 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
 <section id="release">
   <h2><span class="n">10</span> Release plan</h2>
   <h3>App build order, inside a platform sequence owned elsewhere</h3>
-  <p class="lead"><b>Platform sequencing lives in the MVP document</b>, which orders the whole switch: client record and audit trail, broker data and verification, the access bridge, the app, the admin portal, migration rehearsal, then cut-over. That document is authoritative for what happens when.</p>
+  <p class="lead"><b>Platform sequencing lives in the launch scope document</b>, which orders the whole switch: client record and audit trail, broker data and verification, the access bridge, the app and desktop, the admin portal, the IB portal, migration rehearsal, then cut-over. That document is authoritative for what happens when.</p>
   <p>The phases below are narrower. They describe the order the <em>app</em> gets built in, which sits inside the app milestone of that sequence. They were written when the app was the whole project and they still hold for it; they do not describe the platform.</p>
   <div class="phase"><div class="pnum">P0</div><div>
     <h5>Foundations</h5>

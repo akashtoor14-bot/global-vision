@@ -7,7 +7,7 @@
 <meta name="theme-color" content="#0b1626">
 <meta name="description" content="Product requirements for the Global Vision app. Internal.">
 <link rel="icon" href="/favicon.png">
-<title>Global Vision Platform &mdash; Minimum Viable Product</title>
+<title>Global Vision Platform &mdash; Launch Scope</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
 :root{
@@ -172,9 +172,9 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
 <div class="page">
 
 <header class="mast">
-  <div class="kicker">Minimum viable product &middot; Draft v1</div>
-  <h1>What ships first, and what does not</h1>
-  <p class="standfirst">The requirements document describes roughly 240 things the platform should do. This one describes the smallest set that can go live, and argues for everything it leaves out.</p>
+  <div class="kicker">Launch scope and readiness &middot; Draft v2</div>
+  <h1>One launch, whole ecosystem</h1>
+  <p class="standfirst">Everything ships together: the app, the desktop site, the CRM, the admin portal and the IB portal. On launch day nothing runs on GoHighLevel, Telegram, Discord or Messenger. This document defines what that means, in what order it gets built, and how anyone will know it is ready.</p>
   <div class="meta">
     <span><b>Owner</b> Akash Toor, CTO</span>
     <span><b>Stakeholders</b> Gio Victorino &middot; Darlyn Abellar</span>
@@ -189,8 +189,8 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
   <ol>
     <li><a href="#premise">The premise</a></li>
     <li><a href="#critical">The critical path</a></li>
-    <li><a href="#in">What is in</a></li>
-    <li><a href="#out">What is out</a></li>
+    <li><a href="#in">What ships</a></li>
+    <li><a href="#out">What one launch costs</a></li>
     <li><a href="#sequence">Sequence</a></li>
     <li><a href="#ready">What launch ready means</a></li>
     <li><a href="#risks">What could break this</a></li>
@@ -199,238 +199,182 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
 
 <section id="premise">
   <h2><span class="n">01</span> The premise</h2>
-  <h3>The instinct to launch everything at once is right, and it is also the thing most likely to stop this shipping</h3>
-  <p class="lead">The stated position is that nothing launches until the backend, the CRM and the app are all ready. That instinct is correct &mdash; a half-built platform in front of paying members is worse than no platform. But taken literally it describes four products shipping simultaneously, and that is not a plan anyone can execute.</p>
-  <p>This document takes the instinct seriously and asks a narrower question: <b>what is the smallest complete thing?</b> Not the smallest set of features, but the smallest arrangement where every member and every admin has a coherent experience with no dead ends. Something can be missing without being broken. A member who cannot find a feature is fine. A member who is stopped halfway through something is not.</p>
-  <p>The cuts below are made against one test: <b>does its absence stop somebody, or merely inconvenience them?</b></p>
-  <p>One property of this launch removes the usual safety net. <b>It is a switch, not an addition.</b> Going live means turning off GoHighLevel and the Telegram desks at the same time &mdash; the old platform is not left running beside the new one. There is no version of this where members drift across at their own pace, and no quiet period to fix things while the old system carries the load. Everything has to work on the day, for everybody, or there is nowhere for them to be.</p>
-  <p>That raises the bar on two things in particular: the migration (C11), and the rollback plan in section 06.</p>
-  <p><b>A note on the word minimum.</b> Four external platforms are being switched off together &mdash; GoHighLevel, Telegram, Discord and Messenger &mdash; and each one has to have a working replacement on the day it goes. That is not a minimum viable product in the usual sense of a thin first slice, and calling it one would be misleading. It is a full replacement of how the business runs, with the interior deliberately staged.</p>
-  <p>What this document can still do is separate the things that genuinely block the switch from the things that merely make it better, and be honest that the first list is long. The cuts in section 04 are correspondingly few.</p>
+  <h3>Everything at once, because a half-switch is worse than either state</h3>
+  <p class="lead">Version one is the whole ecosystem. The member app, the desktop site, the CRM, the admin portal and the IB portal all go live together, and on that day nothing depends on GoHighLevel, Telegram, Discord or Messenger.</p>
+  <p>That is a deliberate choice and a defensible one. The alternative &mdash; shipping in slices &mdash; means running the old platforms and the new ones in parallel for months: clients in two CRMs, admins in two chat tools, conversation history split across systems, and every person involved having to know which world they are in for any given task. The cost of that is real and it lands on the people least able to absorb it.</p>
+  <p><b>The consequence is that the launch date becomes the dependent variable.</b> Scope is fixed by this decision and quality cannot be the thing that gives, so the date has to be derived from the work rather than set in advance and worked back from. A date chosen first, with this scope, would only be met by quietly cutting something &mdash; which is the outcome this decision exists to prevent.</p>
+  <p>What this document does, therefore, is not argue for cuts. It states the full scope plainly, orders the build, and defines readiness precisely enough that "are we ready" has an answer rather than an opinion.</p>
 </section>
 
 <section id="critical">
   <h2><span class="n">02</span> The critical path</h2>
-  <h3>The CRM is the blocker, not the app</h3>
-  <p class="lead">This is the single most important conclusion in the document, and it inverts the natural order of work.</p>
-  <p>The app is the visible product and the one furthest along &mdash; designed, prototyped, and largely specified. It is also the one that cannot launch on its own. Access is gated on verification inside the CRM, so <b>on the day the app goes live, there must already be a working CRM with verified clients in it.</b> Without that, nobody can log in. Not fewer people &mdash; nobody.</p>
-  <p>That reorders everything. The CRM is not the back office to be built once the app is done; it is the dependency the app is waiting on. Engineering attention should follow that, and the first milestone worth celebrating is not a screen &mdash; it is the first client verified end to end.</p>
+  <h3>Shipping together does not mean building together</h3>
+  <p class="lead">One launch date does not make the work parallel. The pieces depend on each other, and that order does not change because everything arrives on the same day.</p>
+  <p>The CRM is still first, and for the same reason as before: <b>access to the app is gated on verification inside the CRM.</b> On launch day there must already be a working CRM with verified clients in it, or nobody can log in. Not fewer people &mdash; nobody. The CRM is not the back office to be built once the app is done; it is what the app is waiting on.</p>
   <div class="tw">
     <table>
-      <thead><tr><th>Layer</th><th>Blocks launch?</th><th>Why</th></tr></thead>
+      <thead><tr><th>Layer</th><th>Depends on</th><th>Why it sits there</th></tr></thead>
       <tbody>
-        <tr><td><strong>CRM &mdash; verification</strong></td><td class="mono">Yes</td><td>Nobody can enter the app without it. Hard dependency.</td></tr>
-        <tr><td><strong>CRM &mdash; client records</strong></td><td class="mono">Yes</td><td>Verification has nothing to write to without them.</td></tr>
-        <tr><td><strong>CRM &mdash; audit trail</strong></td><td class="mono">Yes</td><td>Retrofitting history is impossible. Every unlogged edit before it exists is permanently lost.</td></tr>
-        <tr><td><strong>Broker data feed</strong></td><td class="mono">Yes</td><td>Deposits and activity drive both the entry condition and the 30-day rule.</td></tr>
-        <tr><td><strong>CRM &mdash; migration</strong></td><td class="mono">Yes</td><td>GoHighLevel is switched off at launch. Anything not carried across is lost.</td></tr>
-        <tr><td><strong>Academy hosting</strong></td><td class="mono">Yes</td><td>GoHighLevel hosts the courses today. Nothing else does yet. C11.7.</td></tr>
-        <tr><td><strong>App &mdash; core</strong></td><td class="mono">Yes</td><td>The product members were promised.</td></tr>
-        <tr><td><strong>Desktop web</strong></td><td class="mono">No</td><td>Members trade on phones. Desktop is an addition, not the entry point.</td></tr>
-        <tr><td><strong>IB views</strong></td><td class="mono">No</td><td>Corporate can verify centrally at current volume. Painful, not blocking.</td></tr>
-        <tr><td><strong>Admin portal</strong></td><td class="mono">Yes</td><td>Discord goes at the same time. Without it there is no way to run the team.</td></tr>
+        <tr><td><strong>Client record and audit trail</strong></td><td class="mono">&mdash;</td><td>Everything else attaches to it. Built second, history is lost permanently.</td></tr>
+        <tr><td><strong>Broker data feed</strong></td><td class="mono">record</td><td>Deposits and activity drive the entry condition and the 30-day rule.</td></tr>
+        <tr><td><strong>Verification and pipelines</strong></td><td class="mono">record, feed</td><td>The gate on everything a member can do.</td></tr>
+        <tr><td><strong>Access bridge</strong></td><td class="mono">verification</td><td>A verified record becomes an app login. CRM and app become one system.</td></tr>
+        <tr><td><strong>App and desktop</strong></td><td class="mono">access bridge</td><td>The product members were promised, on both form factors.</td></tr>
+        <tr><td><strong>Admin portal</strong></td><td class="mono">admin identity</td><td>Shares almost no code with the client path. Runs in parallel.</td></tr>
+        <tr><td><strong>IB portal</strong></td><td class="mono">scoping, pipelines</td><td>A scoped view of the CRM, so it needs the CRM to exist first.</td></tr>
+        <tr><td><strong>Migration</strong></td><td class="mono">all of the above</td><td>Cannot be rehearsed properly until there is somewhere to migrate into.</td></tr>
       </tbody>
     </table>
   </div>
-  <p><b>The audit trail is the one easily-cut item that must not be cut.</b> Every other omission can be added later at normal cost. History cannot be backfilled &mdash; an edit made before logging exists is gone permanently, and the first thing anyone will want when something goes wrong is the record of what happened before it did.</p>
+  <p><b>Two things are cheap now and expensive later, and neither is visible in a demo.</b> The audit trail cannot be backfilled &mdash; an edit made before logging exists is gone. And access scoping (C10.2) has to be enforced server-side from the first query, because retrofitting it onto a system that assumed a single audience means revisiting every query in it.</p>
 </section>
 
 <section id="in">
-  <h2><span class="n">03</span> What is in</h2>
-  <h3>Four blocks, and nothing that is not load-bearing</h3>
-
-  <h4>Block 1 &mdash; CRM core</h4>
-  <p>Enough CRM to get a person from first contact to a working app login, and to know what happened to them along the way.</p>
+  <h2><span class="n">03</span> What ships</h2>
+  <h3>All of it, and it is worth seeing the size on one page</h3>
+  <p class="lead">257 requirements across five surfaces. Nothing is deferred. The value of listing it this way is that the scale becomes visible &mdash; scope decided in a conversation is easy to underestimate, and scope on one page is not.</p>
   <div class="tw">
     <table>
-      <thead><tr><th>Requirement</th><th>What it covers</th></tr></thead>
+      <thead><tr><th>Surface</th><th class="mono">Groups</th><th>What has to work on the day</th></tr></thead>
       <tbody>
-        <tr><td class="mono">C1.1&ndash;C1.5</td><td>Client record: identity, broker UID, MT5 accounts, sponsor, country, pipeline stage, activity, last responder.</td></tr>
-        <tr><td class="mono">C2.1&ndash;C2.5</td><td>Pipeline and verification, with recorded evidence. Revocation as a state, not a deletion.</td></tr>
-        <tr><td class="mono">C4.1&ndash;C4.4</td><td>Audit trail, individual admin logins, append-only, readable per client.</td></tr>
-        <tr><td class="mono">C5.1&ndash;C5.2</td><td>Conversation history attached to the record, with the admin who handled it.</td></tr>
-        <tr><td class="mono">C8.3</td><td>Broker and MT5 data feed. Deposits and trading activity.</td></tr>
-        <tr><td class="mono">C9.1&ndash;C9.3</td><td>Activity tracking, the 30-day view, deposit confirmation.</td></tr>
-        <tr><td class="mono">C10.1&ndash;C10.3</td><td>Roles: corporate and admin. Server-side scoping.</td></tr>
+        <tr><td><strong>Member app</strong></td><td class="mono">F1&ndash;F20</td>
+            <td>Eight desks, Tap to Trade, the journal in full, Academy, community, Vision AI, notifications, verification-gated registration, multiple MT5 accounts, the design and accessibility standard.</td></tr>
+        <tr><td><strong>Desktop site</strong></td><td class="mono">F21</td>
+            <td>Every member feature reachable on desktop, sharing one identity and session model with the app.</td></tr>
+        <tr><td><strong>CRM</strong></td><td class="mono">C1&ndash;C11</td>
+            <td>Client records, pipelines and verification, re-verification, audit trail, conversations, prospects, broadcast and email, integrations, activity tracking, role scoping, and the migration off GoHighLevel.</td></tr>
+        <tr><td><strong>Admin portal</strong></td><td class="mono">W1&ndash;W8</td>
+            <td>Attendance, leave, contracts, benefits and claims, KPIs, chat and calling, training, Vision AI for admins.</td></tr>
+        <tr><td><strong>IB portal</strong></td><td class="mono">S1&ndash;S3</td>
+            <td>Scoped client visibility, participation in verification, sub-IB admins and support routing.</td></tr>
       </tbody>
     </table>
   </div>
-
-  <h4>Block 2 &mdash; App access</h4>
-  <p>The path from verified record to a member using the product.</p>
+  <h4>Four platforms retire on the same day</h4>
+  <p>Each needs a working replacement, and each replacement carries a migration of its own rather than just a feature.</p>
   <div class="tw">
     <table>
-      <thead><tr><th>Requirement</th><th>What it covers</th></tr></thead>
+      <thead><tr><th>Retiring</th><th>Replaced by</th><th>What has to move with it</th></tr></thead>
       <tbody>
-        <tr><td class="mono">F19.1&ndash;F19.7</td><td>Verification-gated registration, broker UID, locked sponsor, full data capture, 30-day revocation.</td></tr>
-        <tr><td class="mono">F1.1&ndash;F1.4, F1.6</td><td>Sign-in, one identity across products, in-app browser support, account deletion.</td></tr>
-        <tr><td class="mono">F20.1&ndash;F20.3, F20.5</td><td>Multiple MT5 accounts, switching, demo clearly marked, live-only activity counting.</td></tr>
+        <tr><td><strong>GoHighLevel</strong></td><td>The CRM, and a new home for Academy courses</td><td>Contacts, custom fields, pipeline history, conversations, course content and membership state. C11.</td></tr>
+        <tr><td><strong>Telegram</strong></td><td>Signal desks in the app; broadcast for prospects</td><td>Members onto the app, and the prospect audience onto whatever replaces the broadcast channel. C7.</td></tr>
+        <tr><td><strong>Discord</strong></td><td>Admin portal chat, voice and video</td><td>The team, and any working knowledge currently living in its history. W6.</td></tr>
+        <tr><td><strong>Messenger</strong></td><td>Prospect and client contact routes in the CRM</td><td>Conversation history, or C5.2 starts empty for everyone who ever wrote in. C6.1.</td></tr>
       </tbody>
     </table>
   </div>
-
-  <h4>Block 3 &mdash; App core</h4>
-  <p>The reason a member opens it at all. This is the existing PRD, unchanged: the eight desks, Tap to Trade, the journal, community, Academy, Vision AI, and the F18 design and accessibility standard.</p>
-  <p>One judgement here. <b>Tap to Trade should ship in the MVP, not after it.</b> It is the flagship and the clearest reason to move off Telegram. Holding it back would launch a product whose main argument is missing &mdash; but it carries the R1 regulatory dependency, which is on the critical path in a way no engineering task is.</p>
-
-  <h4>Block 4 &mdash; Migration</h4>
-  <p>The block with no visible output and the highest cost of failure. Every existing client, conversation and course has to arrive in the new system before the old one is turned off.</p>
-  <div class="tw">
-    <table>
-      <thead><tr><th>Requirement</th><th>What it covers</th></tr></thead>
-      <tbody>
-        <tr><td class="mono">C11.1&ndash;C11.2</td><td>Complete export from GoHighLevel and a documented field map. Nothing dropped by omission.</td></tr>
-        <tr><td class="mono">C11.3&ndash;C11.4</td><td>Rehearsed against real data, more than once, and verified by reconciliation rather than assertion.</td></tr>
-        <tr><td class="mono">C11.5</td><td>Conversation history, not just contacts.</td></tr>
-        <tr><td class="mono">C11.6</td><td>GoHighLevel kept readable after cut-over. Do not cancel it on the day.</td></tr>
-        <tr><td class="mono">C11.7</td><td>A destination for the Academy courses. Currently unresolved.</td></tr>
-        <tr><td class="mono">C11.8&ndash;C11.9</td><td>Cut-over plan with rollback, run in cohorts.</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <h4>Block 5 &mdash; Admin tooling for verification</h4>
-  <p>What an admin needs to do the verification job in Block 1. The rest of the admin portal is Block 6.</p>
-  <div class="tw">
-    <table>
-      <thead><tr><th>Requirement</th><th>What it covers</th></tr></thead>
-      <tbody>
-        <tr><td class="mono">C4.2</td><td>Individual logins. No shared accounts, ever.</td></tr>
-        <tr><td class="mono">C3.1&ndash;C3.2</td><td>Re-verification queue, since existing members need re-verifying at launch.</td></tr>
-        <tr><td class="mono">C6.1&ndash;C6.4</td><td>Prospect capture and flagging &mdash; the pipeline has to start somewhere.</td></tr>
-        <tr><td class="mono">W5.1</td><td>Basic per-admin metrics. Cheap now, expensive to backfill later, same as the audit trail.</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <h4>Block 6 &mdash; Admin portal</h4>
-  <p>Confirmed as launch-blocking. Discord is switched off at the same time as Telegram and GoHighLevel, so the team needs somewhere to work from on day one.</p>
-  <div class="tw">
-    <table>
-      <thead><tr><th>Requirement</th><th>What it covers</th></tr></thead>
-      <tbody>
-        <tr><td class="mono">W1.1&ndash;W1.3</td><td>Clock in and out, break and status states, corporate view of attendance.</td></tr>
-        <tr><td class="mono">W2.1&ndash;W2.3</td><td>Team calendar, leave requests with approval, sick days logged.</td></tr>
-        <tr><td class="mono">W3.1&ndash;W3.3</td><td>Contracts available to each admin, pay adjusted per contract terms, leave balances visible.</td></tr>
-        <tr><td class="mono">W4.1&ndash;W4.3</td><td>Benefits, claims with receipts, remaining entitlement.</td></tr>
-        <tr><td class="mono">W5.1&ndash;W5.2</td><td>Per-admin performance metrics and comparison over time.</td></tr>
-        <tr><td class="mono">W6.1&ndash;W6.3</td><td>Admin chat, the manager channel, and voice and video &mdash; the Discord replacement.</td></tr>
-        <tr><td class="mono">W7.1&ndash;W7.2</td><td>Onboarding path and the reference library admins read mid-conversation.</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p><b>W6.3 is worth costing early.</b> Voice and video is the only item here that is real-time media rather than an application, so its effort is hard to guess from the requirement. Integrating an existing service is a normal way to deliver it. The point for this document is only that it ships with the rest, because Discord goes at the same time.</p>
-  <p><b>The admin portal is Global Vision&rsquo;s own product</b>, not a third-party tool the team gets sent to. How each capability inside it is delivered &mdash; written from scratch or built on something existing &mdash; is a build-time call and does not change what this document commits to. What does matter here is that the portal blocks launch, so its scope on the day needs deciding now rather than during the build.</p>
-  <p><b>Depth is the schedule lever</b>, and it is a real one. W1 and W2 are what admins touch every day and should ship complete. W4 can launch as a benefits list, a receipt upload and a manual approval, with automated entitlement calculation following later &mdash; nobody is blocked by somebody doing that arithmetic by hand for a few months. See W1.6 and W4.7.</p>
-  <p><b>Running this data brings obligations regardless of how it is built.</b> Dental and medical receipts are health data, not ordinary records: encrypted, visible only to the claimant and the approver, kept out of search and exports, and deleted on a schedule. Contract and pay data gets the tightest access scope in the platform &mdash; not visible to other admins, and not to corporate generally. W3.4, W4.5 and W4.6 cover this, and they are the requirements most likely to be skipped under time pressure and most expensive to retrofit.</p>
+  <p><b>The Academy is the one with no answer yet.</b> GoHighLevel hosts the course content and the membership state, and nothing else currently does. Every other retirement has a named destination; this one does not, and it blocks the migration rather than sitting beside it. See C11.7.</p>
 </section>
 
 <section id="out">
-  <h2><span class="n">04</span> What is out</h2>
-  <h3>Each of these is a real requirement, deliberately not in version one</h3>
-  <p class="lead">Cutting is the point of this document. Everything below stays in the requirements document and stays committed &mdash; it is sequencing, not cancellation.</p>
-  <div class="tw">
-    <table>
-      <thead><tr><th>Cut</th><th class="mono">Refs</th><th>Why it is safe to cut</th></tr></thead>
-      <tbody>
-        
-        
-        <tr><td><strong>IB portal</strong></td><td class="mono">S1&ndash;S3</td>
-            <td>At current volume corporate can verify centrally. This becomes necessary when IB volume makes central verification the bottleneck &mdash; which is a good problem and a visible one.</td></tr>
-        <tr><td><strong>Sub-IB admins</strong></td><td class="mono">S3.1&ndash;S3.4</td>
-            <td>Depends on the IB portal existing. Second-order.</td></tr>
-        <tr><td><strong>Desktop web</strong></td><td class="mono">F21</td>
-            <td>Members trade on phones, often on mobile data. Desktop is a real requirement and not an entry point. Also gated on an unmade decision (Q9).</td></tr>
-        <tr><td><strong>Meta and Gmail</strong></td><td class="mono">C8.1, C8.2</td>
-            <td>Convenience consolidation. Both tools work today in their own tabs.</td></tr>
-        <tr><td><strong>Email marketing</strong></td><td class="mono">C7.1&ndash;C7.4</td>
-            <td>Prospect nurture matters, but it does not block a single member from using the platform. Telegram continues to serve this audience until it is ready.</td></tr>
-        
-        <tr><td><strong>Vision AI for admins</strong></td><td class="mono">W8</td>
-            <td>The contract and benefits content it would answer from now ships in Block 6, so this becomes possible at launch &mdash; but a member of staff can still ask a manager. First thing to add once the portal is in use.</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p><b>One cut deserves argument rather than assertion.</b> Dropping the IB portal means IBs keep asking corporate for information about their own clients, which is the friction this platform exists to remove, and it asks the people bringing in business to wait. It is cut because central verification works at today&rsquo;s volume, not because it is unimportant &mdash; and it should be the first thing built after launch.</p>
+  <h2><span class="n">04</span> What one launch costs</h2>
+  <h3>The decision is sound; the bill for it should be visible</h3>
+  <p class="lead">Shipping everything together avoids a long, confusing parallel-running period. It buys that by concentrating every risk onto a single day, and it removes the two things that normally make a launch survivable.</p>
+
+  <h4>There is no learning from a smaller launch first</h4>
+  <p>A staged rollout is partly a scope decision and partly an information-gathering one: the first slice teaches you how the migration behaves, how members react, where support load lands, what nobody thought of. Launching everything at once means every one of those lessons arrives at the same time, in production, with the old platforms already off. <b>The substitute is rehearsal</b> &mdash; the migration run against real data more than once (C11.3), and cohort migration on the day (C11.9) so a fault meets a hundred records rather than all of them.</p>
+
+  <h4>There is no fallback unless one is deliberately kept</h4>
+  <p>"We do not have to rely on the old platforms" is the goal, and it is achieved the moment the new ones work. That is not the same as deleting the old ones. <b>Every retiring platform should be left dormant and readable rather than cancelled</b>, for a defined period after launch. It costs a subscription; it buys the ability to recover from a discovery made in week three. Cancelling on launch day converts an inconvenience into an emergency.</p>
+
+  <h4>The date is derived, not chosen</h4>
+  <p>With scope fixed and quality not available as a variable, the date is whatever the work takes. That is the honest arithmetic and it is worth stating to the team in advance, because the alternative is a date set early, missed, and then met by cutting something quietly &mdash; which is precisely what this decision was made to avoid.</p>
+
+  <h4>Depth is still a lever, and it is not a cut</h4>
+  <p>Every requirement ships. How complete each one is on day one is a separate question, and it is the remaining control on the schedule. A benefits module that lists entitlements, takes a receipt upload and routes it for manual approval satisfies W4 &mdash; automated entitlement calculation can follow without anyone being blocked (W4.7). The same reasoning applies wherever a manual step is tolerable at launch volume. <b>Deciding this deliberately, in writing, before the build starts is very different from discovering it under deadline pressure.</b></p>
 </section>
 
 <section id="sequence">
   <h2><span class="n">05</span> Sequence</h2>
-  <h3>Ordered by dependency, not by visibility</h3>
-  <p class="lead">The uncomfortable property of this order is that the first two stages produce nothing a member can see. That is the correct order anyway, and worth defending when it starts to feel slow.</p>
+  <h3>Build order, all landing before one date</h3>
+  <p class="lead">The first two stages produce nothing anyone can see. That is the correct order anyway, and worth defending when it starts to feel slow.</p>
   <div class="phase"><div class="pnum">M1</div><div>
     <h5>Client record and audit trail</h5>
-    <p>The data model, individual admin logins, and logging from the first write. Everything else attaches to this. Building it second means losing history permanently.</p></div></div>
+    <p>The data model, individual admin logins, server-side access scoping, and logging from the first write. Everything attaches to this. Building it second means losing history permanently and revisiting every query later.</p></div></div>
   <div class="phase"><div class="pnum">M2</div><div>
     <h5>Broker data and verification</h5>
-    <p>The MT5 and broker feed, deposit confirmation, activity tracking, the pipeline. <b>Milestone: the first client verified end to end.</b> This is the first moment the platform does something real.</p></div></div>
+    <p>The MT5 and broker feed, deposit confirmation, activity tracking, pipelines. <b>Milestone: the first client verified end to end.</b> The first moment the platform does something real.</p></div></div>
   <div class="phase"><div class="pnum">M3</div><div>
     <h5>Access bridge</h5>
-    <p>Verified record becomes an app login. Broker UID, locked sponsor, multiple MT5 accounts, the 30-day rule enforced in both directions. The CRM and the app become one system here.</p></div></div>
+    <p>Verified record becomes an app login. Broker UID, locked sponsor, multiple MT5 accounts, the 30-day rule enforced in both directions.</p></div></div>
   <div class="phase"><div class="pnum">M4</div><div>
-    <h5>App core</h5>
-    <p>Desks, Tap to Trade, journal, community, Academy, Vision AI. Largely specified already. <b>R1 must be resolved before this ships, and it does not move faster because engineering is ready.</b></p></div></div>
+    <h5>App and desktop</h5>
+    <p>Desks, Tap to Trade, journal, community, Academy, Vision AI, and the desktop site. Largely specified already. <b>R1 must be resolved before this ships and does not move faster because engineering is ready.</b></p></div></div>
   <div class="phase"><div class="pnum">M5</div><div>
     <h5>Admin portal</h5>
-    <p>Attendance, leave, contracts, benefits, KPIs, chat, and the Discord replacement. <b>Runs in parallel with M3 and M4 rather than after them</b> &mdash; it shares almost no code with the client path, so sequencing it late would add its full duration to the schedule for no reason. The lever here is depth rather than sequence: ship W1 and W2 complete, W4 thin.</p></div></div>
+    <p>Attendance, leave, contracts, benefits, KPIs, chat and calling, training. <b>Runs parallel to M3 and M4</b> &mdash; it shares almost no code with the client path, so sequencing it after them would add its full duration to the schedule for no reason.</p></div></div>
   <div class="phase"><div class="pnum">M6</div><div>
-    <h5>Migration rehearsal</h5>
-    <p>Export everything from GoHighLevel, map it, load it into the new CRM against real data, and reconcile. Then do it again. <b>This is a full stage, not a task inside launch week.</b> The first rehearsal is where you find out what does not map, and finding that out during cut-over is the failure this whole document exists to avoid. The Academy destination (C11.7) has to be settled before this stage can finish.</p></div></div>
+    <h5>IB portal</h5>
+    <p>Scoped views, verification participation, sub-IB admins, support routing. Depends on M1 scoping and M2 pipelines, and can run alongside M4 once those exist.</p></div></div>
   <div class="phase"><div class="pnum">M7</div><div>
-    <h5>Cut-over and launch</h5>
-    <p>Re-verify the existing community, run the real migration in cohorts, move members across, retire the Telegram desks. GoHighLevel stays readable, not cancelled. The riskiest stage: it is the one with real people in it, and the only one no amount of internal testing fully rehearses.</p></div></div>
+    <h5>Migration rehearsal</h5>
+    <p>Export everything from GoHighLevel, Telegram history where it matters, Discord, and Messenger. Map it, load it, reconcile. Then do it again. <b>A full stage, not a task inside launch week.</b> The first rehearsal is where you find what does not map; finding that during cut-over is the failure this document exists to prevent. The Academy destination (C11.7) must be settled before this stage can finish.</p></div></div>
   <div class="phase"><div class="pnum">M8</div><div>
-    <h5>After launch</h5>
-    <p>IB portal first, then desktop web, then marketing and the remaining integrations.</p></div></div>
+    <h5>Cut-over and launch</h5>
+    <p>Re-verify the community, migrate in cohorts, move members across, retire all four platforms. Old systems go dormant and readable, not cancelled. The riskiest stage, and the only one no amount of internal testing fully rehearses.</p></div></div>
+  <p style="margin-top:22px"><b>M5 and M6 are the reason this is not simply a longer version of the old plan.</b> Both run in parallel with the client path rather than after it. Whether that is possible depends on how many people can work at once, which is the question that actually determines the launch date &mdash; not the requirement count.</p>
 </section>
 
 <section id="ready">
   <h2><span class="n">06</span> What launch ready means</h2>
-  <h3>A checklist, so the decision is not a matter of opinion on the day</h3>
-  <p class="lead">The stated position is that nothing launches until everything is ready. That only works if <em>ready</em> is written down in advance. These are pass or fail.</p>
+  <h3>Written in advance, so the decision is not an opinion on the day</h3>
+  <p class="lead">With no staged rollout to learn from, this checklist is the only thing standing between a considered launch and an optimistic one. Every line is pass or fail.</p>
+  <h4>The client path</h4>
   <ul class="plain">
-    <li>A new client can go from first contact to trading in the app without anyone touching a database by hand.</li>
-    <li>Every existing member has been re-verified, or has been told exactly what they need to do and by when.</li>
-    <li>The audit trail answers "who changed this and when" for every record, going back to the first write.</li>
+    <li>A new client goes from first contact to trading in the app without anyone touching a database by hand.</li>
+    <li>Every existing member has been re-verified, or knows exactly what they must do and by when.</li>
     <li>The 30-day rule has been tested in both directions: revoking an idle account, and restoring one.</li>
-    <li>The broker feed has run for a full month without a silent failure. <b>A sync failure here revokes access from active traders</b> &mdash; the worst outcome in either document.</li>
-    <li>R1 is closed, in writing, by someone qualified to close it.</li>
-    <li>Every admin has their own login and has been trained on the verification path.</li>
-    <li>Admins can clock in, request leave, see their contract and file a claim &mdash; the things they will do in week one.</li>
-    <li>Admin chat, voice and video work well enough that nobody reopens Discord out of habit.</li>
-    <li>Claim receipts are encrypted, out of search and exports, and have a working deletion schedule &mdash; not a planned one.</li>
-    <li>No admin can see another admin&rsquo;s contract, pay or claims. Tested by trying it, not by reading the code.</li>
-    <li>Messenger conversations have arrived in the CRM, or the team knows which history did not survive.</li>
+    <li>The broker feed has run for a full month without a silent failure. <b>A failure here revokes access from active traders</b> &mdash; the worst outcome in either document.</li>
     <li>Tap to Trade has been run on demo accounts by people who did not build it.</li>
-    <li>The migration has been run against real data and reconciled, at least twice, with the report kept.</li>
-    <li>Every client, conversation and course exists in the new CRM and can be found there.</li>
-    <li>GoHighLevel is still readable, and nobody has cancelled the account.</li>
-    <li>The rollback plan is written: if the app has to be pulled after launch, members know where to go.</li>
+    <li>R1 is closed, in writing, by somebody qualified to close it.</li>
+    <li>Every member feature works on desktop, verified by using it rather than by assuming parity.</li>
   </ul>
-  <p>The last one gets skipped most often and matters most. Telegram is being switched off as part of this. If the app fails in week one and the desks are gone, the community has nowhere to go &mdash; so <b>the Telegram desks should stay dormant rather than deleted until the app has held for a defined period.</b></p>
+  <h4>The migration</h4>
+  <ul class="plain">
+    <li>Run against real data and reconciled at least twice, with the reports kept.</li>
+    <li>Every client, conversation and course exists in the new system and can be found there.</li>
+    <li>All four retiring platforms are still readable, and nobody has cancelled an account.</li>
+    <li>The Academy courses have a working home and members can reach them.</li>
+  </ul>
+  <h4>The team</h4>
+  <ul class="plain">
+    <li>Every admin has their own login and has been trained on the verification path.</li>
+    <li>Admins can clock in, request leave, see their contract and file a claim &mdash; what they will do in week one.</li>
+    <li>Admin chat, voice and video work well enough that nobody reopens Discord out of habit.</li>
+    <li>Claim receipts are encrypted, out of search and exports, with a working deletion schedule &mdash; not a planned one.</li>
+    <li>No admin can see another admin&rsquo;s contract, pay or claims. Verified by trying it, not by reading the code.</li>
+    <li>An IB can see their own clients and, tested deliberately, cannot see anybody else&rsquo;s.</li>
+  </ul>
+  <h4>The day itself</h4>
+  <ul class="plain">
+    <li>The rollback plan is written: what happens if this has to be reversed, who decides, and where members are told to go.</li>
+    <li>Support cover is arranged for launch week specifically, at a level nobody would sustain permanently.</li>
+    <li>Somebody owns the decision to stop. A launch with no defined abort condition does not have one.</li>
+  </ul>
 </section>
 
 <section id="risks">
   <h2><span class="n">07</span> What could break this</h2>
   <h3>Six things, in the order they would hurt</h3>
+  <p class="lead">A single-date, four-platform switch with no parallel running has a specific risk profile. These are not generic project risks; they are the ones this delivery mode creates.</p>
   <div class="risks">
     <div class="risk"><div class="rh"><span class="rid">L1</span><h5>The migration loses something nobody notices until later</h5></div>
-      <p>GoHighLevel is switched off at launch, so anything not carried across is gone. The dangerous failures are the quiet ones &mdash; a custom field nobody mapped, conversation history that came across truncated, membership state that looked fine in a spot check. <b>Mitigation:</b> C11.3 and C11.4 &mdash; rehearse twice against real data, reconcile by count rather than by eye, and keep GoHighLevel readable afterwards so a late discovery is recoverable rather than fatal.</p></div>
-    <div class="risk"><div class="rh"><span class="rid">L2</span><h5>The admin portal build expands and takes the launch date with it</h5></div>
-      <p>W1&ndash;W4 is an HR system and it blocks launch, so its duration is the launch date rather than a parallel workstream that can slip quietly. HR features are also unusually prone to growth, because every person using them has a personal stake in one of them. <b>Mitigation:</b> fix the launch depth of each group in writing before M5 opens (W1.6, W4.7), and treat additions as post-launch by default rather than debating each on merit.</p></div>
-    <div class="risk"><div class="rh"><span class="rid">L3</span><h5>Four platforms are switched off on one day</h5></div>
-      <p>GoHighLevel, Telegram, Discord and Messenger all go together. Any one replacement being weak sends people straight back to the tool they know, and once a team is back on Discord it is hard to move them twice. <b>Mitigation:</b> keep every old platform dormant and readable rather than deleted, and treat a return to an old tool as a defect report rather than a discipline problem.</p></div>
+      <p>Four platforms are switched off, so anything not carried across is gone. The dangerous failures are quiet: a custom field nobody mapped, conversation history that arrived truncated, membership state that passed a spot check. <b>Mitigation:</b> rehearse twice against real data, reconcile by count rather than by eye, migrate in cohorts, and keep every old platform readable afterwards so a late discovery is recoverable rather than fatal.</p></div>
+    <div class="risk"><div class="rh"><span class="rid">L2</span><h5>The date is set before the scope is costed</h5></div>
+      <p>The most likely failure of a fixed-scope launch is a date picked for external reasons and then met by quietly dropping something. That converts a deliberate decision into an accidental one. <b>Mitigation:</b> derive the date from the sequence in section 05 after the parallelism question is answered, and treat any proposal to move it as a scope conversation rather than a scheduling one.</p></div>
+    <div class="risk"><div class="rh"><span class="rid">L3</span><h5>Four replacements land at once and the weakest one decides the verdict</h5></div>
+      <p>People judge a switch by whichever part serves them worst. An excellent app will not stop admins going back to Discord if portal chat is poor, and once a team has returned to a familiar tool, moving them a second time is much harder than the first. <b>Mitigation:</b> keep old platforms dormant rather than deleted, and treat somebody reopening an old tool as a defect report rather than a discipline problem. It is the earliest signal available.</p></div>
     <div class="risk"><div class="rh"><span class="rid">L4</span><h5>Verification does not scale on launch day</h5></div>
-      <p>Every existing member needs re-verifying at once. If that takes an admin ten minutes per client, the community size decides how long launch takes, and it is likely to be weeks. <b>Mitigation:</b> measure the per-client time during M2, before it is a launch-day discovery, and stage migration in cohorts.</p></div>
-    <div class="risk"><div class="rh"><span class="rid">L5</span><h5>The broker feed is less reliable than assumed</h5></div>
-      <p>Access, the entry condition and the 30-day rule all depend on C8.3. If it is slow, incomplete, or quietly stale, the platform revokes access from people who are trading. <b>Mitigation:</b> C8.4 &mdash; fail loudly, and never revoke on stale data. Build the fallback before the feature.</p></div>
+      <p>Every existing member needs re-verifying at once. At ten minutes per client, community size decides how long launch takes, and it is likely to be weeks rather than days. <b>Mitigation:</b> measure the real per-client time during M2, not on launch day, and stage the community in cohorts.</p></div>
+    <div class="risk"><div class="rh"><span class="rid">L5</span><h5>Scope grows because everything is already in scope</h5></div>
+      <p>Paradoxically, a no-cuts launch is easier to add to than a staged one: with nothing deferred there is no obvious category for a new idea except "in". The admin portal is most exposed, because everyone using it has a personal stake in one of its features. <b>Mitigation:</b> a dated scope freeze, after which additions are post-launch by default rather than debated individually on merit.</p></div>
     <div class="risk"><div class="rh"><span class="rid">L6</span><h5>R1 arrives late and blocks a finished product</h5></div>
-      <p>Tap to Trade is the flagship and carries regulatory exposure. Legal review does not move faster because engineering is done. <b>Mitigation:</b> start R1 now, in parallel with M1, not when M4 is ready.</p></div>
+      <p>Tap to Trade is the flagship and carries regulatory exposure. Legal review does not accelerate because engineering is done, and with a single launch date it can hold the entire ecosystem rather than one feature. <b>Mitigation:</b> start R1 now, during M1, not when M4 is ready.</p></div>
   </div>
 </section>
 
 <footer style="margin-top:80px;padding-top:24px;border-top:1px solid var(--rule);font-family:var(--mono);font-size:12px;color:var(--faint)">
-  Companion to the platform requirements document, rev 3. Cuts recorded here remain committed requirements there.
+  Companion to the platform requirements document. Scope here is the whole of it &mdash; this document orders the work and defines readiness.
 </footer>
 
 </div>
