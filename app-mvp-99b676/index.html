@@ -203,6 +203,8 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
   <p class="lead">The stated position is that nothing launches until the backend, the CRM and the app are all ready. That instinct is correct &mdash; a half-built platform in front of paying members is worse than no platform. But taken literally it describes four products shipping simultaneously, and that is not a plan anyone can execute.</p>
   <p>This document takes the instinct seriously and asks a narrower question: <b>what is the smallest complete thing?</b> Not the smallest set of features, but the smallest arrangement where every member and every admin has a coherent experience with no dead ends. Something can be missing without being broken. A member who cannot find a feature is fine. A member who is stopped halfway through something is not.</p>
   <p>The cuts below are made against one test: <b>does its absence stop somebody, or merely inconvenience them?</b></p>
+  <p>One property of this launch removes the usual safety net. <b>It is a switch, not an addition.</b> Going live means turning off GoHighLevel and the Telegram desks at the same time &mdash; the old platform is not left running beside the new one. There is no version of this where members drift across at their own pace, and no quiet period to fix things while the old system carries the load. Everything has to work on the day, for everybody, or there is nowhere for them to be.</p>
+  <p>That raises the bar on two things in particular: the migration (C11), and the rollback plan in section 06.</p>
 </section>
 
 <section id="critical">
@@ -219,10 +221,12 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
         <tr><td><strong>CRM &mdash; client records</strong></td><td class="mono">Yes</td><td>Verification has nothing to write to without them.</td></tr>
         <tr><td><strong>CRM &mdash; audit trail</strong></td><td class="mono">Yes</td><td>Retrofitting history is impossible. Every unlogged edit before it exists is permanently lost.</td></tr>
         <tr><td><strong>Broker data feed</strong></td><td class="mono">Yes</td><td>Deposits and activity drive both the entry condition and the 30-day rule.</td></tr>
+        <tr><td><strong>CRM &mdash; migration</strong></td><td class="mono">Yes</td><td>GoHighLevel is switched off at launch. Anything not carried across is lost.</td></tr>
+        <tr><td><strong>Academy hosting</strong></td><td class="mono">Yes</td><td>GoHighLevel hosts the courses today. Nothing else does yet. C11.7.</td></tr>
         <tr><td><strong>App &mdash; core</strong></td><td class="mono">Yes</td><td>The product members were promised.</td></tr>
         <tr><td><strong>Desktop web</strong></td><td class="mono">No</td><td>Members trade on phones. Desktop is an addition, not the entry point.</td></tr>
         <tr><td><strong>IB views</strong></td><td class="mono">No</td><td>Corporate can verify centrally at current volume. Painful, not blocking.</td></tr>
-        <tr><td><strong>Workforce module</strong></td><td class="mono">No</td><td>Admins are working today without it.</td></tr>
+        <tr><td><strong>Admin portal</strong><br><span style="color:var(--muted)">HR side</span></td><td class="mono">See 04</td><td>Admins are working today without it &mdash; but the notes call it launch-blocking. Open.</td></tr>
       </tbody>
     </table>
   </div>
@@ -267,8 +271,24 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
   <p>The reason a member opens it at all. This is the existing PRD, unchanged: the eight desks, Tap to Trade, the journal, community, Academy, Vision AI, and the F18 design and accessibility standard.</p>
   <p>One judgement here. <b>Tap to Trade should ship in the MVP, not after it.</b> It is the flagship and the clearest reason to move off Telegram. Holding it back would launch a product whose main argument is missing &mdash; but it carries the R1 regulatory dependency, which is on the critical path in a way no engineering task is.</p>
 
-  <h4>Block 4 &mdash; Admin minimum</h4>
-  <p>Not the workforce module. Only what an admin needs to do the verification job in Block 1.</p>
+  <h4>Block 4 &mdash; Migration</h4>
+  <p>The block with no visible output and the highest cost of failure. Every existing client, conversation and course has to arrive in the new system before the old one is turned off.</p>
+  <div class="tw">
+    <table>
+      <thead><tr><th>Requirement</th><th>What it covers</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">C11.1&ndash;C11.2</td><td>Complete export from GoHighLevel and a documented field map. Nothing dropped by omission.</td></tr>
+        <tr><td class="mono">C11.3&ndash;C11.4</td><td>Rehearsed against real data, more than once, and verified by reconciliation rather than assertion.</td></tr>
+        <tr><td class="mono">C11.5</td><td>Conversation history, not just contacts.</td></tr>
+        <tr><td class="mono">C11.6</td><td>GoHighLevel kept readable after cut-over. Do not cancel it on the day.</td></tr>
+        <tr><td class="mono">C11.7</td><td>A destination for the Academy courses. Currently unresolved.</td></tr>
+        <tr><td class="mono">C11.8&ndash;C11.9</td><td>Cut-over plan with rollback, run in cohorts.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h4>Block 5 &mdash; Admin minimum</h4>
+  <p>Not the HR side of the admin portal. Only what an admin needs to do the verification job in Block 1.</p>
   <div class="tw">
     <table>
       <thead><tr><th>Requirement</th><th>What it covers</th></tr></thead>
@@ -290,10 +310,10 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
     <table>
       <thead><tr><th>Cut</th><th class="mono">Refs</th><th>Why it is safe to cut</th></tr></thead>
       <tbody>
-        <tr><td><strong>Workforce module</strong><br><span style="color:var(--muted)">attendance, leave, contracts, benefits</span></td><td class="mono">W1&ndash;W4</td>
-            <td><b>The single largest cut, and the one that saves the most time.</b> This is an HR platform, not a CRM feature. Admins are working today without it. It should almost certainly be bought rather than built &mdash; and if it is bought, it may never need to be in a release plan at all.</td></tr>
+        <tr><td><strong>Admin portal</strong><br><span style="color:var(--muted)">attendance, leave, contracts, benefits</span></td><td class="mono">W1&ndash;W4</td>
+            <td><b>The single largest cut, and the one that saves the most time.</b> This is an HR platform, not a CRM feature. Admins are working today without it, and it should almost certainly be bought rather than built &mdash; if it is bought, it may never need to be in a release plan at all. <b>This cut contradicts the brief and needs a decision.</b> The source notes list the admin portal alongside the CRM and the IB portal as areas that must all be addressed before anything is launch ready. The counter-argument is that admin logins, KPIs and the verification tools are already in scope through C4 and W5 &mdash; what is cut is attendance, leave, contracts, benefits and claims, none of which stop a member or an admin from working on launch day.</td></tr>
         <tr><td><strong>Voice and video</strong></td><td class="mono">W6.3</td>
-            <td>Discord works. Building WebRTC in-house would cost more than the rest of the workforce module combined, to replace something that is not broken.</td></tr>
+            <td>Discord works. Building WebRTC in-house would cost more than the rest of the rest of the admin portal combined, to replace something that is not broken.</td></tr>
         <tr><td><strong>IB portal</strong></td><td class="mono">S1&ndash;S3</td>
             <td>At current volume corporate can verify centrally. This becomes necessary when IB volume makes central verification the bottleneck &mdash; which is a good problem and a visible one.</td></tr>
         <tr><td><strong>Sub-IB admins</strong></td><td class="mono">S3.1&ndash;S3.4</td>
@@ -331,11 +351,14 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
     <h5>App core</h5>
     <p>Desks, Tap to Trade, journal, community, Academy, Vision AI. Largely specified already. <b>R1 must be resolved before this ships, and it does not move faster because engineering is ready.</b></p></div></div>
   <div class="phase"><div class="pnum">M5</div><div>
-    <h5>Migration and launch</h5>
-    <p>Re-verify the existing community, move them across, retire the Telegram desks. The riskiest stage: it is the one with real people in it and the one no amount of internal testing rehearses.</p></div></div>
+    <h5>Migration rehearsal</h5>
+    <p>Export everything from GoHighLevel, map it, load it into the new CRM against real data, and reconcile. Then do it again. <b>This is a full stage, not a task inside launch week.</b> The first rehearsal is where you find out what does not map, and finding that out during cut-over is the failure this whole document exists to avoid. The Academy destination (C11.7) has to be settled before this stage can finish.</p></div></div>
   <div class="phase"><div class="pnum">M6</div><div>
+    <h5>Cut-over and launch</h5>
+    <p>Re-verify the existing community, run the real migration in cohorts, move members across, retire the Telegram desks. GoHighLevel stays readable, not cancelled. The riskiest stage: it is the one with real people in it, and the only one no amount of internal testing fully rehearses.</p></div></div>
+  <div class="phase"><div class="pnum">M7</div><div>
     <h5>After launch</h5>
-    <p>IB portal first, then desktop web, then the workforce decision, then marketing and integrations.</p></div></div>
+    <p>IB portal first, then desktop web, then the admin portal decision, then marketing and integrations.</p></div></div>
 </section>
 
 <section id="ready">
@@ -351,6 +374,9 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
     <li>R1 is closed, in writing, by someone qualified to close it.</li>
     <li>Every admin has their own login and has been trained on the verification path.</li>
     <li>Tap to Trade has been run on demo accounts by people who did not build it.</li>
+    <li>The migration has been run against real data and reconciled, at least twice, with the report kept.</li>
+    <li>Every client, conversation and course exists in the new CRM and can be found there.</li>
+    <li>GoHighLevel is still readable, and nobody has cancelled the account.</li>
     <li>The rollback plan is written: if the app has to be pulled after launch, members know where to go.</li>
   </ul>
   <p>The last one gets skipped most often and matters most. Telegram is being switched off as part of this. If the app fails in week one and the desks are gone, the community has nowhere to go &mdash; so <b>the Telegram desks should stay dormant rather than deleted until the app has held for a defined period.</b></p>
@@ -358,15 +384,17 @@ footer{margin-top:72px;padding-top:22px;border-top:2px solid var(--ink);
 
 <section id="risks">
   <h2><span class="n">07</span> What could break this</h2>
-  <h3>Four things, in the order they would hurt</h3>
+  <h3>Five things, in the order they would hurt</h3>
   <div class="risks">
-    <div class="risk"><div class="rh"><span class="rid">M1</span><h5>Scope returns through the back door</h5></div>
-      <p>Every cut in section 04 is a real requirement someone wants. They will come back one at a time, each individually reasonable. The workforce module is the most likely, because it is the most personally felt by the people asking. <b>Mitigation:</b> cuts are reopened at milestone boundaries, not in the middle of one.</p></div>
-    <div class="risk"><div class="rh"><span class="rid">M2</span><h5>Verification does not scale on launch day</h5></div>
+    <div class="risk"><div class="rh"><span class="rid">L1</span><h5>The migration loses something nobody notices until later</h5></div>
+      <p>GoHighLevel is switched off at launch, so anything not carried across is gone. The dangerous failures are the quiet ones &mdash; a custom field nobody mapped, conversation history that came across truncated, membership state that looked fine in a spot check. <b>Mitigation:</b> C11.3 and C11.4 &mdash; rehearse twice against real data, reconcile by count rather than by eye, and keep GoHighLevel readable afterwards so a late discovery is recoverable rather than fatal.</p></div>
+    <div class="risk"><div class="rh"><span class="rid">L2</span><h5>Scope returns through the back door</h5></div>
+      <p>Every cut in section 04 is a real requirement someone wants. They will come back one at a time, each individually reasonable. The admin portal is the most likely, because it is the most personally felt by the people asking. <b>Mitigation:</b> cuts are reopened at milestone boundaries, not in the middle of one.</p></div>
+    <div class="risk"><div class="rh"><span class="rid">L3</span><h5>Verification does not scale on launch day</h5></div>
       <p>Every existing member needs re-verifying at once. If that takes an admin ten minutes per client, the community size decides how long launch takes, and it is likely to be weeks. <b>Mitigation:</b> measure the per-client time during M2, before it is a launch-day discovery, and stage migration in cohorts.</p></div>
-    <div class="risk"><div class="rh"><span class="rid">M3</span><h5>The broker feed is less reliable than assumed</h5></div>
+    <div class="risk"><div class="rh"><span class="rid">L4</span><h5>The broker feed is less reliable than assumed</h5></div>
       <p>Access, the entry condition and the 30-day rule all depend on C8.3. If it is slow, incomplete, or quietly stale, the platform revokes access from people who are trading. <b>Mitigation:</b> C8.4 &mdash; fail loudly, and never revoke on stale data. Build the fallback before the feature.</p></div>
-    <div class="risk"><div class="rh"><span class="rid">M4</span><h5>R1 arrives late and blocks a finished product</h5></div>
+    <div class="risk"><div class="rh"><span class="rid">L5</span><h5>R1 arrives late and blocks a finished product</h5></div>
       <p>Tap to Trade is the flagship and carries regulatory exposure. Legal review does not move faster because engineering is done. <b>Mitigation:</b> start R1 now, in parallel with M1, not when M4 is ready.</p></div>
   </div>
 </section>
