@@ -48,6 +48,12 @@
       --dur-quick: .2s;   /* hover, small state changes   */
       --dur-base: .55s;   /* elements entering / moving   */
       --dur-slow: .9s;    /* larger reveals               */
+      /* Liquid-glass spring (damped, ~8% overshoot, settles soft). Only for
+         glass surfaces moving; opacity never springs. linear() below. */
+      --ease-spring: cubic-bezier(.3,1.25,.5,1);
+    }
+    @supports (transition-timing-function: linear(0, 1)){
+      :root{--ease-spring: linear(0, .051 4%, .175 8%, .335 12%, .502 16%, .659 20%, .824 25%, .945 30%, 1.024 35%, 1.067 40%, 1.083 47%, 1.068 55%, 1.033 65%, 1.002 78%, .993 90%, 1)}
     }
 
     /* ============================================================
@@ -643,6 +649,32 @@
     /* Registered so the conic border light can animate its start angle
        (browsers without @property just show a still highlight). */
     @property --border-angle{syntax:'<angle>';inherits:false;initial-value:0deg}
+    /* Liquid glass (cards). Registered so the sheen can glide, not jump. */
+    @property --glass-x{syntax:'<percentage>';inherits:false;initial-value:20%}
+    @property --glass-y{syntax:'<percentage>';inherits:false;initial-value:0%}
+    :root{
+      --glass-shadow:
+        inset 0 1px 0 rgba(255,255,255,.13),
+        inset 0 -24px 40px -32px rgba(122,224,255,.12),
+        0 18px 40px -14px rgba(0,0,0,.5);
+      --glass-shadow-lifted:
+        inset 0 1px 0 rgba(255,255,255,.2),
+        inset 0 -24px 40px -28px rgba(122,224,255,.18),
+        0 30px 60px -16px rgba(0,0,0,.6),
+        0 0 0 1px rgba(122,224,255,.12);
+    }
+    /* Specular rim: a 1px edge highlight brightest at the top-left, fading
+       round the shape, with a faint cool return at the bottom-right. */
+    .f-card::after,.level-card::after{
+      content:"";position:absolute;inset:0;border-radius:21px;padding:1px;
+      pointer-events:none;z-index:2;
+      background:linear-gradient(140deg, rgba(255,255,255,.5) 0%, rgba(255,255,255,.14) 20%, rgba(255,255,255,.03) 48%, rgba(255,255,255,.03) 72%, rgba(190,222,245,.2) 100%);
+      mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      mask-composite:exclude;-webkit-mask-composite:xor;
+    }
+    /* Touch screens: the card nearest the middle (.glow) catches the light. */
+    .f-card.glow,.level-card.glow{--glass-x:50%;--glass-y:0%}
     @keyframes border-travel{to{--border-angle:360deg}}
     @keyframes pulse{0%,100%{opacity:.85;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
 
@@ -657,14 +689,22 @@
 
     /* Futuristic glass card (dark sections) */
     .f-card{
-      position:relative;padding:1.9rem;border-radius:16px;
-      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
-      border:1px solid rgba(190,222,245,.12);
+      position:relative;padding:1.9rem;border-radius:22px;
+      /* Liquid glass: frosted tint, lighter at the top, plus a sheen that
+         glides after the pointer (--glass-x/--glass-y; see "Liquid glass
+         sheen" script). Specular rim is ::after; thickness comes from the
+         inner highlights in box-shadow. */
+      background:
+        radial-gradient(90% 70% at var(--glass-x) var(--glass-y), rgba(255,255,255,.085), transparent 62%),
+        linear-gradient(180deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.018) 45%, rgba(255,255,255,.01) 100%);
+      box-shadow:var(--glass-shadow);
+      border:1px solid rgba(255,255,255,.08);
       overflow:hidden;backdrop-filter:blur(10px);
-      transition:transform var(--dur-quick) var(--ease),border-color var(--dur-quick) var(--ease),box-shadow var(--dur-quick) var(--ease);
+      transition:transform var(--dur-base) var(--ease-spring),border-color var(--dur-quick) var(--ease),box-shadow var(--dur-quick) var(--ease),
+                 --glass-x .6s var(--ease-out),--glass-y .6s var(--ease-out);
     }
     .f-card::before{
-      content:"";position:absolute;inset:0;border-radius:15px;
+      content:"";position:absolute;inset:0;border-radius:21px;
       /* A short arc of light that travels round the border on hover/.glow:
          a 1px ring just inside the border (the card's overflow:hidden clips
          anything drawn on the border itself), stacked above the banner so
@@ -682,18 +722,18 @@
     @media (hover:hover){
       .f-card:hover::before{opacity:1;animation:border-travel 3.2s linear infinite}
       .f-card:hover{
-        transform:translateY(-4px) !important;
+        transform:translateY(-6px) !important;
         border-color:rgba(122,224,255,.28);
-        box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 1px rgba(122,224,255,.14);
+        box-shadow:var(--glass-shadow-lifted);
       }
     }
     /* Touch devices: trigger via .glow class (set by scroll JS) only */
     @media (hover:none){
       .f-card.glow::before{opacity:1;animation:border-travel 3.2s linear infinite}
       .f-card.glow{
-        transform:translateY(-4px) !important;
+        transform:translateY(-6px) !important;
         border-color:rgba(122,224,255,.28);
-        box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 1px rgba(122,224,255,.14);
+        box-shadow:var(--glass-shadow-lifted);
       }
     }
     .f-card.has-banner:hover .card-banner .glyph-fg{transform:scale(1.12)}
@@ -2122,15 +2162,23 @@
     }
     .level-card{
       position:relative;z-index:1;overflow:hidden;
-      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
-      border:1px solid rgba(190,222,245,.12);
-      border-radius:16px;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:22px;
       padding:1.6rem 1.1rem 1.4rem;text-align:center;
       backdrop-filter:blur(10px);
-      transition:transform var(--dur-quick) var(--ease),box-shadow var(--dur-quick) var(--ease),border-color var(--dur-quick) var(--ease);
+      /* Liquid glass: frosted tint, lighter at the top, plus a sheen that
+         glides after the pointer (--glass-x/--glass-y; see "Liquid glass
+         sheen" script). Specular rim is ::after; thickness comes from the
+         inner highlights in box-shadow. */
+      background:
+        radial-gradient(90% 70% at var(--glass-x) var(--glass-y), rgba(255,255,255,.085), transparent 62%),
+        linear-gradient(180deg, rgba(255,255,255,.06) 0%, rgba(255,255,255,.018) 45%, rgba(255,255,255,.01) 100%);
+      box-shadow:var(--glass-shadow);
+      transition:transform var(--dur-base) var(--ease-spring),box-shadow var(--dur-quick) var(--ease),border-color var(--dur-quick) var(--ease),
+                 --glass-x .6s var(--ease-out),--glass-y .6s var(--ease-out);
     }
     .level-card::before{
-      content:"";position:absolute;inset:0;border-radius:15px;z-index:2;pointer-events:none;
+      content:"";position:absolute;inset:0;border-radius:21px;z-index:2;pointer-events:none;
       background:conic-gradient(from var(--border-angle), transparent 0deg, rgba(122,224,255,.95) 50deg, transparent 120deg);
       opacity:0;transition:opacity var(--dur-quick) var(--ease);
       mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -2142,18 +2190,18 @@
     @media (hover:hover){
       .level-card:hover::before{opacity:1;animation:border-travel 3.2s linear infinite}
       .level-card:hover{
-        transform:translateY(-4px) !important;
+        transform:translateY(-6px) !important;
         border-color:rgba(122,224,255,.28);
-        box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 1px rgba(122,224,255,.14);
+        box-shadow:var(--glass-shadow-lifted);
       }
     }
     /* Touch devices: trigger via .glow class only */
     @media (hover:none){
       .level-card.glow::before{opacity:1;animation:border-travel 3.2s linear infinite}
       .level-card.glow{
-        transform:translateY(-4px) !important;
+        transform:translateY(-6px) !important;
         border-color:rgba(122,224,255,.28);
-        box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 1px rgba(122,224,255,.14);
+        box-shadow:var(--glass-shadow-lifted);
       }
     }
     .level-card .badge-num{
@@ -4317,6 +4365,30 @@
           const r = card.getBoundingClientRect();
           card.style.setProperty('--mx', ((e.clientX - r.left)/r.width*100)+'%');
           card.style.setProperty('--my', ((e.clientY - r.top)/r.height*100)+'%');
+        });
+      });
+
+      /* Liquid glass sheen: the light on a glass card glides after the
+         pointer (the registered --glass-x/--glass-y transition makes it
+         trail softly) and drifts back to the top-left on leave. One card,
+         at most one update per frame. */
+      let sheenCard = null, sheenX = 0, sheenY = 0, sheenRaf = 0;
+      function applySheen(){
+        sheenRaf = 0;
+        if(!sheenCard) return;
+        const r = sheenCard.getBoundingClientRect();
+        sheenCard.style.setProperty('--glass-x', ((sheenX - r.left) / r.width * 100).toFixed(1) + '%');
+        sheenCard.style.setProperty('--glass-y', ((sheenY - r.top) / r.height * 100).toFixed(1) + '%');
+      }
+      document.querySelectorAll('.f-card,.level-card').forEach(card=>{
+        card.addEventListener('pointermove', (e)=>{
+          sheenCard = card; sheenX = e.clientX; sheenY = e.clientY;
+          if(!sheenRaf) sheenRaf = requestAnimationFrame(applySheen);
+        });
+        card.addEventListener('pointerleave', ()=>{
+          if(sheenCard === card){ sheenCard = null; cancelAnimationFrame(sheenRaf); sheenRaf = 0; }
+          card.style.removeProperty('--glass-x');
+          card.style.removeProperty('--glass-y');
         });
       });
 
