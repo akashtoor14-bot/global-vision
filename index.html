@@ -2564,6 +2564,20 @@
     }
     .modal-note b{color:#fff;font-weight:700}
     .modal-note .accent{color:var(--cyan)}
+    /* The GHL form iframe only starts loading when someone shows intent to
+       join (see loadJoinForm), so show a quiet spinner until it arrives. */
+    .form-frame{position:relative;min-height:441px}
+    .form-loading{
+      position:absolute;top:2.5rem;left:0;right:0;
+      display:flex;flex-direction:column;align-items:center;gap:.75rem;
+      font-size:13px;color:#9fb0cb;pointer-events:none;
+    }
+    .form-loading::before{
+      content:"";width:26px;height:26px;border-radius:50%;
+      border:2px solid rgba(122,224,255,.18);border-top-color:var(--cyan);
+      animation:spin .8s linear infinite;
+    }
+    .form-frame.is-loaded .form-loading{display:none}
 
     .form-row{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-bottom:.85rem}
     .form-field{position:relative;margin-bottom:.85rem}
@@ -4170,8 +4184,10 @@
           <h3 id="joinTitle">Fill Out The Form To<br/><span class="grad-text">Access The Next Step</span></h3>
           <p class="modal-note"><b>NOTE:</b> Make sure to use your <span class="accent">real email address</span>. You'll be prompted to verify it. A <span class="accent">verification code</span> will be sent to your email.</p>
 
+          <div class="form-frame">
+          <p class="form-loading">Loading form…</p>
           <iframe
-            src="https://links.globalv.me/widget/form/VB3CWvgWHZP5QJaaPQnY"
+            data-src="https://links.globalv.me/widget/form/VB3CWvgWHZP5QJaaPQnY"
             style="width:100%;height:441px;border:none;border-radius:14px;background:transparent"
             id="inline-VB3CWvgWHZP5QJaaPQnY"
             data-layout="{'id':'INLINE'}"
@@ -4187,6 +4203,7 @@
             data-form-id="VB3CWvgWHZP5QJaaPQnY"
             title="Free Community: Opt-in Form"
           ></iframe>
+          </div>
         </div>
       </div>
     </div>
@@ -4381,6 +4398,20 @@
         });
       }, { threshold: 0, rootMargin: '100px' });
       document.querySelectorAll('.has-anim').forEach(el=>animIO.observe(el));
+
+      /* Same idea for every section: loops (pulsing dots, the testimonial
+         ticker, hover borders…) freeze while their section is off screen
+         and resume a little before it scrolls back in. */
+      const secPauseStyle = document.createElement('style');
+      secPauseStyle.textContent =
+        'section.is-offscreen *,section.is-offscreen *::before,section.is-offscreen *::after{animation-play-state:paused !important}';
+      document.head.appendChild(secPauseStyle);
+      const secIO = new IntersectionObserver((entries)=>{
+        entries.forEach(e=>{
+          e.target.classList.toggle('is-offscreen', !e.isIntersecting);
+        });
+      }, { threshold: 0, rootMargin: '200px 0px' });
+      document.querySelectorAll('section').forEach(el=>secIO.observe(el));
     }
 
     /* ---------- Stars ----------
@@ -4509,10 +4540,31 @@
       document.body.appendChild(s);
     }
 
+    /* The form iframe itself used to load during page load (~3.5s of
+       third-party work competing with first paint and the first scroll). Its
+       URL now sits in data-src and is set on the first sign of intent —
+       hovering, focusing or touching a Join button — or quietly once the
+       visitor has been on the page 5s and isn't mid-scroll, so the form is
+       usually ready before anyone taps Join. */
+    const joinFrame = joinModal.querySelector('iframe[data-src]');
+    function loadJoinForm(){
+      if(!joinFrame || joinFrame.getAttribute('src')) return;
+      joinFrame.addEventListener('load', ()=>joinFrame.parentElement.classList.add('is-loaded'), {once:true});
+      joinFrame.src = joinFrame.dataset.src;
+    }
+    let lastScrollAt = 0;
+    window.addEventListener('scroll', ()=>{ lastScrollAt = performance.now(); }, {passive:true});
+    function preloadJoinFormWhenIdle(){
+      if(performance.now() - lastScrollAt < 1500) return setTimeout(preloadJoinFormWhenIdle, 1500);
+      (window.requestIdleCallback || setTimeout)(loadJoinForm);
+    }
+    window.addEventListener('load', ()=>setTimeout(preloadJoinFormWhenIdle, 5000));
+
     function openJoinModal(){
       joinModal.classList.add('open');
       joinModal.setAttribute('aria-hidden','false');
       document.body.style.overflow = 'hidden';
+      loadJoinForm();
       loadGHLFormScript();
     }
     function closeJoinModal(){
@@ -4527,6 +4579,8 @@
         e.preventDefault();
         openJoinModal();
       });
+      ['pointerenter','touchstart','focus'].forEach(type=>
+        el.addEventListener(type, loadJoinForm, {once:true, passive:true}));
     });
 
     // Close triggers
