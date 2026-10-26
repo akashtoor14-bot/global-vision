@@ -368,7 +368,7 @@
     .stars-bg i:nth-child(2){animation-duration:7s;animation-delay:-2.3s}
     .stars-bg i:nth-child(3){animation-duration:9s;animation-delay:-5.1s}
     @keyframes twinkle{
-      0%,100%{opacity:.3}
+      0%,100%{opacity:.4}
       50%{opacity:1}
     }
     @media (prefers-reduced-motion:reduce){
@@ -4429,7 +4429,7 @@
       for (var i = 0; i < count; i++){
         var at = (Math.random()*100).toFixed(2) + 'vw ' + (Math.random()*100).toFixed(2) + 'vh ';
         var spread = (Math.random()).toFixed(2);           // 1–3px dot
-        var a = .3 + Math.random()*.3;
+        var a = .55 + Math.random()*.4;
         layers[i % 3].push(at + '0 ' + spread + 'px rgba(255,255,255,' + a.toFixed(2) + ')',
                            at + '6px 0 rgba(190,222,245,' + (a*.6).toFixed(2) + ')');
       }
