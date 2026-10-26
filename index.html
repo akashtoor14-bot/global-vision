@@ -657,14 +657,14 @@
       background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
       border:1px solid rgba(190,222,245,.12);
       overflow:hidden;backdrop-filter:blur(10px);
-      transition:transform .2s var(--ease-out),border-color .2s var(--ease-out),box-shadow .2s var(--ease-out);
+      transition:transform .5s cubic-bezier(.23,1,.32,1),border-color .45s cubic-bezier(.23,1,.32,1),box-shadow .45s cubic-bezier(.23,1,.32,1);
     }
     .f-card::before{
       content:"";position:absolute;inset:-1px;border-radius:16px;
       background:conic-gradient(from 0deg, transparent, rgba(122,224,255,.3), transparent 30%);
       /* Hidden until hover/.glow, and only spins then — it used to rotate
          invisibly on every card on the page, all the time. */
-      opacity:0;transition:opacity .2s var(--ease-out);
+      opacity:0;transition:opacity .45s cubic-bezier(.23,1,.32,1);
       z-index:0;
       mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -674,7 +674,6 @@
     @media (hover:hover){
       .f-card:hover::before{opacity:1;animation:spin 4s linear infinite}
       .f-card:hover{
-        transform:translateY(-6px) scale(1.04) !important;
         border-color:rgba(122,224,255,.6);
         box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.3);
       }
@@ -2119,22 +2118,27 @@
       border-radius:16px;
       padding:1.6rem 1.1rem 1.4rem;text-align:center;
       backdrop-filter:blur(10px);
-      transition:transform .2s var(--ease-out),box-shadow .2s var(--ease-out),border-color .2s var(--ease-out);
+      transition:transform .5s cubic-bezier(.23,1,.32,1),box-shadow .45s cubic-bezier(.23,1,.32,1),border-color .45s cubic-bezier(.23,1,.32,1);
     }
     .level-card::before{
       content:"";position:absolute;inset:-1px;border-radius:16px;
       background:conic-gradient(from 0deg, transparent, rgba(122,224,255,.3), transparent 30%);
-      opacity:0;transition:opacity .2s var(--ease-out);
+      opacity:0;transition:opacity .45s cubic-bezier(.23,1,.32,1);
       mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       mask-composite:exclude;-webkit-mask-composite:xor;padding:1px;
     }
     .level-card > *{position:relative;z-index:1}
+    @media (hover:hover) and (pointer:fine){
+      /* The hover swell is a JS spring ("Liquid hover"); only the glow transitions. */
+      .f-card,.level-card{
+        transition:border-color .45s cubic-bezier(.23,1,.32,1),box-shadow .45s cubic-bezier(.23,1,.32,1);
+      }
+    }
     /* Desktop with mouse: trigger via :hover only */
     @media (hover:hover){
       .level-card:hover::before{opacity:1;animation:spin 4s linear infinite}
       .level-card:hover{
-        transform:translateY(-6px) scale(1.04) !important;
         border-color:rgba(122,224,255,.6);
         box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.3);
       }
@@ -4311,6 +4315,40 @@
           card.style.setProperty('--my', ((e.clientY - r.top)/r.height*100)+'%');
         });
       });
+
+      /* Liquid hover: cards swell to the same pose as before (lift 6px,
+         scale 1.04) but on a critically damped spring instead of a fixed
+         0.2s curve — a smooth glide with no overshoot that can reverse
+         from wherever it is if the pointer leaves mid-swell. Only cards
+         that are moving run; transform is set !important because the
+         finished reveal animation holds transform. */
+      if(!window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+        const RESPONSE = .42;                                // seconds to settle
+        const K = Math.pow(2 * Math.PI / RESPONSE, 2);       // stiffness (mass 1)
+        const C = 4 * Math.PI / RESPONSE;                    // damping ratio 1 = no bounce
+        const moving = new Set();
+        let springRaf = 0, lastT = 0;
+        function step(s, h){ s.v += (-K * (s.x - s.to) - C * s.v) * h; s.x += s.v * h; }
+        function springFrame(now){
+          const dt = Math.min(.032, (now - lastT) / 1000); lastT = now;
+          const n = Math.ceil(dt / .008), h = dt / n;
+          moving.forEach(c=>{
+            for(let i = 0; i < n; i++){ step(c.scale, h); step(c.lift, h); }
+            const rest = Math.abs(c.scale.x - c.scale.to) < 1e-4 && Math.abs(c.scale.v) < 1e-3
+                      && Math.abs(c.lift.x - c.lift.to) < 1e-2 && Math.abs(c.lift.v) < 1e-2;
+            if(rest && c.scale.to === 1){ c.el.style.removeProperty('transform'); moving.delete(c); return; }
+            c.el.style.setProperty('transform', `translate3d(0,${c.lift.x.toFixed(2)}px,0) scale(${c.scale.x.toFixed(4)})`, 'important');
+            if(rest) moving.delete(c);
+          });
+          springRaf = moving.size ? requestAnimationFrame(springFrame) : 0;
+        }
+        function wake(c){ moving.add(c); if(!springRaf){ lastT = performance.now(); springRaf = requestAnimationFrame(springFrame); } }
+        document.querySelectorAll('.f-card,.level-card').forEach(el=>{
+          const c = { el, scale: { x: 1, v: 0, to: 1 }, lift: { x: 0, v: 0, to: 0 } };
+          el.addEventListener('pointerenter', e=>{ if(e.pointerType !== 'mouse') return; c.scale.to = 1.04; c.lift.to = -6; wake(c); });
+          el.addEventListener('pointerleave', e=>{ if(e.pointerType !== 'mouse') return; c.scale.to = 1; c.lift.to = 0; wake(c); });
+        });
+      }
 
     }
 
