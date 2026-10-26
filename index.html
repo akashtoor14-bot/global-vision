@@ -960,89 +960,40 @@
        elements inside that root.
        ============================================================ */
 
-    /* ---- 1. VIP Signal Desk — premium phone messaging ----
-       Phone fades in + subtle scale, ambient glow pulses, then trade
-       messages drop in sequentially (BUY XAU → SELL EUR → BUY BTC).
-       Newest message holds a green border glow with a pulsing "new"
-       dot, typing indicator hints more coming, phone idles 6s float. */
-    .anim-signal .phone{
-      transform-origin:center;transform-box:fill-box;
-      opacity:0;
-      animation:signalPhoneIn 1s cubic-bezier(.22,1,.36,1) .2s forwards,
-                signalPhoneFloat 6s ease-in-out infinite 1.2s;
-    }
-    @keyframes signalPhoneIn{
-      0%  {opacity:0;transform:translateY(8px) scale(.97)}
-      100%{opacity:1;transform:translateY(0)   scale(1)}
-    }
-    @keyframes signalPhoneFloat{
-      0%,100%{transform:translateY(0)}
-      50%    {transform:translateY(-2.5px)}
-    }
+    /* ---- 1. VIP Signal Desk — live signal feed ----
+       Behaves like a real chat: every few seconds the typing bubble shows,
+       then a new signal rises out of it into the newest slot while older
+       ones scroll up under the header (driven by the "VIP Signal Desk:
+       live feed" script). One thing moves at a time; the glow under the
+       phone breathes slowly as ambient life. */
     .anim-signal .phone-glow{
       transform-origin:center;transform-box:fill-box;
-      animation:signalGlowPulse 4s ease-in-out infinite;
+      animation:signalGlowPulse 6s var(--ease-loop) infinite;
     }
     @keyframes signalGlowPulse{
       0%,100%{opacity:.45;transform:scaleX(1)}
       50%    {opacity:.75;transform:scaleX(1.08)}
     }
     .anim-signal .msg{
-      transform-origin:center;transform-box:fill-box;
-      opacity:0;
-      animation:signalMsgIn .65s cubic-bezier(.22,1,.36,1) forwards;
+      transition:transform var(--dur-base) var(--ease),opacity var(--dur-base) var(--ease);
     }
-    .anim-signal .msg.m1{animation-delay:1.0s}
-    .anim-signal .msg.m2{animation-delay:1.7s}
-    .anim-signal .msg.m3{animation-delay:2.4s}
-    @keyframes signalMsgIn{
-      0%  {opacity:0;transform:translateY(6px) scale(.97)}
-      100%{opacity:1;transform:translateY(0)   scale(1)}
+    /* Newest signal: coloured outline + "new" dot, which hand over to the
+       next signal when it arrives. */
+    .anim-signal .msg-hl,.anim-signal .msg-dot{
+      opacity:0;transition:opacity var(--dur-base) var(--ease);
     }
-    .anim-signal .msg-bg-new{
-      animation:signalNewGlow 3s ease-in-out infinite 2.8s;
-    }
-    @keyframes signalNewGlow{
-      0%,100%{stroke-opacity:.55}
-      50%    {stroke-opacity:1}
-    }
-    .anim-signal .new-dot{
-      transform-origin:center;transform-box:fill-box;
-      opacity:0;
-      animation:signalDotIn .35s cubic-bezier(.22,1,.36,1) 2.7s forwards,
-                signalDotPulse 1.6s ease-in-out infinite 3.2s;
-    }
-    @keyframes signalDotIn{
-      0%  {opacity:0;transform:scale(0)}
-      100%{opacity:1;transform:scale(1)}
-    }
-    @keyframes signalDotPulse{
-      0%,100%{opacity:1; transform:scale(1)}
-      50%    {opacity:.65;transform:scale(1.5)}
-    }
-    .anim-signal .typing{
-      opacity:0;
-      animation:signalTypingIn .4s ease-out 3.2s forwards;
-    }
-    @keyframes signalTypingIn{
-      0%{opacity:0} 100%{opacity:1}
-    }
-    .anim-signal .td{
-      transform-origin:center;transform-box:fill-box;
-      animation:signalTypingDot 1.2s ease-in-out infinite 3.5s;
-    }
-    .anim-signal .td.td2{animation-delay:3.65s}
-    .anim-signal .td.td3{animation-delay:3.80s}
+    .anim-signal .msg.is-newest .msg-hl,.anim-signal .msg.is-newest .msg-dot{opacity:1}
+    .anim-signal .typing{opacity:0;transition:opacity var(--dur-quick) var(--ease)}
+    .anim-signal .typing.is-on{opacity:1}
+    .anim-signal .typing.is-on .td{animation:signalTypingDot 1s var(--ease-loop) infinite}
+    .anim-signal .typing.is-on .td2{animation-delay:.15s}
+    .anim-signal .typing.is-on .td3{animation-delay:.3s}
     @keyframes signalTypingDot{
-      0%,100%{opacity:.30; transform:translateY(0)}
-      50%    {opacity:1;   transform:translateY(-1px)}
+      0%,100%{opacity:.3;transform:translateY(0)}
+      50%    {opacity:1; transform:translateY(-1px)}
     }
     @media (prefers-reduced-motion: reduce){
-      .anim-signal .phone,.anim-signal .phone-glow,
-      .anim-signal .msg,.anim-signal .msg-bg-new,
-      .anim-signal .new-dot,.anim-signal .typing,.anim-signal .td{
-        animation:none;opacity:1;transform:none;
-      }
+      .anim-signal .phone-glow{animation:none}
     }
 
     /* ---- 2. Live Trading Floor — premium live video broadcast ----
@@ -2829,6 +2780,9 @@
                   <stop offset="0" stop-color="rgba(122,224,255,.12)"/>
                   <stop offset="1" stop-color="rgba(122,224,255,0)"/>
                 </radialGradient>
+                <clipPath id="signalFeedClip">
+                  <rect x="116" y="60" width="88" height="94"/>
+                </clipPath>
               </defs>
 
               <!-- Soft ambient glow under the phone -->
@@ -2875,42 +2829,10 @@
                 <line x1="120" y1="52" x2="200" y2="52" stroke="rgba(122,224,255,.12)" stroke-width=".4"/>
                 <text x="160" y="58.5" text-anchor="middle" fill="rgba(190,222,245,.40)" font-family="Inter,sans-serif" font-size="3.6" font-weight="700" letter-spacing="1">TODAY</text>
 
-                <!-- Message 1: BUY XAU (oldest) -->
-                <g class="msg m1">
-                  <rect x="120" y="63" width="80" height="22" rx="5"
-                        fill="rgba(11,28,52,.85)" stroke="rgba(108,243,180,.38)" stroke-width=".55"/>
-                  <rect x="120" y="63" width="2.2" height="22" rx="1.1" fill="#6cf3b4"/>
-                  <rect x="125" y="66.5" width="14" height="6.5" rx="1.5" fill="rgba(108,243,180,.30)"/>
-                  <text x="132" y="71.2" text-anchor="middle" fill="#6cf3b4" font-family="Inter,sans-serif" font-size="4.5" font-weight="800" letter-spacing=".3">BUY</text>
-                  <text x="142" y="71.5" fill="#eaf6ff" font-family="Inter,sans-serif" font-size="5.5" font-weight="700">XAUUSD</text>
-                  <text x="195" y="68.5" text-anchor="end" fill="rgba(190,222,245,.45)" font-family="Inter,sans-serif" font-size="3.6">9:23</text>
-                  <text x="125" y="80.5" fill="rgba(190,222,245,.7)" font-family="JetBrains Mono,monospace" font-size="4.2">@ 2384.50 · TP 2398</text>
-                </g>
-
-                <!-- Message 2: SELL EUR -->
-                <g class="msg m2">
-                  <rect x="120" y="89" width="80" height="22" rx="5"
-                        fill="rgba(11,28,52,.85)" stroke="rgba(255,122,155,.38)" stroke-width=".55"/>
-                  <rect x="120" y="89" width="2.2" height="22" rx="1.1" fill="#ff7a9b"/>
-                  <rect x="125" y="92.5" width="14" height="6.5" rx="1.5" fill="rgba(255,122,155,.30)"/>
-                  <text x="132" y="97.2" text-anchor="middle" fill="#ff7a9b" font-family="Inter,sans-serif" font-size="4.5" font-weight="800" letter-spacing=".3">SELL</text>
-                  <text x="142" y="97.5" fill="#eaf6ff" font-family="Inter,sans-serif" font-size="5.5" font-weight="700">EURUSD</text>
-                  <text x="195" y="94.5" text-anchor="end" fill="rgba(190,222,245,.45)" font-family="Inter,sans-serif" font-size="3.6">9:34</text>
-                  <text x="125" y="106.5" fill="rgba(190,222,245,.7)" font-family="JetBrains Mono,monospace" font-size="4.2">@ 1.0852 · TP 1.0790</text>
-                </g>
-
-                <!-- Message 3: BUY BTC (newest, bordered + glows) -->
-                <g class="msg m3">
-                  <rect class="msg-bg-new" x="120" y="115" width="80" height="22" rx="5"
-                        fill="rgba(11,28,52,.92)" stroke="#6cf3b4" stroke-width=".8"/>
-                  <rect x="120" y="115" width="2.2" height="22" rx="1.1" fill="#6cf3b4"/>
-                  <rect x="125" y="118.5" width="14" height="6.5" rx="1.5" fill="rgba(108,243,180,.35)"/>
-                  <text x="132" y="123.2" text-anchor="middle" fill="#6cf3b4" font-family="Inter,sans-serif" font-size="4.5" font-weight="800" letter-spacing=".3">BUY</text>
-                  <text x="142" y="123.5" fill="#eaf6ff" font-family="Inter,sans-serif" font-size="5.5" font-weight="700">BTCUSD</text>
-                  <text x="195" y="120.5" text-anchor="end" fill="rgba(190,222,245,.55)" font-family="Inter,sans-serif" font-size="3.6">now</text>
-                  <text x="125" y="132.5" fill="rgba(190,222,245,.85)" font-family="JetBrains Mono,monospace" font-size="4.2">@ 61,250 · TP 63,800</text>
-                  <circle class="new-dot" cx="186" cy="120" r="1.6" fill="#6cf3b4"/>
-                </g>
+                <!-- Live feed: signal messages are built and cycled by the
+                     "VIP Signal Desk: live feed" script; clipped so older
+                     messages scroll away under the TODAY divider. -->
+                <g class="feed" clip-path="url(#signalFeedClip)"></g>
 
                 <!-- Typing indicator (more coming) -->
                 <g class="typing">
@@ -4422,6 +4344,107 @@
       }, { threshold: 0, rootMargin: '200px 0px' });
       document.querySelectorAll('section').forEach(el=>secIO.observe(el));
     }
+
+    /* ---------- VIP Signal Desk: live feed ----------
+       A new signal "arrives" every ~4s: the typing bubble shows, then the
+       signal rises out of it into the newest slot while the older ones
+       scroll up and the oldest slides away under the header. Runs only
+       while the card is on screen and the tab is visible; reduced-motion
+       visitors get the first three signals, still. Levels are mock-ups
+       pitched near current market prices. */
+    (function(){
+      const svg = document.querySelector('.anim-signal');
+      if(!svg) return;
+      const feed = svg.querySelector('.feed');
+      const typing = svg.querySelector('.typing');
+      const card = svg.closest('.has-anim');
+      const NS = 'http://www.w3.org/2000/svg';
+      const SIGNALS = [
+        ['BUY',  'XAUUSD', '@ 4,025.50 · TP 4,048'],
+        ['SELL', 'EURUSD', '@ 1.1362 · TP 1.1310'],
+        ['BUY',  'BTCUSD', '@ 80,250 · TP 82,800'],
+        ['SELL', 'XAUUSD', '@ 4,061.00 · TP 4,032'],
+        ['BUY',  'GBPUSD', '@ 1.3172 · TP 1.3240'],
+        ['BUY',  'XAUUSD', '@ 4,018.20 · TP 4,045'],
+      ];
+      const COLORS = { BUY: ['#6cf3b4', '108,243,180'], SELL: ['#ff7a9b', '255,122,155'] };
+      const SLOTS = [63, 89, 115];        // message tops, oldest → newest
+      const ENTER = 141, EXIT = 37;       // rises out of the typing bubble; leaves under the header
+      const AGES = ['5m', '2m', 'now'];
+      let next = 0;
+
+      function node(tag, attrs, text){
+        const e = document.createElementNS(NS, tag);
+        for(const k in attrs) e.setAttribute(k, attrs[k]);
+        if(text != null) e.textContent = text;
+        return e;
+      }
+      function makeMsg([side, symbol, levels]){
+        const [hex, rgb] = COLORS[side];
+        const g = node('g', {class:'msg'});
+        g.append(
+          node('rect', {x:120, y:0, width:80, height:22, rx:5, fill:'rgba(11,28,52,.88)', stroke:`rgba(${rgb},.38)`, 'stroke-width':.55}),
+          node('rect', {class:'msg-hl', x:120, y:0, width:80, height:22, rx:5, fill:'none', stroke:hex, 'stroke-width':.8}),
+          node('rect', {x:120, y:0, width:2.2, height:22, rx:1.1, fill:hex}),
+          node('rect', {x:125, y:3.5, width:14, height:6.5, rx:1.5, fill:`rgba(${rgb},.3)`}),
+          node('text', {x:132, y:8.2, 'text-anchor':'middle', fill:hex, 'font-family':'Inter,sans-serif', 'font-size':4.5, 'font-weight':800, 'letter-spacing':.3}, side),
+          node('text', {x:142, y:8.5, fill:'#eaf6ff', 'font-family':'Inter,sans-serif', 'font-size':5.5, 'font-weight':700}, symbol),
+          node('text', {class:'msg-time', x:195, y:5.5, 'text-anchor':'end', fill:'rgba(190,222,245,.5)', 'font-family':'Inter,sans-serif', 'font-size':3.6}),
+          node('text', {x:125, y:17.5, fill:'rgba(190,222,245,.78)', 'font-family':'JetBrains Mono,monospace', 'font-size':4.2}, levels),
+          node('circle', {class:'msg-dot', cx:186, cy:4.3, r:1.6, fill:hex})
+        );
+        return g;
+      }
+      function place(g, y, opacity){
+        g.style.transform = `translateY(${y}px)`;
+        if(opacity != null) g.style.opacity = opacity;
+      }
+      function setAges(msgs){
+        msgs.forEach((g, i) => { g.querySelector('.msg-time').textContent = AGES[i]; });
+      }
+
+      // Opening state: three signals already in, newest highlighted.
+      const first = SIGNALS.slice(0, 3).map(makeMsg);
+      first.forEach((g, i) => { place(g, SLOTS[i]); feed.append(g); });
+      first[2].classList.add('is-newest');
+      setAges(first);
+      next = 3;
+
+      function arrive(){
+        typing.classList.remove('is-on');
+        const msgs = [...feed.children];
+        msgs.forEach(g => { g.style.transitionDelay = ''; });
+        const oldest = msgs[0];
+        place(oldest, EXIT, 0);
+        msgs.slice(1).forEach((g, i) => place(g, SLOTS[i]));
+        msgs[msgs.length - 1].classList.remove('is-newest');
+
+        const g = makeMsg(SIGNALS[next++ % SIGNALS.length]);
+        g.classList.add('is-newest');
+        place(g, ENTER, 0);
+        feed.append(g);
+        g.getBoundingClientRect();          // commit the start position so it transitions
+        g.style.transitionDelay = '80ms';   // land just after the others start moving
+        place(g, SLOTS[2], 1);
+        setAges([...msgs.slice(1), g]);
+        setTimeout(() => oldest.remove(), 800);
+      }
+
+      if(window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+
+      let timer = null, running = false;
+      function cycle(){
+        typing.classList.add('is-on');
+        timer = setTimeout(() => { arrive(); timer = setTimeout(cycle, 2600); }, 1300);
+      }
+      function start(){ if(running) return; running = true; timer = setTimeout(cycle, 600); }
+      function stop(){ running = false; clearTimeout(timer); typing.classList.remove('is-on'); }
+
+      let onScreen = false;
+      const sync = () => (onScreen && !document.hidden) ? start() : stop();
+      new IntersectionObserver(es => { onScreen = es[0].isIntersecting; sync(); }, { threshold: .35 }).observe(card);
+      document.addEventListener('visibilitychange', sync);
+    })();
 
     /* ---------- Stars ----------
        Single global star layer — fixed-position, behind all content, so
