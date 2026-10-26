@@ -2272,9 +2272,12 @@
       animation:testimonial-scroll 55s linear infinite;
     }
     .testimonial-marquee:hover .testimonial-track{animation-play-state:paused}
+    /* The track is 6 cards + their 6 duplicates with 11 gaps between them,
+       so one full set is half the width PLUS half a gap. Shifting by only
+       -50% made the row jump half a gap every time the loop restarted. */
     @keyframes testimonial-scroll{
       from{transform:translateX(0)}
-      to  {transform:translateX(-50%)}
+      to  {transform:translateX(calc(-50% - .625rem))}
     }
     @media (prefers-reduced-motion:reduce){
       .testimonial-track{animation:none}
