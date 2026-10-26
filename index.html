@@ -37,8 +37,17 @@
       --glow:       0 0 0 1px rgba(122,224,255,.25), 0 0 24px rgba(122,224,255,.25);
       --glow-blue:  0 0 0 1px rgba(103,154,203,.35), 0 0 32px rgba(103,154,203,.35);
 
+      /* Motion system ("premium": calm, no overshoot). Use these instead of
+         one-off timings so everything moves with the same rhythm.
+         --ease-out  entrances (fast start, soft landing)
+         --ease      things moving on screen / hover
+         --ease-loop seamless ambient loops (sine-like)            */
       --ease: cubic-bezier(.4,0,.2,1);
       --ease-out: cubic-bezier(.22,1,.36,1);
+      --ease-loop: cubic-bezier(.37,0,.63,1);
+      --dur-quick: .2s;   /* hover, small state changes   */
+      --dur-base: .55s;   /* elements entering / moving   */
+      --dur-slow: .9s;    /* larger reveals               */
     }
 
     /* ============================================================
