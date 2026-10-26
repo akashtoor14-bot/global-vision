@@ -357,15 +357,22 @@
     .stars-bg{
       position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;
     }
-    .stars-bg span{
-      position:absolute;width:2px;height:2px;border-radius:50%;
-      background:#fff;opacity:.35;
-      box-shadow:0 0 6px rgba(190,222,245,.4);
-      animation:twinkle 4s ease-in-out infinite;
+    /* Each star is a box-shadow on one of three 1px layers (positions in
+       vw/vh, built by the Stars script), so the whole field is 3 animations
+       instead of one per star. The layers twinkle on staggered cycles so
+       the shimmer still looks uneven. */
+    .stars-bg i{
+      position:absolute;top:0;left:0;width:1px;height:1px;border-radius:50%;
+      animation:twinkle 5s ease-in-out infinite;
     }
+    .stars-bg i:nth-child(2){animation-duration:7s;animation-delay:-2.3s}
+    .stars-bg i:nth-child(3){animation-duration:9s;animation-delay:-5.1s}
     @keyframes twinkle{
-      0%,100%{opacity:.12;transform:scale(.8)}
-      50%{opacity:.55;transform:scale(1.2)}
+      0%,100%{opacity:.3}
+      50%{opacity:1}
+    }
+    @media (prefers-reduced-motion:reduce){
+      .stars-bg i{animation:none;opacity:.7}
     }
 
     /* ============================================================
@@ -4376,29 +4383,30 @@
       document.querySelectorAll('.has-anim').forEach(el=>animIO.observe(el));
     }
 
-    /* ---------- Stars ---------- */
-    function populateStars(container, count){
-      if(!container) return;
-      for(let i=0;i<count;i++){
-        const s = document.createElement('span');
-        s.style.top  = Math.random()*100 + '%';
-        s.style.left = Math.random()*100 + '%';
-        s.style.animationDelay = (Math.random()*4)+'s';
-        s.style.animationDuration = (3 + Math.random()*5)+'s';
-        s.style.opacity = (.2 + Math.random()*.7);
-        const size = 1 + Math.random()*2;
-        s.style.width = size+'px'; s.style.height = size+'px';
-        container.appendChild(s);
-      }
-    }
-    /* Single global star layer — fixed-position, behind all content.
-       True scroll parallax: stars stay in viewport while content scrolls past.
-       Reduced count on mobile + when reduced-motion is preferred for perf. */
+    /* ---------- Stars ----------
+       Single global star layer — fixed-position, behind all content, so
+       stars stay in the viewport while content scrolls past. Stars are dealt
+       round-robin onto three layers as box-shadows (a solid dot plus a soft
+       glow each); see .stars-bg i. Reduced count on mobile + reduced-motion. */
     (function(){
+      var field = document.getElementById('starsBg');
+      if(!field) return;
       var isMobile = window.matchMedia('(max-width:768px)').matches;
       var prefersReduced = window.matchMedia('(prefers-reduced-motion:reduce)').matches;
       var count = prefersReduced ? 60 : (isMobile ? 90 : 160);
-      populateStars(document.getElementById('starsBg'), count);
+      var layers = [[], [], []];
+      for (var i = 0; i < count; i++){
+        var at = (Math.random()*100).toFixed(2) + 'vw ' + (Math.random()*100).toFixed(2) + 'vh ';
+        var spread = (Math.random()).toFixed(2);           // 1–3px dot
+        var a = .3 + Math.random()*.3;
+        layers[i % 3].push(at + '0 ' + spread + 'px rgba(255,255,255,' + a.toFixed(2) + ')',
+                           at + '6px 0 rgba(190,222,245,' + (a*.6).toFixed(2) + ')');
+      }
+      layers.forEach(function(shadows){
+        var layer = document.createElement('i');
+        layer.style.boxShadow = shadows.join(',');
+        field.appendChild(layer);
+      });
     })();
 
 
