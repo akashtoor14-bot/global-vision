@@ -646,16 +646,17 @@
     .f-card::before{
       content:"";position:absolute;inset:-1px;border-radius:16px;
       background:conic-gradient(from 0deg, transparent, rgba(122,224,255,.3), transparent 30%);
+      /* Hidden until hover/.glow, and only spins then — it used to rotate
+         invisibly on every card on the page, all the time. */
       opacity:0;transition:opacity .2s var(--ease-out);
       z-index:0;
-      animation:spin 4s linear infinite;
       mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       mask-composite:exclude;-webkit-mask-composite:xor;padding:1px;
     }
     /* Desktop with mouse: trigger via :hover only */
     @media (hover:hover){
-      .f-card:hover::before{opacity:1}
+      .f-card:hover::before{opacity:1;animation:spin 4s linear infinite}
       .f-card:hover{
         transform:translateY(-6px) scale(1.04) !important;
         border-color:rgba(122,224,255,.6);
@@ -664,7 +665,7 @@
     }
     /* Touch devices: trigger via .glow class (set by scroll JS) only */
     @media (hover:none){
-      .f-card.glow::before{opacity:1}
+      .f-card.glow::before{opacity:1;animation:spin 4s linear infinite}
       .f-card.glow{
         transform:translateY(-6px) scale(1.04) !important;
         border-color:rgba(122,224,255,.6);
@@ -2157,7 +2158,6 @@
       content:"";position:absolute;inset:-1px;border-radius:16px;
       background:conic-gradient(from 0deg, transparent, rgba(122,224,255,.3), transparent 30%);
       opacity:0;transition:opacity .2s var(--ease-out);
-      animation:spin 4s linear infinite;
       mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       mask-composite:exclude;-webkit-mask-composite:xor;padding:1px;
@@ -2165,7 +2165,7 @@
     .level-card > *{position:relative;z-index:1}
     /* Desktop with mouse: trigger via :hover only */
     @media (hover:hover){
-      .level-card:hover::before{opacity:1}
+      .level-card:hover::before{opacity:1;animation:spin 4s linear infinite}
       .level-card:hover{
         transform:translateY(-6px) scale(1.04) !important;
         border-color:rgba(122,224,255,.6);
@@ -2174,7 +2174,7 @@
     }
     /* Touch devices: trigger via .glow class only */
     @media (hover:none){
-      .level-card.glow::before{opacity:1}
+      .level-card.glow::before{opacity:1;animation:spin 4s linear infinite}
       .level-card.glow{
         transform:translateY(-6px) scale(1.04) !important;
         border-color:rgba(122,224,255,.6);
