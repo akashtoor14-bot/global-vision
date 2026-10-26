@@ -4834,7 +4834,9 @@
           }
         };
         img.onerror = function(){ buildGlobe(null); };
-        img.src = 'https://unpkg.com/three-globe/example/img/earth-blue-marble.jpg';
+        // Local 1024×512 copy (~116 KB). The land mask is sampled at
+        // 1024×512 anyway; the old unpkg source was 4096×2048 (~1.46 MB).
+        img.src = 'earth-texture.jpg';
       })();
 
       // ---- Ambient particle field around the globe ----
