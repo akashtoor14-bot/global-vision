@@ -657,11 +657,14 @@
         inset 0 1px 0 rgba(255,255,255,.13),
         inset 0 -24px 40px -32px rgba(122,224,255,.12),
         0 18px 40px -14px rgba(0,0,0,.5);
+      /* hover / .glow: deeper shadow plus the cyan neon glow */
       --glass-shadow-lifted:
-        inset 0 1px 0 rgba(255,255,255,.2),
-        inset 0 -24px 40px -28px rgba(122,224,255,.18),
+        inset 0 1px 0 rgba(255,255,255,.22),
+        inset 0 -24px 40px -28px rgba(122,224,255,.2),
         0 30px 60px -16px rgba(0,0,0,.6),
-        0 0 0 1px rgba(122,224,255,.12);
+        0 0 0 1px rgba(122,224,255,.32),
+        0 0 26px rgba(122,224,255,.26),
+        0 0 64px rgba(122,224,255,.12);
     }
     /* Specular rim: a 1px edge highlight brightest at the top-left, fading
        round the shape, with a faint cool return at the bottom-right. */
@@ -722,8 +725,7 @@
     @media (hover:hover){
       .f-card:hover::before{opacity:1;animation:border-travel 3.2s linear infinite}
       .f-card:hover{
-        transform:translateY(-6px) !important;
-        border-color:rgba(122,224,255,.28);
+        border-color:rgba(122,224,255,.55);
         box-shadow:var(--glass-shadow-lifted);
       }
     }
@@ -732,7 +734,7 @@
       .f-card.glow::before{opacity:1;animation:border-travel 3.2s linear infinite}
       .f-card.glow{
         transform:translateY(-6px) !important;
-        border-color:rgba(122,224,255,.28);
+        border-color:rgba(122,224,255,.55);
         box-shadow:var(--glass-shadow-lifted);
       }
     }
@@ -2186,12 +2188,20 @@
       mask-composite:exclude;-webkit-mask-composite:xor;padding:1px;
     }
     .level-card > *{position:relative;z-index:1}
+    @media (hover:hover){
+      /* Mouse devices: the swell is a JS spring ("Liquid hover"), so only
+         the glow transitions here — slow enough to bloom with the swell. */
+      .f-card,.level-card{
+        transition:border-color .5s var(--ease-out),box-shadow .5s var(--ease-out),
+                   --glass-x .6s var(--ease-out),--glass-y .6s var(--ease-out);
+      }
+      .f-card::before,.level-card::before{transition:opacity .5s var(--ease-out)}
+    }
     /* Desktop with mouse: trigger via :hover only */
     @media (hover:hover){
       .level-card:hover::before{opacity:1;animation:border-travel 3.2s linear infinite}
       .level-card:hover{
-        transform:translateY(-6px) !important;
-        border-color:rgba(122,224,255,.28);
+        border-color:rgba(122,224,255,.55);
         box-shadow:var(--glass-shadow-lifted);
       }
     }
@@ -2200,7 +2210,7 @@
       .level-card.glow::before{opacity:1;animation:border-travel 3.2s linear infinite}
       .level-card.glow{
         transform:translateY(-6px) !important;
-        border-color:rgba(122,224,255,.28);
+        border-color:rgba(122,224,255,.55);
         box-shadow:var(--glass-shadow-lifted);
       }
     }
@@ -4391,6 +4401,59 @@
           card.style.removeProperty('--glass-y');
         });
       });
+
+      /* Liquid hover: a glass card swells out from where the cursor enters,
+         like water spreading, and settles on real springs — width leads and
+         height follows a beat behind, so it wobbles and rounds out instead of
+         snapping. Leaving mid-swell springs straight back. Transform is set
+         !important because the finished reveal animation holds transform.
+         Runs only while a card is moving; reduced-motion skips the swell
+         (the glow still blooms via CSS). */
+      if(!window.matchMedia('(prefers-reduced-motion:reduce)').matches){
+        const SWELL = 1.035, LIFT = -6;          // scale and px lift at rest-on-hover
+        const SX = { k: 210, c: 15 };            // ~15% overshoot, settles ~0.5s
+        const SY = { k: 150, c: 13 };            // softer, so height trails width
+        const moving = new Set();
+        let springRaf = 0, lastT = 0;
+        function springStep(now){
+          const dt = Math.min(.032, (now - lastT) / 1000 || .016);
+          lastT = now;
+          moving.forEach(s=>{
+            s.vx += (-SX.k * (s.x - s.to) - SX.c * s.vx) * dt; s.x += s.vx * dt;
+            s.vy += (-SY.k * (s.y - s.to) - SY.c * s.vy) * dt; s.y += s.vy * dt;
+            const settled = Math.abs(s.x - s.to) < 1e-4 && Math.abs(s.y - s.to) < 1e-4
+                         && Math.abs(s.vx) < 1e-3 && Math.abs(s.vy) < 1e-3;
+            if(settled && s.to === 1){
+              s.x = s.y = 1; s.card.style.removeProperty('transform'); moving.delete(s); return;
+            }
+            const lift = LIFT * (s.y - 1) / (SWELL - 1);
+            s.card.style.setProperty('transform',
+              `translate3d(0,${lift.toFixed(2)}px,0) scale(${s.x.toFixed(4)},${s.y.toFixed(4)})`, 'important');
+            if(settled) moving.delete(s);
+          });
+          springRaf = moving.size ? requestAnimationFrame(springStep) : 0;
+        }
+        function kick(s){
+          moving.add(s);
+          if(!springRaf){ lastT = performance.now(); springRaf = requestAnimationFrame(springStep); }
+        }
+        document.querySelectorAll('.f-card,.level-card').forEach(card=>{
+          const s = { card, x: 1, y: 1, vx: 0, vy: 0, to: 1 };
+          card.addEventListener('pointerenter', (e)=>{
+            if(e.pointerType !== 'mouse') return;
+            // Grow from halfway between the centre and the entry point.
+            const r = card.getBoundingClientRect();
+            const ox = r.width / 2 + (e.clientX - r.left - r.width / 2) * .5;
+            const oy = r.height / 2 + (e.clientY - r.top - r.height / 2) * .5;
+            card.style.transformOrigin = `${ox.toFixed(0)}px ${oy.toFixed(0)}px`;
+            s.to = SWELL; kick(s);
+          });
+          card.addEventListener('pointerleave', (e)=>{
+            if(e.pointerType !== 'mouse') return;
+            s.to = 1; kick(s);
+          });
+        });
+      }
 
     }
 
