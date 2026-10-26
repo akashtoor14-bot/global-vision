@@ -640,6 +640,10 @@
     /* Shared keyframes (used across cards and other UI — formerly grouped
        with the now-removed globe styles). */
     @keyframes spin{to{transform:rotate(360deg)}}
+    /* Registered so the conic border light can animate its start angle
+       (browsers without @property just show a still highlight). */
+    @property --border-angle{syntax:'<angle>';inherits:false;initial-value:0deg}
+    @keyframes border-travel{to{--border-angle:360deg}}
     @keyframes pulse{0%,100%{opacity:.85;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
 
     /* ============================================================
@@ -657,41 +661,45 @@
       background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
       border:1px solid rgba(190,222,245,.12);
       overflow:hidden;backdrop-filter:blur(10px);
-      transition:transform .2s var(--ease-out),border-color .2s var(--ease-out),box-shadow .2s var(--ease-out);
+      transition:transform var(--dur-quick) var(--ease),border-color var(--dur-quick) var(--ease),box-shadow var(--dur-quick) var(--ease);
     }
     .f-card::before{
-      content:"";position:absolute;inset:-1px;border-radius:16px;
-      background:conic-gradient(from 0deg, transparent, rgba(122,224,255,.3), transparent 30%);
-      /* Hidden until hover/.glow, and only spins then — it used to rotate
-         invisibly on every card on the page, all the time. */
-      opacity:0;transition:opacity .2s var(--ease-out);
-      z-index:0;
+      content:"";position:absolute;inset:0;border-radius:15px;
+      /* A short arc of light that travels round the border on hover/.glow:
+         a 1px ring just inside the border (the card's overflow:hidden clips
+         anything drawn on the border itself), stacked above the banner so
+         it isn't covered at the top. Only the gradient's start angle
+         (--border-angle) animates. The old version spun the whole masked
+         box, so only its corners ever showed — the "wobble". */
+      background:conic-gradient(from var(--border-angle), transparent 0deg, rgba(122,224,255,.95) 50deg, transparent 120deg);
+      opacity:0;transition:opacity var(--dur-quick) var(--ease);
+      z-index:2;pointer-events:none;
       mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       mask-composite:exclude;-webkit-mask-composite:xor;padding:1px;
     }
     /* Desktop with mouse: trigger via :hover only */
     @media (hover:hover){
-      .f-card:hover::before{opacity:1;animation:spin 4s linear infinite}
+      .f-card:hover::before{opacity:1;animation:border-travel 3.2s linear infinite}
       .f-card:hover{
-        transform:translateY(-6px) scale(1.04) !important;
-        border-color:rgba(122,224,255,.6);
-        box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.3);
+        transform:translateY(-4px) !important;
+        border-color:rgba(122,224,255,.28);
+        box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 1px rgba(122,224,255,.14);
       }
     }
     /* Touch devices: trigger via .glow class (set by scroll JS) only */
     @media (hover:none){
-      .f-card.glow::before{opacity:1;animation:spin 4s linear infinite}
+      .f-card.glow::before{opacity:1;animation:border-travel 3.2s linear infinite}
       .f-card.glow{
-        transform:translateY(-6px) scale(1.04) !important;
-        border-color:rgba(122,224,255,.6);
-        box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.3);
+        transform:translateY(-4px) !important;
+        border-color:rgba(122,224,255,.28);
+        box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 1px rgba(122,224,255,.14);
       }
     }
     .f-card.has-banner:hover .card-banner .glyph-fg{transform:scale(1.12)}
-    /* Community cards get a subtle scale-up on hover (Primeverse-style) */
+    /* Community cards get a slightly stronger glow on hover */
     .community-grid .f-card:hover{
-      transform:translateY(-6px) scale(1.03);
+      transform:translateY(-4px);
       box-shadow:0 28px 60px rgba(0,0,0,.5),0 0 0 1px rgba(122,224,255,.45),0 0 28px rgba(122,224,255,.18);
     }
     .f-card > *{position:relative;z-index:1}
@@ -2168,12 +2176,12 @@
       border-radius:16px;
       padding:1.6rem 1.1rem 1.4rem;text-align:center;
       backdrop-filter:blur(10px);
-      transition:transform .2s var(--ease-out),box-shadow .2s var(--ease-out),border-color .2s var(--ease-out);
+      transition:transform var(--dur-quick) var(--ease),box-shadow var(--dur-quick) var(--ease),border-color var(--dur-quick) var(--ease);
     }
     .level-card::before{
-      content:"";position:absolute;inset:-1px;border-radius:16px;
-      background:conic-gradient(from 0deg, transparent, rgba(122,224,255,.3), transparent 30%);
-      opacity:0;transition:opacity .2s var(--ease-out);
+      content:"";position:absolute;inset:0;border-radius:15px;z-index:2;pointer-events:none;
+      background:conic-gradient(from var(--border-angle), transparent 0deg, rgba(122,224,255,.95) 50deg, transparent 120deg);
+      opacity:0;transition:opacity var(--dur-quick) var(--ease);
       mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       mask-composite:exclude;-webkit-mask-composite:xor;padding:1px;
@@ -2181,20 +2189,20 @@
     .level-card > *{position:relative;z-index:1}
     /* Desktop with mouse: trigger via :hover only */
     @media (hover:hover){
-      .level-card:hover::before{opacity:1;animation:spin 4s linear infinite}
+      .level-card:hover::before{opacity:1;animation:border-travel 3.2s linear infinite}
       .level-card:hover{
-        transform:translateY(-6px) scale(1.04) !important;
-        border-color:rgba(122,224,255,.6);
-        box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.3);
+        transform:translateY(-4px) !important;
+        border-color:rgba(122,224,255,.28);
+        box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 1px rgba(122,224,255,.14);
       }
     }
     /* Touch devices: trigger via .glow class only */
     @media (hover:none){
-      .level-card.glow::before{opacity:1;animation:spin 4s linear infinite}
+      .level-card.glow::before{opacity:1;animation:border-travel 3.2s linear infinite}
       .level-card.glow{
-        transform:translateY(-6px) scale(1.04) !important;
-        border-color:rgba(122,224,255,.6);
-        box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.3);
+        transform:translateY(-4px) !important;
+        border-color:rgba(122,224,255,.28);
+        box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 1px rgba(122,224,255,.14);
       }
     }
     .level-card .badge-num{
