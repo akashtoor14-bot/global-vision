@@ -2398,6 +2398,9 @@
     }
     @media (max-width:768px){
       .section{padding:3.25rem 1rem}
+      /* Phone gutters: section 1rem + container .5rem = 24px a side (was
+         48px, which squeezed every card to ~290px wide on a 390px phone). */
+      .container{padding:0 .5rem}
       h1{font-size:60px;letter-spacing:-.8px}
       h2{font-size:40px;letter-spacing:-.8px}
       h3{font-size:19px}
@@ -2432,7 +2435,7 @@
          .container 2rem gutters for the card alone (so its demo panes
          aren't crushed) while the heading/description copy keeps the
          site's normal gutters like every other section. */
-      .dashboard{margin-inline:-1rem;padding:1rem .85rem}
+      .dashboard{margin-inline:-.5rem;padding:1rem .85rem}
       .cal-d .pnl{display:none}
       .cal-d .num{font-size:10px}
       .cal-bar{flex-direction:column;align-items:flex-start;gap:.4rem}
@@ -2452,6 +2455,13 @@
       }
       .site-header{background:rgba(6,14,30,.92)}
       .mobile-menu{background:rgba(6,14,30,.98)}
+    }
+    @media (max-width:420px){
+      /* Small phones: give the logo breathing room from the Join button */
+      .nav{padding:.75rem 1rem}
+      .logo img{height:30px}
+      .nav-cta{gap:.5rem}
+      .nav-cta .btn{padding-left:.95rem;padding-right:.95rem}
     }
     @media (max-width:480px){
       /* Step the big headings down so they don't graze the screen edge
