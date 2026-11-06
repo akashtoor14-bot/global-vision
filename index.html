@@ -650,6 +650,11 @@
     /* Shared keyframes (used across cards and other UI — formerly grouped
        with the now-removed globe styles). */
     @keyframes spin{to{transform:rotate(360deg)}}
+    /* Card edge light: the gradient's angle travels round the border.
+       (It used to rotate the whole ring element, whose corners then swept
+       across the card as a diagonal line.) */
+    @property --edge-angle{syntax:'<angle>';inherits:false;initial-value:0deg}
+    @keyframes edgeTravel{to{--edge-angle:360deg}}
     @keyframes pulse{0%,100%{opacity:.85;transform:scale(1)}50%{opacity:1;transform:scale(1.05)}}
 
     /* ============================================================
@@ -674,8 +679,8 @@
       transition:transform .5s cubic-bezier(.23,1,.32,1),border-color .45s cubic-bezier(.23,1,.32,1),box-shadow .45s cubic-bezier(.23,1,.32,1);
     }
     .f-card::before{
-      content:"";position:absolute;inset:-1px;border-radius:16px;
-      background:conic-gradient(from 0deg, transparent, rgba(122,224,255,.3), transparent 30%);
+      content:"";position:absolute;inset:0;border-radius:15px;
+      background:conic-gradient(from var(--edge-angle), transparent, rgba(122,224,255,.3), transparent 30%);
       /* Hidden until hover/.glow, and only spins then — it used to rotate
          invisibly on every card on the page, all the time. */
       opacity:0;transition:opacity .45s cubic-bezier(.23,1,.32,1);
@@ -686,7 +691,7 @@
     }
     /* Desktop with mouse: trigger via :hover only */
     @media (hover:hover){
-      .f-card:hover::before{opacity:1;animation:spin 4s linear infinite}
+      .f-card:hover::before{opacity:1;animation:edgeTravel 4s linear infinite}
       .f-card:hover{
         border-color:rgba(122,224,255,.6);
         box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.3);
@@ -694,7 +699,7 @@
     }
     /* Touch devices: trigger via .glow class (set by scroll JS) only */
     @media (hover:none){
-      .f-card.glow::before{opacity:1;animation:spin 4s linear infinite}
+      .f-card.glow::before{opacity:1;animation:edgeTravel 4s linear infinite}
       .f-card.glow{
         transform:translateY(-6px) scale(1.04) !important;
         border-color:rgba(122,224,255,.6);
@@ -2134,8 +2139,8 @@
       transition:transform .5s cubic-bezier(.23,1,.32,1),box-shadow .45s cubic-bezier(.23,1,.32,1),border-color .45s cubic-bezier(.23,1,.32,1);
     }
     .level-card::before{
-      content:"";position:absolute;inset:-1px;border-radius:16px;
-      background:conic-gradient(from 0deg, transparent, rgba(122,224,255,.3), transparent 30%);
+      content:"";position:absolute;inset:0;border-radius:15px;
+      background:conic-gradient(from var(--edge-angle), transparent, rgba(122,224,255,.3), transparent 30%);
       opacity:0;transition:opacity .45s cubic-bezier(.23,1,.32,1);
       mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
       -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
@@ -2150,7 +2155,7 @@
     }
     /* Desktop with mouse: trigger via :hover only */
     @media (hover:hover){
-      .level-card:hover::before{opacity:1;animation:spin 4s linear infinite}
+      .level-card:hover::before{opacity:1;animation:edgeTravel 4s linear infinite}
       .level-card:hover{
         border-color:rgba(122,224,255,.6);
         box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.3);
@@ -2158,7 +2163,7 @@
     }
     /* Touch devices: trigger via .glow class only */
     @media (hover:none){
-      .level-card.glow::before{opacity:1;animation:spin 4s linear infinite}
+      .level-card.glow::before{opacity:1;animation:edgeTravel 4s linear infinite}
       .level-card.glow{
         transform:translateY(-6px) scale(1.04) !important;
         border-color:rgba(122,224,255,.6);
