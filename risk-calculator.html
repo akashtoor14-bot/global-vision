@@ -7,6 +7,15 @@
   <link rel="apple-touch-icon" href="apple-touch-icon.png" />
   <title>Risk Calculator — Global Vision</title>
   <meta name="description" content="Position sizing, pip value, and R:R calculator for XAU/USD, BTC/USD, and US30 — by Global Vision." />
+  <meta name="theme-color" content="#01040d" />
+  <link rel="canonical" href="https://vip.globalv.me/risk-calculator" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="Global Vision" />
+  <meta property="og:url" content="https://vip.globalv.me/risk-calculator" />
+  <meta property="og:title" content="Risk Calculator — Global Vision" />
+  <meta property="og:description" content="Know your exact lot size before you trade. Free position-size, pip-value and risk:reward calculator." />
+  <meta property="og:image" content="https://vip.globalv.me/og-image.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="preload" href="fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin />
   <style>
     /* Site fonts, self-hosted (SIL Open Font License — see fonts/OFL-*.txt).
@@ -83,7 +92,7 @@
       box-shadow:0 0 0 1px rgba(122,224,255,.5),0 10px 30px rgba(122,224,255,.35),inset 0 1px 0 rgba(255,255,255,.6);
     }
     .btn-neon:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(122,224,255,.7),0 20px 45px rgba(122,224,255,.55),inset 0 1px 0 rgba(255,255,255,.7)}
-    .btn-ghost{background:rgba(255,255,255,.04);color:#fff;border-color:rgba(190,222,245,.25);backdrop-filter:blur(10px)}
+    .btn-ghost{background:rgba(255,255,255,.04);color:#fff;border-color:rgba(190,222,245,.25)}
     .btn-ghost:hover{background:rgba(190,222,245,.1);border-color:rgba(190,222,245,.55)}
     .btn::after{content:"";position:absolute;top:0;left:-120%;width:40%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.3),transparent);transform:skewX(-20deg);transition:left .7s var(--ease-out)}
     .btn:hover::after{left:130%}
@@ -100,6 +109,10 @@
     .tv-ticker .tradingview-widget-container{padding:.15rem 0}
     .tv-ticker iframe{display:block !important}
 
+    /* Visible focus ring for keyboard users only */
+    a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{
+      outline:2px solid #7ae0ff;outline-offset:3px;border-radius:6px;
+    }
     /* ============================================================
        HEADER
        ============================================================ */
@@ -129,7 +142,7 @@
     .back-link:hover .arrow{transform:translateX(-3px)}
 
     .nav-cta{display:flex;gap:.65rem;align-items:center}
-    .nav-cta .btn{padding:.65rem 1.15rem;font-size:13px}
+    .nav-cta .btn{padding:.65rem 1.15rem;font-size:13px;white-space:nowrap}
 
     /* ---------- Mobile menu (hamburger + drawer) ---------- */
     .nav-toggle{
@@ -182,6 +195,13 @@
       .site-header{background:rgba(6,14,30,.92)}
       .mobile-menu{background:rgba(6,14,30,.98)}
     }
+    @media (max-width:420px){
+      /* Small phones: give the logo breathing room from the Join button */
+      .nav{padding:.75rem 1rem}
+      .logo img{height:30px}
+      .nav-cta{gap:.5rem}
+      .nav-cta .btn{padding-left:.95rem;padding-right:.95rem}
+    }
 
     /* ============================================================
        PAGE HERO (compact)
@@ -233,11 +253,11 @@
 
     .calc-tabs{
       display:flex;gap:.4rem;
-      background:rgba(255,255,255,.04);
+      /* Solid base instead of backdrop blur (same look, no per-frame re-blur) */
+      background:linear-gradient(rgba(255,255,255,.04),rgba(255,255,255,.04)),rgba(2,7,19,.8);
       border:1px solid rgba(190,222,245,.14);
       padding:.4rem;border-radius:14px;
       margin:0 auto 2rem;width:fit-content;
-      backdrop-filter:blur(8px);
       position:relative;
     }
     .calc-tab{
@@ -256,10 +276,9 @@
     .calc-tab .ico{font-size:14px;line-height:1}
 
     .calc-card{
-      position:relative;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012));
+      position:relative;background:linear-gradient(180deg,rgba(255,255,255,.035),rgba(255,255,255,.012)),rgba(2,7,19,.8);
       border:1px solid rgba(190,222,245,.14);
       border-radius:18px;padding:1.85rem;margin-bottom:1.25rem;
-      backdrop-filter:blur(10px);
       box-shadow:0 24px 60px rgba(0,0,0,.25);
       overflow:hidden;
     }
@@ -423,7 +442,7 @@
       display:flex;justify-content:space-between;align-items:center;gap:1rem;flex-wrap:wrap;
     }
     .footer-inner a:hover{color:var(--cyan)}
-    .footer-inner .links{display:flex;gap:1.5rem}
+    .footer-inner .links{display:flex;flex-wrap:wrap;justify-content:center;gap:.75rem 1.5rem}
     @media (max-width:600px){.footer-inner{flex-direction:column;text-align:center}}
 
     /* ============================================================
@@ -524,16 +543,16 @@
         "symbols": [
           {"description": "Gold (XAU/USD)",   "proName": "OANDA:XAUUSD"},
           {"description": "Bitcoin",          "proName": "BITSTAMP:BTCUSD"},
-          {"description": "Dow Jones (US30)", "proName": "TVC:DJI"},
+          {"description": "Dow Jones (US30)", "proName": "OANDA:US30USD"},
           {"description": "Crude Oil (WTI)",  "proName": "TVC:USOIL"},
           {"description": "Brent Oil",        "proName": "TVC:UKOIL"},
           {"description": "Silver (XAG/USD)", "proName": "OANDA:XAGUSD"},
-          {"description": "S&P 500",          "proName": "TVC:SPX"},
-          {"description": "Nasdaq 100",       "proName": "NASDAQ:NDX"},
+          {"description": "S&P 500",          "proName": "OANDA:SPX500USD"},
+          {"description": "Nasdaq 100",       "proName": "OANDA:NAS100USD"},
           {"description": "Ethereum",         "proName": "BITSTAMP:ETHUSD"},
           {"description": "EUR/USD",          "proName": "FX:EURUSD"},
           {"description": "GBP/USD",          "proName": "FX:GBPUSD"},
-          {"description": "USD Index (DXY)",  "proName": "TVC:DXY"}
+          {"description": "USD Index (DXY)",  "proName": "CAPITALCOM:DXY"}
         ],
         "showSymbolLogo": true,
         "isTransparent": true,
@@ -725,8 +744,11 @@
       <div>© <span id="year"></span> Global Vision. All rights reserved.</div>
       <div class="links">
         <a href="index.html">Home</a>
-        <a href="index.html#community">Community</a>
+        <a href="index.html#trading">Community</a>
         <a href="https://portal.globalv.me" target="_blank" rel="noopener noreferrer">Portal</a>
+        <a href="legal.html#terms">Terms</a>
+        <a href="legal.html#privacy">Privacy</a>
+        <a href="legal.html#risk">Risk Disclosure</a>
       </div>
     </div>
   </footer>
