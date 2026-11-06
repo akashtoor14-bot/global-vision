@@ -2580,6 +2580,8 @@
       animation:spin .8s linear infinite;
     }
     .form-frame.is-loaded .form-loading{display:none}
+    /* Only spin while someone is looking at it (the modal is open) */
+    .modal-backdrop:not(.open) .form-loading::before{animation:none}
 
     .form-row{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-bottom:.85rem}
     .form-field{position:relative;margin-bottom:.85rem}
