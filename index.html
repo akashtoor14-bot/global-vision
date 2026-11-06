@@ -156,10 +156,6 @@
       background:linear-gradient(90deg, var(--blue-soft) 0%, #fff 40%, var(--cyan) 80%);
       -webkit-background-clip:text;background-clip:text;color:transparent;
     }
-    .grad-text-dark{
-      background:linear-gradient(90deg, var(--navy) 0%, var(--blue) 100%);
-      -webkit-background-clip:text;background-clip:text;color:transparent;
-    }
 
     /* ============================================================
        LAYOUT
@@ -199,9 +195,6 @@
     .section.dark h2,.section.dark h3,.section.dark h4{color:#fff}
     .section.dark .section-header p{color:#9fb0cb}
 
-    /* LIGHT SECTION */
-    .section.light{background:var(--soft)}
-
     /* ============================================================
        GRID / STAR BACKDROP (for dark sections)
        ============================================================ */
@@ -240,12 +233,6 @@
     .btn .arrow{transition:transform .25s var(--ease)}
     .btn:hover .arrow{transform:translateX(4px)}
 
-    .btn-primary{
-      background:linear-gradient(180deg, #2a5a9c 0%, #1A3D6C 100%);
-      color:#fff;box-shadow:0 10px 24px rgba(26,61,108,.35), inset 0 1px 0 rgba(255,255,255,.15);
-    }
-    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 36px rgba(26,61,108,.45), inset 0 1px 0 rgba(255,255,255,.2)}
-
     .btn-neon{
       background:linear-gradient(135deg, #7ae0ff 0%, #BEDEF5 100%);
       color:#062139;
@@ -258,9 +245,6 @@
       border-color:rgba(190,222,245,.25);
     }
     .btn-ghost:hover{background:rgba(190,222,245,.1);border-color:rgba(190,222,245,.55)}
-
-    .btn-outline-dark{background:transparent;color:var(--navy);border-color:var(--navy)}
-    .btn-outline-dark:hover{background:var(--navy);color:#fff}
 
     /* Shine pass on buttons */
     .btn::after{
@@ -280,8 +264,6 @@
       border-bottom:1px solid rgba(103,154,203,.14);
       overflow:hidden;
     }
-    /* TradingView widget container fits inside our dark ticker bar */
-    .tv-ticker .tradingview-widget-container{padding:.15rem 0}
     .tv-ticker iframe{display:block !important}
 
     /* ============================================================
@@ -378,31 +360,6 @@
         radial-gradient(1200px 700px at 75% 35%, rgba(103,154,203,.18), transparent 55%),
         radial-gradient(900px 600px at 10% 90%, rgba(122,224,255,.08), transparent 55%);
     }
-    .hero-grid-bg{
-      position:absolute;inset:0;z-index:0;pointer-events:none;
-      background-image:
-        linear-gradient(to right, rgba(190,222,245,.06) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(190,222,245,.06) 1px, transparent 1px);
-      background-size:60px 60px;
-      mask-image:radial-gradient(ellipse at center, black 35%, transparent 85%);
-      -webkit-mask-image:radial-gradient(ellipse at center, black 35%, transparent 85%);
-    }
-    /* Perspective floor */
-    .hero-floor{
-      position:absolute;bottom:-20%;left:-10%;right:-10%;height:60%;z-index:0;pointer-events:none;
-      background-image:
-        linear-gradient(to right, rgba(122,224,255,.22) 1px, transparent 1px),
-        linear-gradient(to bottom, rgba(122,224,255,.22) 1px, transparent 1px);
-      background-size:60px 60px;
-      transform:perspective(600px) rotateX(65deg);
-      mask-image:linear-gradient(to top, black 30%, transparent 100%);
-      -webkit-mask-image:linear-gradient(to top, black 30%, transparent 100%);
-      animation:floorShift 20s linear infinite;
-    }
-    @keyframes floorShift{
-      from{background-position:0 0}
-      to{background-position:60px 60px}
-    }
     /* Global star layer — fixed to viewport, parallax effect as content scrolls past */
     .stars-bg{
       position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;
@@ -478,104 +435,6 @@
          meta cards keep their own narrower max-widths. */
       max-width:760px;
     }
-    .modal-hero-eyebrow{
-      display:inline-flex;
-      align-items:center;
-      gap:.5rem;
-      font-family:Inter,system-ui,sans-serif;
-      font-size:12px;
-      font-weight:500;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      color:#7ae0ff;
-      margin-bottom:1.5rem;
-    }
-    .modal-hero-eyebrow::before{
-      content:"";
-      width:6px;height:6px;
-      background:#7ae0ff;
-      border-radius:50%;
-      box-shadow:0 0 8px #7ae0ff;
-    }
-    .modal-hero-h1{
-      font-family:Inter,system-ui,sans-serif;
-      font-size:64px;
-      font-weight:700;
-      line-height:1.05;
-      letter-spacing:-.015em;
-      color:#dffaff;
-      margin:0 0 1.5rem 0;
-      background:none;
-      -webkit-text-fill-color:#dffaff;
-    }
-    .modal-hero-sub{
-      font-family:Inter,system-ui,sans-serif;
-      font-size:18px;
-      line-height:1.5;
-      color:#dffaff;
-      opacity:.72;
-      margin:0 0 2.5rem;
-      max-width:480px;
-    }
-    .modal-hero-cta{
-      display:flex;
-      gap:.75rem;
-      justify-content:flex-start;
-      align-items:center;
-      /* Re-enable clicks on the buttons; the wrapper passes clicks
-         through to the globe canvas behind it. */
-      pointer-events:auto;
-    }
-    .modal-btn-primary,
-    .modal-btn-ghost{
-      display:inline-flex;
-      align-items:center;
-      gap:.5rem;
-      font-family:Inter,system-ui,sans-serif;
-      font-size:14px;
-      font-weight:500;
-      letter-spacing:-.02em;
-      padding:.7rem 1.5rem;
-      border-radius:4px;
-      text-decoration:none;
-      cursor:pointer;
-      transition:background-color .2s ease,color .2s ease,
-                 border-color .2s ease,transform .15s ease;
-    }
-    .modal-btn-primary{
-      background:#7ae0ff;
-      color:#01040d;
-      border:0;
-    }
-    .modal-btn-primary:hover{
-      background:#a8eaff;
-      transform:translateY(-1px);
-    }
-    .modal-btn-ghost{
-      background:transparent;
-      color:#dffaff;
-      border:1px solid #1a3258;
-    }
-    .modal-btn-ghost:hover{
-      border-color:#7ae0ff;
-      color:#fff;
-    }
-    .modal-hero-meta{
-      display:flex;
-      gap:1.25rem;
-      justify-content:flex-start;
-      margin-top:2.25rem;
-      font-family:Inter,system-ui,sans-serif;
-      font-size:12px;
-      letter-spacing:.05em;
-      color:#677d8e;
-      text-transform:uppercase;
-    }
-    .modal-hero-meta strong{
-      color:#dffaff;
-      font-weight:600;
-    }
-    .modal-hero-meta-sep{color:#1a3258}
     .modal-hero-hint{
       position:absolute;
       bottom:1.5rem;
@@ -624,61 +483,14 @@
       .modal-hero-text{max-width:none;text-align:center}
       .modal-hero .sub{margin-left:auto;margin-right:auto}
       .modal-hero .hero-cta{justify-content:center}
-      .modal-hero .hero-meta{margin-left:auto;margin-right:auto}
       .modal-hero-hint{display:none}
     }
 
-    /* Hero brand logo — primary visual focal point in place of any
-       planet / 3D rendering. Subtle cyan drop-shadow halo + gentle
-       6s vertical float. Fades in on initial load. */
-    .hero-logo{
-      display:block;
-      width:100%;max-width:520px;height:auto;
-      margin:0 auto 2.25rem;
-      filter:drop-shadow(0 0 36px rgba(122,224,255,.35))
-             drop-shadow(0 0 10px rgba(122,224,255,.25));
-      animation:heroLogoIn 1.1s cubic-bezier(.22,1,.36,1) .15s backwards,
-                heroLogoFloat 6s ease-in-out infinite 1.2s;
-    }
-    @keyframes heroLogoIn{
-      0%{opacity:0;transform:translateY(10px) scale(.97)}
-      100%{opacity:1;transform:translateY(0) scale(1)}
-    }
-    @keyframes heroLogoFloat{
-      0%,100%{transform:translateY(0)}
-      50%{transform:translateY(-5px)}
-    }
-    @media (max-width:1100px){.hero-logo{max-width:420px}}
-    @media (max-width:768px){.hero-logo{max-width:300px;margin-bottom:1.5rem}}
-    @media (prefers-reduced-motion:reduce){
-      .hero-logo{animation:none}
-    }
     .hero h1{margin-bottom:1.35rem}
     .hero .sub{
       font-size:19px;color:#b4c3dc;max-width:560px;margin-bottom:2.25rem;
     }
     .hero-cta{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2.75rem;pointer-events:auto}
-
-    /* Hero meta cards (glass) */
-    .hero-meta{
-      display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem;max-width:520px;
-    }
-    .meta-card{
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(190,222,245,.14);
-      border-radius:14px;padding:1rem 1.1rem;backdrop-filter:blur(10px);
-      position:relative;overflow:hidden;
-    }
-    .meta-card::before{
-      content:"";position:absolute;inset:0;border-radius:14px;
-      background:linear-gradient(135deg, rgba(122,224,255,.2), transparent 50%);
-      mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask:linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      mask-composite:exclude;-webkit-mask-composite:xor;
-      padding:1px;pointer-events:none;
-    }
-    .meta-card strong{font-size:22px;color:#fff;font-weight:800;letter-spacing:-.4px;display:block}
-    .meta-card span{font-size:11px;color:#8fa3c5;text-transform:uppercase;letter-spacing:1.5px}
 
     /* Shared keyframes (used across cards and other UI — formerly grouped
        with the now-removed globe styles). */
@@ -694,10 +506,6 @@
        FEATURE CARDS
        ============================================================ */
     .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem}
-    .grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:2rem}
-    .grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:1.25rem}
-    @media (max-width:1024px){.grid-4{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:560px){.grid-4{grid-template-columns:1fr}}
 
     /* Futuristic glass card (dark sections) */
     .f-card{
@@ -739,12 +547,6 @@
         box-shadow:0 28px 60px rgba(0,0,0,.45),0 0 0 2px rgba(122,224,255,.3);
       }
     }
-    .f-card.has-banner:hover .card-banner .glyph-fg{transform:scale(1.12)}
-    /* Community cards get a subtle scale-up on hover (Primeverse-style) */
-    .community-grid .f-card:hover{
-      transform:translateY(-6px) scale(1.03);
-      box-shadow:0 28px 60px rgba(0,0,0,.5),0 0 0 1px rgba(122,224,255,.45),0 0 28px rgba(122,224,255,.18);
-    }
     .f-card > *{position:relative;z-index:1}
 
     .f-card .icon{
@@ -779,19 +581,6 @@
         radial-gradient(1px 1px at 85% 25%, rgba(255,255,255,.4),  transparent 60%),
         radial-gradient(1px 1px at 35% 65%, rgba(190,222,245,.4),  transparent 60%);
     }
-    .f-card.has-banner .card-banner .glyph-bg,
-    .f-card.has-banner .card-banner .glyph-fg{
-      position:absolute;font-family:'JetBrains Mono',ui-monospace,monospace;line-height:1;
-    }
-    .f-card.has-banner .card-banner .glyph-bg{
-      font-size:160px;color:rgba(190,222,245,.05);
-      transform:translate(15%, 5%);
-    }
-    .f-card.has-banner .card-banner .glyph-fg{
-      font-size:62px;color:var(--cyan);
-      filter:drop-shadow(0 0 18px rgba(122,224,255,.55));
-      transition:transform .5s var(--ease-out);
-    }
     .f-card.has-banner > h3{padding:1.5rem 1.6rem 0;margin-bottom:.55rem}
     .f-card.has-banner > p {padding:0 1.6rem 1.6rem}
 
@@ -800,210 +589,6 @@
       position:absolute;inset:0;width:100%;height:100%;
       pointer-events:none;
       filter:drop-shadow(0 0 12px rgba(122,224,255,.18));
-    }
-    /* When a card has an animated illustration, hide the static glyph */
-    .f-card.has-anim .glyph-bg,.f-card.has-anim .glyph-fg{display:none}
-
-    /* ---- Chat-bubble illustration (Community Chat) ---- */
-    /* Each bubble pops in (scale+opacity) then gently floats forever */
-    .anim-chat .bubble{
-      transform-origin:center;transform-box:fill-box;
-      opacity:0;animation:chatPopIn .55s var(--ease-out) forwards, chatFloat 4.5s ease-in-out infinite 1.2s;
-    }
-    .anim-chat .bubble.bub1{animation-delay:.2s, 1.2s}
-    .anim-chat .bubble.bub2{animation-delay:1.0s, 2.0s}
-    .anim-chat .bubble.bub3{animation-delay:1.8s, 2.8s}
-    @keyframes chatPopIn{
-      0%  {opacity:0;transform:translateY(8px) scale(.92)}
-      100%{opacity:1;transform:translateY(0) scale(1)}
-    }
-    @keyframes chatFloat{
-      0%,100%{transform:translateY(0)}
-      50%    {transform:translateY(-2.5px)}
-    }
-    /* Typing-indicator dots — pulse opacity in sequence */
-    .anim-chat .dot{
-      transform-origin:center;transform-box:fill-box;
-      animation:chatDotPulse 1.2s ease-in-out infinite;
-    }
-    .anim-chat .dot.d2{animation-delay:.20s}
-    .anim-chat .dot.d3{animation-delay:.40s}
-    @keyframes chatDotPulse{
-      0%,100%{opacity:.30;transform:translateY(0)}
-      50%    {opacity:1;  transform:translateY(-2px)}
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      .anim-chat .bubble,.anim-chat .dot{animation:none;opacity:1}
-    }
-
-    /* ---- Microphone illustration (Live Rooms) ----
-       Audio waveform bars on each side of the mic pulse vertically
-       at different rhythms, like an EQ visualizer. Capsule glow steady. */
-    .anim-mic .bar{
-      transform-origin:center;transform-box:fill-box;
-      animation:micBarPulse 1.1s ease-in-out infinite;
-      filter:drop-shadow(0 0 4px rgba(122,224,255,.55));
-    }
-    .anim-mic .bar.b1{animation-duration:1.30s; animation-delay:-.10s}
-    .anim-mic .bar.b2{animation-duration:0.95s; animation-delay:-.45s}
-    .anim-mic .bar.b3{animation-duration:1.50s; animation-delay:-.20s}
-    .anim-mic .bar.b4{animation-duration:1.05s; animation-delay:-.65s}
-    .anim-mic .bar.b5{animation-duration:1.20s; animation-delay:-.30s}
-    .anim-mic .bar.b6{animation-duration:0.90s; animation-delay:-.55s}
-    .anim-mic .bar.b7{animation-duration:1.40s; animation-delay:-.15s}
-    .anim-mic .bar.b8{animation-duration:1.10s; animation-delay:-.70s}
-    @keyframes micBarPulse{
-      0%,100%{transform:scaleY(.30)}
-      50%    {transform:scaleY(1.25)}
-    }
-    .anim-mic .mic-glow{
-      transform-origin:center;transform-box:fill-box;
-      animation:micGlowPulse 2.0s ease-in-out infinite;
-    }
-    @keyframes micGlowPulse{
-      0%,100%{transform:scale(1);  opacity:.85}
-      50%    {transform:scale(1.4);opacity:1}
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      .anim-mic .bar,.anim-mic .mic-glow{animation:none}
-    }
-
-    /* ---- Stacked-docs illustration (Resource Vault) ----
-       Front document gently bobs up/down; checkmarks reveal sequentially. */
-    .anim-vault .doc-front{
-      transform-origin:center;transform-box:fill-box;
-      animation:vaultFrontFloat 5s ease-in-out infinite;
-    }
-    @keyframes vaultFrontFloat{
-      0%,100%{transform:translateY(0)}
-      50%    {transform:translateY(-3px)}
-    }
-    /* Each tick path is hidden initially (drawn via stroke-dashoffset),
-       then "draws in" sequentially. Loops every 6s. */
-    .anim-vault .tick{
-      stroke-dasharray:7;stroke-dashoffset:7;
-      animation:vaultTickDraw 6s ease-in-out infinite;
-    }
-    .anim-vault .c1 .tick{animation-delay:.4s}
-    .anim-vault .c2 .tick{animation-delay:1.2s}
-    .anim-vault .c3 .tick{animation-delay:2.0s}
-    .anim-vault .c4 .tick{animation-delay:2.8s}
-    @keyframes vaultTickDraw{
-      0%   {stroke-dashoffset:7}
-      8%   {stroke-dashoffset:0}
-      80%  {stroke-dashoffset:0}
-      90%  {stroke-dashoffset:7}
-      100% {stroke-dashoffset:7}
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      .anim-vault .doc-front,.anim-vault .tick{animation:none;stroke-dashoffset:0}
-    }
-
-    /* ---- Mentorship illustration (two avatars + flowing connection) ----
-       Connection line dashes flow toward right avatar; a pellet travels
-       along the curved path; both avatars gently breathe out of phase. */
-    .anim-mentor .conn{
-      animation:mentorDashFlow 2.4s linear infinite;
-    }
-    @keyframes mentorDashFlow{
-      0%  {stroke-dashoffset:0}
-      100%{stroke-dashoffset:-28}
-    }
-    .anim-mentor .pellet{
-      offset-path:path("M126,90 Q160,68 194,90");
-      offset-rotate:0deg;
-      animation:mentorPellet 2.4s linear infinite;
-      filter:drop-shadow(0 0 5px #7ae0ff);
-    }
-    @keyframes mentorPellet{
-      0%  {offset-distance:0%; opacity:0}
-      10% {opacity:1}
-      90% {opacity:1}
-      100%{offset-distance:100%; opacity:0}
-    }
-    .anim-mentor .avatar{
-      transform-origin:center;transform-box:fill-box;
-      animation:mentorBreathe 3.6s ease-in-out infinite;
-    }
-    .anim-mentor .av-r{animation-delay:-1.8s}
-    @keyframes mentorBreathe{
-      0%,100%{transform:scale(1)}
-      50%    {transform:scale(1.04)}
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      .anim-mentor .conn,.anim-mentor .pellet,.anim-mentor .avatar{animation:none}
-    }
-
-    /* ---- Phone-with-alert illustration (Signal Alerts) ----
-       Phone subtly wobbles like it's vibrating; notification badge
-       pulses; rose-colored ripples emanate from the badge. */
-    .anim-alert .phone{
-      transform-origin:center;transform-box:fill-box;
-      animation:alertWobble 3s ease-in-out infinite;
-    }
-    @keyframes alertWobble{
-      0%,100%{transform:rotate(0)}
-      40%    {transform:rotate(-1.5deg)}
-      55%    {transform:rotate(1.5deg)}
-      70%    {transform:rotate(-1deg)}
-      85%    {transform:rotate(0)}
-    }
-    .anim-alert .badge{
-      transform-origin:center;transform-box:fill-box;
-      animation:alertBadgePulse 1.6s ease-in-out infinite;
-      filter:drop-shadow(0 0 6px #ff7a9b);
-    }
-    @keyframes alertBadgePulse{
-      0%,100%{transform:scale(1)}
-      50%    {transform:scale(1.18)}
-    }
-    .anim-alert .ripple{
-      transform-origin:center;transform-box:fill-box;
-      opacity:0;
-      animation:alertRipple 2.2s ease-out infinite;
-    }
-    .anim-alert .ripple.rp2{animation-delay:.7s}
-    .anim-alert .ripple.rp3{animation-delay:1.4s}
-    @keyframes alertRipple{
-      0%   {transform:scale(.6); opacity:0}
-      15%  {opacity:.85}
-      100% {transform:scale(2.6); opacity:0}
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      .anim-alert .phone,.anim-alert .badge,.anim-alert .ripple{animation:none}
-    }
-
-    /* ---- Calendar illustration (Monthly Events) ----
-       Event dates pulse out of phase; today indicator has an
-       outward ring pulse + a steady center glow. */
-    .anim-cal .event{
-      transform-origin:center;transform-box:fill-box;
-      animation:calEventPulse 2.4s ease-in-out infinite;
-      filter:drop-shadow(0 0 5px rgba(122,224,255,.7));
-    }
-    .anim-cal .event.e2{animation-delay:.6s}
-    .anim-cal .event.e3{animation-delay:1.2s}
-    .anim-cal .event.e4{animation-delay:1.8s}
-    @keyframes calEventPulse{
-      0%,100%{transform:scale(.85);opacity:.6}
-      50%    {transform:scale(1.15);opacity:1}
-    }
-    .anim-cal .today-ring{
-      transform-origin:center;transform-box:fill-box;
-      animation:calTodayRing 2.6s ease-out infinite;
-    }
-    @keyframes calTodayRing{
-      0%   {transform:scale(.7);opacity:1}
-      100% {transform:scale(2);  opacity:0}
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      .anim-cal .event,.anim-cal .today-ring{animation:none}
     }
 
     /* ============================================================
@@ -1064,19 +649,11 @@
       0%  {opacity:0;transform:translateY(8px) scale(.97)}
       100%{opacity:1;transform:translateY(0) scale(1)}
     }
-    @keyframes liveFrameFloat{
-      0%,100%{transform:translateY(0)}
-      50%    {transform:translateY(-2.5px)}
-    }
     /* Card beats: after the intro, these illustrations no longer loop
        non-stop (that kept every SVG repainting every frame). A small script
        adds .beat for a couple of seconds every ~5s while the card is on
        screen, so each card makes one calm move at a time. */
     .anim-live .frame-glow{opacity:.6}
-    @keyframes liveGlowPulse{
-      0%,100%{opacity:.45;transform:scaleX(1)}
-      50%    {opacity:.75;transform:scaleX(1.05)}
-    }
     .anim-live .live-badge{
       opacity:0;
       animation:liveBadgeIn .4s ease-out .4s forwards;
@@ -1229,15 +806,7 @@
       0%  {opacity:0;transform:translateY(8px) scale(.97)}
       100%{opacity:1;transform:translateY(0)   scale(1)}
     }
-    @keyframes indFrameFloat{
-      0%,100%{transform:translateY(0)}
-      50%    {transform:translateY(-2px)}
-    }
     .anim-indicators .frame-glow{opacity:.6}
-    @keyframes indGlowPulse{
-      0%,100%{opacity:.45;transform:scaleX(1)}
-      50%    {opacity:.75;transform:scaleX(1.05)}
-    }
     .anim-indicators .status-dot{transform-origin:center;transform-box:fill-box}
     .anim-indicators.beat .status-dot{animation:indStatusPulse 1.6s ease-in-out}
     @keyframes indStatusPulse{
@@ -1306,10 +875,6 @@
        absorbed into the academy). Ambient sparkle particles drift up
        in the background. Cap idle-floats gently. */
     .anim-academy .cap-glow{opacity:.7}
-    @keyframes acCapGlow{
-      0%,100%{opacity:.55;transform:scale(1)}
-      50%    {opacity:.85;transform:scale(1.08)}
-    }
     .anim-academy .cap{
       transform-origin:center;transform-box:fill-box;
       opacity:0;
@@ -1318,10 +883,6 @@
     @keyframes acCapIn{
       0%  {opacity:0;transform:translateY(8px) scale(.92)}
       100%{opacity:1;transform:translateY(0)   scale(1)}
-    }
-    @keyframes acCapFloat{
-      0%,100%{transform:translateY(0)}
-      50%    {transform:translateY(-3px)}
     }
     .anim-academy .tassel{
       transform-origin:201px 77px;transform:rotate(-3deg);
@@ -1369,10 +930,6 @@
        Heatmap cells light up with a diagonal sweep shimmer;
        P&L bar grows from 0 to ~70% width; subtle journal float. */
 
-    @keyframes journalFloat{
-      0%,100%{transform:translateY(0)}
-      50%    {transform:translateY(-3px)}
-    }
     /* One diagonal shimmer sweeps the calendar per beat */
     .anim-journal .cell{transform-origin:center;transform-box:fill-box}
     .anim-journal.beat .cell{animation:journalCellShimmer 1.4s ease-in-out}
@@ -1397,10 +954,6 @@
       0%  {transform:scaleX(0)}
       100%{transform:scaleX(1)}
     }
-    @keyframes journalPnlPulse{
-      0%,100%{filter:brightness(1)}
-      50%    {filter:brightness(1.35)}
-    }
     @media (prefers-reduced-motion: reduce){
       .anim-journal .journal,.anim-journal .cell,.anim-journal .pnl-bar-fill{
         animation:none;transform:none;
@@ -1414,10 +967,6 @@
     /* The 455-dot map no longer shimmers as a whole (that repainted the
        entire map every frame); one city pings at a time instead. */
     .anim-network .netmap{opacity:.62}
-    @keyframes netmapShimmer{
-      0%,100%{opacity:.52}
-      50%    {opacity:.74}
-    }
     .anim-network .pin .dot{transform-origin:center;transform-box:fill-box;opacity:.55}
     .anim-network .pin .ring{transform-origin:center;transform-box:fill-box;opacity:0}
     .anim-network .pin.ping .dot{animation:netPinDot 2.6s ease-in-out}
@@ -1462,39 +1011,6 @@
     }
     .l-card h3{color:var(--navy);margin-bottom:.55rem}
     .l-card p{color:var(--muted);font-size:14.5px}
-
-    /* ============================================================
-       STATS / COUNTERS
-       ============================================================ */
-    .stats-row{
-      display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:3.5rem;
-    }
-    .stat-box{
-      position:relative;padding:1.9rem;border-radius:14px;text-align:center;overflow:hidden;
-      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
-      border:1px solid rgba(190,222,245,.14);
-      transition:transform .3s var(--ease),border-color .3s;
-    }
-    .stat-box:hover{transform:translateY(-3px);border-color:rgba(122,224,255,.4)}
-    .stat-box .num{
-      font-size:44px;font-weight:800;color:#fff;
-      letter-spacing:-.8px;margin-bottom:.25rem;line-height:1;
-      font-variant-numeric:tabular-nums;
-      background:linear-gradient(180deg,#fff,#a2c9ec);
-      -webkit-background-clip:text;background-clip:text;color:transparent;
-    }
-    .stat-box .lbl{font-size:11px;letter-spacing:1.8px;text-transform:uppercase;color:#8fa3c5}
-    .stat-box .spark{position:absolute;inset:auto 0 0 0;height:60%;opacity:.2;pointer-events:none}
-
-    /* Light stat variant */
-    .stats-light .stat-box{
-      background:#fff;border-color:var(--line);
-    }
-    .stats-light .stat-box .num{
-      background:linear-gradient(180deg,var(--navy),var(--blue));
-      -webkit-background-clip:text;background-clip:text;color:transparent;
-    }
-    .stats-light .stat-box .lbl{color:var(--muted)}
 
     /* ============================================================
        DASHBOARD SECTION (complex live visual)
@@ -1551,55 +1067,6 @@
       background:radial-gradient(600px 300px at 80% 0%, rgba(122,224,255,.15), transparent 60%);
       pointer-events:none;
     }
-    .db-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;position:relative}
-    .db-head .pair{font-weight:800;letter-spacing:.4px;font-size:15px;display:flex;align-items:center;gap:.5rem}
-    .db-head .pair .emoji{color:var(--amber)}
-    .db-head .pill{
-      background:rgba(108,243,180,.1);border:1px solid rgba(108,243,180,.3);
-      color:var(--mint);
-      padding:.3rem .7rem;border-radius:999px;font-size:10.5px;letter-spacing:1.4px;text-transform:uppercase;
-      display:inline-flex;align-items:center;gap:.45rem;font-weight:700;
-    }
-    .db-head .pill .dot{
-      width:6px;height:6px;border-radius:50%;background:var(--mint);
-      box-shadow:0 0 10px var(--mint);animation:pulse 1.4s ease-in-out infinite;
-    }
-
-    .db-price{display:flex;align-items:baseline;gap:.8rem;margin-bottom:.8rem;position:relative}
-    .db-price .main{font-size:34px;font-weight:800;letter-spacing:-1px;color:#fff;font-variant-numeric:tabular-nums}
-    .db-price .chg{font-size:13px;color:var(--mint);font-weight:700}
-
-    /* TradingView Symbol Overview widget inside dashboard card */
-    .db-tv{
-      position:relative;border-radius:10px;overflow:hidden;
-      background:rgba(7,16,34,.4);
-      border:1px solid rgba(190,222,245,.08);
-      min-height:320px;
-    }
-    .db-tv .tradingview-widget-container,
-    .db-tv .tradingview-widget-container__widget{height:100%;width:100%}
-
-    .db-chart{
-      position:relative;height:240px;border-radius:10px;overflow:hidden;
-      background:
-        linear-gradient(180deg, rgba(103,154,203,.08) 0%, transparent 100%),
-        repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0 1px, transparent 1px 44px),
-        repeating-linear-gradient(0deg,  rgba(255,255,255,.035) 0 1px, transparent 1px 40px);
-    }
-    .db-chart svg{position:absolute;inset:0;width:100%;height:100%}
-    .chart-line{
-      fill:none;stroke:url(#lineGrad);stroke-width:2.5;
-      stroke-linecap:round;stroke-linejoin:round;
-      filter:drop-shadow(0 0 8px rgba(122,224,255,.6));
-      stroke-dasharray:1600;stroke-dashoffset:1600;
-      animation:draw 5s var(--ease-out) forwards infinite;
-    }
-    @keyframes draw{
-      0%{stroke-dashoffset:1600}
-      70%,100%{stroke-dashoffset:0}
-    }
-    .chart-area{fill:url(#areaGrad);opacity:.6}
-    .chart-dot{fill:var(--cyan);filter:drop-shadow(0 0 8px var(--cyan));animation:pulse 1.3s ease-in-out infinite}
 
     .db-meta{display:grid;grid-template-columns:repeat(4,1fr);gap:.6rem;margin-top:1rem;position:relative}
     .db-meta .m{
@@ -1733,11 +1200,6 @@
     .vs-navitem.locked:hover{background:transparent;color:#9fb0cb}
     .vs-navitem .ico{
       width:16px;font-size:13px;text-align:center;flex-shrink:0;line-height:1;
-    }
-    .vs-badge{
-      margin-left:auto;padding:.12rem .4rem;border-radius:4px;
-      background:rgba(122,224,255,.12);color:var(--cyan);
-      font-size:8px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;
     }
     .vs-nav-divider{
       height:1px;background:rgba(190,222,245,.08);
@@ -2235,7 +1697,6 @@
       color:var(--cyan);font-size:10.5px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;
       margin-bottom:.8rem;
     }
-    .founder-bio{color:#9fb0cb;font-size:13.5px;line-height:1.55}
     @media (max-width:900px){
       .founder-grid{grid-template-columns:1fr;gap:1.1rem;max-width:420px}
     }
@@ -2288,11 +1749,6 @@
     .f-card.testimonial p{color:#c8d3e3;font-size:14.5px;line-height:1.6;font-style:italic}
 
     /* ============================================================
-       COMMUNITY
-       ============================================================ */
-    .community-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
-
-    /* ============================================================
        PRODUCTS GRID — Trading section "Everything you need" cards
        (Banner illustration + eyebrow/pill meta row + explore link)
        ============================================================ */
@@ -2312,11 +1768,6 @@
       background:rgba(122,224,255,.10);
       border:1px solid rgba(122,224,255,.32);
       color:var(--cyan);white-space:nowrap;
-    }
-    .f-card.has-banner .card-meta .meta-pill.soon{
-      background:rgba(255,200,122,.10);
-      border-color:rgba(255,200,122,.40);
-      color:#ffd28f;
     }
     .f-card.has-banner .card-meta .meta-pill.is-live{
       background:rgba(108,243,180,.10);
@@ -2390,7 +1841,7 @@
     .reveal.in{animation:fadeInUp .5s var(--ease-out) both}
     .fade-in{animation:fadeInUp .6s var(--ease-out) both}
     .delay-1{animation-delay:.08s}.delay-2{animation-delay:.16s}
-    .delay-3{animation-delay:.24s}.delay-4{animation-delay:.32s}
+    .delay-3{animation-delay:.24s}
     /* On mobile or for reduced-motion users: skip the reveal animation
        entirely — content shows immediately, no white flash on scroll. */
     @media (max-width:768px), (prefers-reduced-motion:reduce){
@@ -2402,14 +1853,12 @@
        RESPONSIVE
        ============================================================ */
     @media (max-width:1100px){
-      .hero-grid{grid-template-columns:1fr;text-align:center}
-      .hero-meta{margin-left:auto;margin-right:auto}
-      .hero-cta,.tier-tabs{justify-content:center}
+      .hero-cta{justify-content:center}
       h1{font-size:88px}h2{font-size:64px}
     }
     @media (max-width:1024px){
       h1{font-size:72px}h2{font-size:52px}
-      .grid-3,.community-grid{grid-template-columns:repeat(2,1fr)}
+      .grid-3{grid-template-columns:repeat(2,1fr)}
       .academy-grid{grid-template-columns:repeat(3,1fr)}
       .academy-grid::before,.academy-grid::after{display:none}
       .footer-grid{grid-template-columns:1fr 1fr 1fr}
@@ -2435,11 +1884,7 @@
       /* Cards stack single-column on mobile for max readability. Stats
          row stays 3-up since the small stat cards are info-dense, not
          content. */
-      .grid-3,.grid-2,.community-grid{grid-template-columns:1fr;gap:1rem}
-      .stats-row{grid-template-columns:repeat(3,1fr);gap:.5rem;margin-top:2rem}
-      .stat-box{padding:.8rem .4rem;border-radius:11px}
-      .stat-box .num{font-size:19px;letter-spacing:-.3px}
-      .stat-box .lbl{font-size:9px;letter-spacing:.8px}
+      .grid-3{grid-template-columns:1fr;gap:1rem}
       .f-card{padding:1.1rem}
       .f-card.has-banner{padding:0}
       .f-card.has-banner > h3{padding:.9rem 1rem 0}
@@ -2462,16 +1907,11 @@
       .cal-bar{flex-direction:column;align-items:flex-start;gap:.4rem}
       .cal-bar .stats{gap:.75rem;font-size:10.5px}
       .cursor-glow{display:none}
-      .hero-meta{grid-template-columns:repeat(3,1fr);gap:.5rem}
-      .meta-card{padding:.7rem .55rem;border-radius:11px}
-      .meta-card strong{font-size:18px;letter-spacing:-.3px}
-      .meta-card span{font-size:9.5px;letter-spacing:1px}
 
       /* Disable backdrop-filter on mobile — it's the #1 paint cost on
          phones. Use solid (slightly more opaque) backgrounds instead.
          (Cards, pills and founder cards no longer use it anywhere.) */
-      .site-header,.mobile-menu,.modal,.meta-card,
-      .dashboard,.signals-list,.l-card,.cta-banner{
+      .site-header,.mobile-menu,.modal,.dashboard,.signals-list,.l-card,.cta-banner{
         backdrop-filter:none !important;-webkit-backdrop-filter:none !important;
       }
       .site-header{background:rgba(6,14,30,.92)}
@@ -2583,73 +2023,8 @@
     /* Only spin while someone is looking at it (the modal is open) */
     .modal-backdrop:not(.open) .form-loading::before{animation:none}
 
-    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;margin-bottom:.85rem}
-    .form-field{position:relative;margin-bottom:.85rem}
-    .form-field label{
-      display:block;font-size:11px;font-weight:700;letter-spacing:1.5px;
-      text-transform:uppercase;color:var(--blue-soft);margin-bottom:.4rem;
-    }
-    .form-field label .req{color:var(--cyan);margin-left:.2rem}
-    .form-field input{
-      width:100%;font-family:inherit;font-size:15px;color:#fff;
-      background:rgba(255,255,255,.04);
-      border:1px solid rgba(190,222,245,.18);
-      border-radius:999px;padding:.95rem 1.15rem;outline:none;
-      transition:border-color .25s var(--ease),background .25s var(--ease),box-shadow .25s var(--ease);
-    }
-    .form-field.has-icon input{padding-left:2.6rem}
-    .form-field input::placeholder{color:#5b6577}
-    .form-field input:focus{
-      border-color:rgba(122,224,255,.55);
-      background:rgba(122,224,255,.06);
-      box-shadow:0 0 0 4px rgba(122,224,255,.1);
-    }
-    .form-field .ico{
-      position:absolute;left:1rem;top:calc(50% + 9px);transform:translateY(-50%);
-      color:#5b6577;font-size:14px;pointer-events:none;
-    }
-    .form-field.error input{border-color:rgba(255,122,155,.6);background:rgba(255,122,155,.05)}
-    .form-field .err-msg{display:none;color:var(--rose);font-size:11.5px;margin-top:.4rem;padding-left:.4rem}
-    .form-field.error .err-msg{display:block}
-
-    .modal-submit{
-      width:100%;margin-top:.5rem;padding:1.05rem 1.5rem;border-radius:999px;
-      font-size:15px;font-weight:800;letter-spacing:.4px;cursor:pointer;
-      color:#062139;border:none;
-      background:linear-gradient(135deg, #7ae0ff 0%, #BEDEF5 100%);
-      box-shadow:0 0 0 1px rgba(122,224,255,.5), 0 10px 30px rgba(122,224,255,.35), inset 0 1px 0 rgba(255,255,255,.6);
-      transition:transform .25s var(--ease),box-shadow .3s var(--ease),filter .25s var(--ease);
-      position:relative;overflow:hidden;
-    }
-    .modal-submit:hover{transform:translateY(-2px);box-shadow:0 0 0 1px rgba(122,224,255,.7), 0 20px 45px rgba(122,224,255,.55), inset 0 1px 0 rgba(255,255,255,.7)}
-    .modal-submit::after{
-      content:"";position:absolute;top:0;left:-120%;width:40%;height:100%;
-      background:linear-gradient(90deg, transparent, rgba(255,255,255,.3), transparent);
-      transform:skewX(-20deg);transition:left .8s var(--ease-out);
-    }
-    .modal-submit:hover::after{left:130%}
-
-    /* Success state */
-    .modal-success{
-      display:none;text-align:center;padding:1rem 0 .25rem;
-    }
-    .modal-success .check-circle{
-      width:68px;height:68px;border-radius:50%;margin:0 auto 1.25rem;
-      display:flex;align-items:center;justify-content:center;
-      background:linear-gradient(135deg, #6cf3b4, #7ae0ff);
-      color:#062139;font-size:32px;font-weight:800;
-      box-shadow:0 16px 36px rgba(108,243,180,.35), 0 0 0 1px rgba(108,243,180,.4);
-      animation:popIn .5s var(--ease-out);
-    }
-    @keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
-    .modal-success h3{margin-bottom:.4rem}
-    .modal-success p{color:#9fb0cb;font-size:14.5px;line-height:1.6}
-    .modal.is-success .modal-form{display:none}
-    .modal.is-success .modal-success{display:block}
-
     @media (max-width:520px){
       .modal{padding:2rem 1.5rem 1.75rem}
-      .form-row{grid-template-columns:1fr;gap:0}
       .modal h3{font-size:20px}
     }
   </style>
