@@ -104,6 +104,10 @@
     ul{list-style:none}
     img,svg{display:block;max-width:100%}
     button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+    /* Visible focus ring for keyboard users only */
+    a:focus-visible,button:focus-visible,[tabindex]:focus-visible,input:focus-visible{
+      outline:2px solid var(--cyan);outline-offset:3px;border-radius:6px;
+    }
 
     /* ============================================================
        CUSTOM CURSOR GLOW
@@ -1875,7 +1879,7 @@
     }
     .perf-block{margin-bottom:1.1rem}
     .perf-block:last-child{margin-bottom:0}
-    .perf-block h5{
+    .section .perf-block h3,.perf-block h5{line-height:1.4;
       font-size:10px;font-weight:800;letter-spacing:1.6px;text-transform:uppercase;color:#7a8aa8;
       margin-bottom:.55rem;
     }
@@ -2081,7 +2085,7 @@
       padding:.7rem .8rem;
       background:rgba(7,16,34,.55);border:1px solid rgba(190,222,245,.1);border-radius:9px;
     }
-    .replay-notes h5{
+    .section .replay-notes h3,.replay-notes h5{line-height:1.4;
       font-size:9.5px;font-weight:800;letter-spacing:1.5px;text-transform:uppercase;
       color:#7a8aa8;margin-bottom:.55rem;
     }
@@ -2173,7 +2177,7 @@
       box-shadow:0 10px 22px rgba(7,16,34,.5), inset 0 1px 0 rgba(255,255,255,.35), 0 0 22px rgba(122,224,255,.35);
       border:2px solid rgba(190,222,245,.25);
     }
-    .level-card h4{color:#fff;margin-bottom:.4rem}
+    .level-card h3,.level-card h4{color:#fff;margin-bottom:.4rem;font-size:17px;line-height:1.4;letter-spacing:-.1px}
     .level-card .mod{
       font-size:12.5px;color:#9fb0cb;
       padding-top:.7rem;margin-top:.7rem;border-top:1px solid rgba(190,222,245,.1);
@@ -2364,7 +2368,7 @@
     }
     .footer-brand .logo{color:#fff}
     .footer-brand p{font-size:14px;color:#8fa3c5;max-width:340px;margin-top:1rem}
-    .footer-col h5{
+    .footer-col h2,.footer-col h5{line-height:1.4;
       font-size:11.5px;font-weight:800;letter-spacing:2px;
       text-transform:uppercase;color:#fff;margin-bottom:1.25rem;
     }
@@ -2501,7 +2505,7 @@
       }
       .footer-col{text-align:center}
       .footer-col ul{list-style:none;padding:0}
-      .footer-col h5{font-size:10px;margin-bottom:.55rem;letter-spacing:1.2px}
+      .footer-col h2,.footer-col h5{font-size:10px;margin-bottom:.55rem;letter-spacing:1.2px}
       .footer-col li{margin-bottom:.35rem}
       .footer-col a{font-size:11px;line-height:1.35}
     }
@@ -3432,10 +3436,10 @@
                 <button class="vs-navitem"        type="button" data-tab="replay"   role="tab" aria-selected="false"><span class="ico">▷</span>Trade Replay</button>
                 <button class="vs-navitem"        type="button" data-tab="analytics" role="tab" aria-selected="false"><span class="ico">◴</span>Analytics</button>
 
-                <div class="vs-nav-divider"></div>
+                <div class="vs-nav-divider" role="presentation"></div>
 
                 <button class="vs-navitem" type="button" data-tab="hallofgains" role="tab" aria-selected="false"><span class="ico">★</span>Hall of Gains</button>
-                <button class="vs-navitem locked" type="button" disabled><span class="ico">◷</span>Accounts</button>
+                <button class="vs-navitem locked" type="button" role="tab" aria-selected="false" aria-disabled="true" disabled><span class="ico">◷</span>Accounts</button>
               </nav>
 
               <div class="vs-sidefoot">
@@ -3675,7 +3679,7 @@
             </div>
 
             <div class="replay-notes">
-              <h5>Trade Notes</h5>
+              <h3>Trade Notes</h3>
               <div class="replay-note">
                 <div class="ts">09:45</div>
                 <div><span class="tag">Entry</span>Break + retest of London VAH. Clean structure.</div>
@@ -3726,7 +3730,7 @@
             </div>
 
             <div class="perf-block">
-              <h5>Win Rate by Pair</h5>
+              <h3>Win Rate by Pair</h3>
               <div class="perf-bar"><span class="lbl">XAU/USD</span><div class="bar"><div class="fill" style="width:84%"></div></div><span class="val">84%</span></div>
               <div class="perf-bar"><span class="lbl">BTC/USD</span><div class="bar"><div class="fill" style="width:78%"></div></div><span class="val">78%</span></div>
               <div class="perf-bar"><span class="lbl">EUR/USD</span><div class="bar"><div class="fill" style="width:72%"></div></div><span class="val">72%</span></div>
@@ -3735,7 +3739,7 @@
             </div>
 
             <div class="perf-block">
-              <h5>Win Rate by Session</h5>
+              <h3>Win Rate by Session</h3>
               <div class="perf-bar"><span class="lbl">London</span><div class="bar"><div class="fill" style="width:81%"></div></div><span class="val">81%</span></div>
               <div class="perf-bar"><span class="lbl">New York</span><div class="bar"><div class="fill" style="width:74%"></div></div><span class="val">74%</span></div>
               <div class="perf-bar"><span class="lbl">Asia</span><div class="bar"><div class="fill" style="width:69%"></div></div><span class="val">69%</span></div>
@@ -3875,11 +3879,11 @@
       </div>
 
       <div class="academy-grid">
-        <div class="level-card reveal"><div class="badge-num">01</div><h4>Overview</h4><div class="mod">8 Modules</div></div>
-        <div class="level-card reveal"><div class="badge-num">02</div><h4>Foundation</h4><div class="mod">12 Modules</div></div>
-        <div class="level-card reveal"><div class="badge-num">03</div><h4>Structure</h4><div class="mod">18 Modules</div></div>
-        <div class="level-card reveal"><div class="badge-num">04</div><h4>Mastery</h4><div class="mod">24 Modules</div></div>
-        <div class="level-card reveal"><div class="badge-num">05</div><h4>Live Floor</h4><div class="mod">Ongoing</div></div>
+        <div class="level-card reveal"><div class="badge-num">01</div><h3>Overview</h3><div class="mod">8 Modules</div></div>
+        <div class="level-card reveal"><div class="badge-num">02</div><h3>Foundation</h3><div class="mod">12 Modules</div></div>
+        <div class="level-card reveal"><div class="badge-num">03</div><h3>Structure</h3><div class="mod">18 Modules</div></div>
+        <div class="level-card reveal"><div class="badge-num">04</div><h3>Mastery</h3><div class="mod">24 Modules</div></div>
+        <div class="level-card reveal"><div class="badge-num">05</div><h3>Live Floor</h3><div class="mod">Ongoing</div></div>
       </div>
 
       <div style="text-align:center">
@@ -4160,7 +4164,7 @@
   <!-- ============================================================
        JOIN MODAL
        ============================================================ -->
-  <div class="modal-backdrop" id="joinModal" role="dialog" aria-modal="true" aria-labelledby="joinTitle" aria-hidden="true">
+  <div class="modal-backdrop" id="joinModal" role="dialog" aria-modal="true" aria-labelledby="joinTitle" aria-hidden="true" inert>
     <div class="modal" role="document">
       <button class="modal-close" id="modalClose" aria-label="Close form">✕</button>
 
@@ -4207,7 +4211,7 @@
         <p>Free forever access to VIP trade signals, institutional tooling, and a worldwide community of serious traders.</p>
       </div>
       <div class="footer-col">
-        <h5>Platform</h5>
+        <h2>Platform</h2>
         <ul>
           <li><a href="#trading">Trading</a></li>
           <li><a href="#tools">Tools</a></li>
@@ -4216,7 +4220,7 @@
         </ul>
       </div>
       <div class="footer-col">
-        <h5>Legal</h5>
+        <h2>Legal</h2>
         <ul>
           <li><a href="legal.html#terms">Terms of Service</a></li>
           <li><a href="legal.html#privacy">Privacy Policy</a></li>
@@ -4225,7 +4229,7 @@
         </ul>
       </div>
       <div class="footer-col">
-        <h5>About</h5>
+        <h2>About</h2>
         <ul>
           <li><a href="#story">Our Story</a></li>
           <li><a href="#growth">Growth</a></li>
@@ -4729,6 +4733,7 @@
 
     function openJoinModal(){
       joinModal.classList.add('open');
+      joinModal.removeAttribute('inert');
       joinModal.setAttribute('aria-hidden','false');
       document.body.style.overflow = 'hidden';
       loadJoinForm();
@@ -4737,6 +4742,7 @@
     function closeJoinModal(){
       joinModal.classList.remove('open');
       joinModal.setAttribute('aria-hidden','true');
+      joinModal.setAttribute('inert','');
       document.body.style.overflow = '';
     }
 
