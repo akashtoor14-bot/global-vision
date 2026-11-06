@@ -174,6 +174,7 @@
       content-visibility:auto;
       contain-intrinsic-size:auto 800px;
     }
+    .cv-all .section{content-visibility:visible}
     .section-header{text-align:center;max-width:760px;margin:0 auto 4rem;position:relative;z-index:2}
     .section-header h2{margin-bottom:1rem}
     .section-header p{font-size:18px;color:var(--muted)}
@@ -2751,7 +2752,7 @@
         </button>
       </div>
     </nav>
-    <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <div class="mobile-menu" id="mobileMenu" aria-hidden="true" inert>
       <ul class="mobile-menu-links">
         <li><a href="#hero">Home</a></li>
         <li><a href="#trading">Trading</a></li>
@@ -4259,8 +4260,16 @@
         if(!target) return;
         e.preventDefault();
         const offset = 82;
+        /* Off-screen sections skip rendering (content-visibility) and use a
+           guessed height, which made far links (e.g. Academy) land up to
+           1000px off. Render them all for this jump so the target is real;
+           their measured heights are remembered afterwards. */
+        const root = document.documentElement;
+        root.classList.add('cv-all');
         const top = target.getBoundingClientRect().top + window.pageYOffset - offset;
         window.scrollTo({ top, behavior:'smooth' });
+        clearTimeout(window._cvAllTimer);
+        window._cvAllTimer = setTimeout(()=>root.classList.remove('cv-all'), 1800);
       });
     });
 
@@ -4635,6 +4644,7 @@
       navToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
       mobileMenu.classList.toggle('open', open);
       mobileMenu.setAttribute('aria-hidden', open ? 'false' : 'true');
+      mobileMenu.toggleAttribute('inert', !open);
     }
     navToggle.addEventListener('click', ()=>{
       const open = navToggle.getAttribute('aria-expanded') !== 'true';
