@@ -1024,8 +1024,7 @@
     .anim-live .frame{
       transform-origin:center;transform-box:fill-box;
       opacity:0;
-      animation:liveFrameIn 1s cubic-bezier(.22,1,.36,1) .15s forwards,
-                liveFrameFloat 6s ease-in-out infinite 1.2s;
+      animation:liveFrameIn 1s cubic-bezier(.22,1,.36,1) .15s forwards;
     }
     @keyframes liveFrameIn{
       0%  {opacity:0;transform:translateY(8px) scale(.97)}
@@ -1035,10 +1034,11 @@
       0%,100%{transform:translateY(0)}
       50%    {transform:translateY(-2.5px)}
     }
-    .anim-live .frame-glow{
-      transform-origin:center;transform-box:fill-box;
-      animation:liveGlowPulse 4s ease-in-out infinite;
-    }
+    /* Card beats: after the intro, these illustrations no longer loop
+       non-stop (that kept every SVG repainting every frame). A small script
+       adds .beat for a couple of seconds every ~5s while the card is on
+       screen, so each card makes one calm move at a time. */
+    .anim-live .frame-glow{opacity:.6}
     @keyframes liveGlowPulse{
       0%,100%{opacity:.45;transform:scaleX(1)}
       50%    {opacity:.75;transform:scaleX(1.05)}
@@ -1059,8 +1059,8 @@
     .anim-live .live-ring{
       transform-origin:center;transform-box:fill-box;
       opacity:0;
-      animation:liveRingExpand 1.8s ease-out infinite 1s;
     }
+    .anim-live.beat .live-ring{animation:liveRingExpand 1.8s ease-out}
     @keyframes liveRingExpand{
       0%  {transform:scale(1);  opacity:.85}
       100%{transform:scale(3.5);opacity:0}
@@ -1130,8 +1130,8 @@
     .anim-live .ann-pulse{
       transform-origin:center;transform-box:fill-box;
       opacity:0;
-      animation:liveAnnPulse 2.2s ease-out infinite 4.0s;
     }
+    .anim-live.beat .ann-pulse{animation:liveAnnPulse 2.2s ease-out .3s}
     @keyframes liveAnnPulse{
       0%  {transform:scale(1);  opacity:.9}
       100%{transform:scale(2.8);opacity:0}
@@ -1155,8 +1155,8 @@
     .anim-live .speak-ring{
       transform-origin:center;transform-box:fill-box;
       opacity:0;
-      animation:liveSpeakRing 2.2s ease-out infinite 1.8s;
     }
+    .anim-live.beat .speak-ring{animation:liveSpeakRing 2.2s ease-out .1s}
     @keyframes liveSpeakRing{
       0%  {transform:scale(.85);opacity:.85}
       100%{transform:scale(1.7);opacity:0}
@@ -1189,8 +1189,7 @@
     .anim-indicators .frame{
       transform-origin:center;transform-box:fill-box;
       opacity:0;
-      animation:indFrameIn 1s cubic-bezier(.22,1,.36,1) .15s forwards,
-                indFrameFloat 6s ease-in-out infinite 1.2s;
+      animation:indFrameIn 1s cubic-bezier(.22,1,.36,1) .15s forwards;
     }
     @keyframes indFrameIn{
       0%  {opacity:0;transform:translateY(8px) scale(.97)}
@@ -1200,18 +1199,13 @@
       0%,100%{transform:translateY(0)}
       50%    {transform:translateY(-2px)}
     }
-    .anim-indicators .frame-glow{
-      transform-origin:center;transform-box:fill-box;
-      animation:indGlowPulse 4s ease-in-out infinite;
-    }
+    .anim-indicators .frame-glow{opacity:.6}
     @keyframes indGlowPulse{
       0%,100%{opacity:.45;transform:scaleX(1)}
       50%    {opacity:.75;transform:scaleX(1.05)}
     }
-    .anim-indicators .status-dot{
-      transform-origin:center;transform-box:fill-box;
-      animation:indStatusPulse 1.6s ease-in-out infinite .8s;
-    }
+    .anim-indicators .status-dot{transform-origin:center;transform-box:fill-box}
+    .anim-indicators.beat .status-dot{animation:indStatusPulse 1.6s ease-in-out}
     @keyframes indStatusPulse{
       0%,100%{opacity:1; transform:scale(1)}
       50%    {opacity:.55;transform:scale(1.4)}
@@ -1247,8 +1241,8 @@
     .anim-indicators .spike-pulse{
       transform-origin:center;transform-box:fill-box;
       opacity:0;
-      animation:indSpikePulse 2.2s ease-out infinite 4.4s;
     }
+    .anim-indicators.beat .spike-pulse{animation:indSpikePulse 2.2s ease-out .2s}
     @keyframes indSpikePulse{
       0%  {transform:scale(1);  opacity:.9}
       100%{transform:scale(4.5);opacity:0}
@@ -1277,10 +1271,7 @@
        upward, and dissolves before reaching the cap (knowledge being
        absorbed into the academy). Ambient sparkle particles drift up
        in the background. Cap idle-floats gently. */
-    .anim-academy .cap-glow{
-      transform-origin:center;transform-box:fill-box;
-      animation:acCapGlow 4s ease-in-out infinite;
-    }
+    .anim-academy .cap-glow{opacity:.7}
     @keyframes acCapGlow{
       0%,100%{opacity:.55;transform:scale(1)}
       50%    {opacity:.85;transform:scale(1.08)}
@@ -1288,8 +1279,7 @@
     .anim-academy .cap{
       transform-origin:center;transform-box:fill-box;
       opacity:0;
-      animation:acCapIn 1s cubic-bezier(.22,1,.36,1) .15s forwards,
-                acCapFloat 5s ease-in-out infinite 1.2s;
+      animation:acCapIn 1s cubic-bezier(.22,1,.36,1) .15s forwards;
     }
     @keyframes acCapIn{
       0%  {opacity:0;transform:translateY(8px) scale(.92)}
@@ -1300,31 +1290,22 @@
       50%    {transform:translateY(-3px)}
     }
     .anim-academy .tassel{
-      transform-origin:201px 77px;
-      animation:acTasselSway 3.5s ease-in-out infinite 1.6s;
+      transform-origin:201px 77px;transform:rotate(-3deg);
     }
+    .anim-academy.beat .tassel{animation:acTasselSway 3.5s ease-in-out}
     @keyframes acTasselSway{
       0%,100%{transform:rotate(-3deg)}
       50%    {transform:rotate(5deg)}
     }
-    .anim-academy .cap-btn{
-      transform-origin:center;transform-box:fill-box;
-      animation:acCapBtnPulse 2.4s ease-in-out infinite 2s;
-    }
+    .anim-academy .cap-btn{transform-origin:center;transform-box:fill-box}
+    .anim-academy.beat .cap-btn{animation:acCapBtnPulse 2.4s ease-in-out}
     @keyframes acCapBtnPulse{
       0%,100%{opacity:1;   transform:scale(1)}
       50%    {opacity:.55; transform:scale(1.4)}
     }
-    .anim-academy .disc{
-      opacity:0;
-      animation:acDiscRise 5s linear infinite;
-    }
-    .anim-academy .disc.d1{animation-delay:.6s}
-    .anim-academy .disc.d2{animation-delay:1.5s}
-    .anim-academy .disc.d3{animation-delay:2.4s}
-    .anim-academy .disc.d4{animation-delay:3.2s}
-    .anim-academy .disc.d5{animation-delay:4.0s}
-    .anim-academy .disc.d6{animation-delay:4.8s}
+    /* One discipline name rises per beat (script adds .rise in turn) */
+    .anim-academy .disc{opacity:0}
+    .anim-academy .disc.rise{animation:acDiscRise 4.2s linear}
     @keyframes acDiscRise{
       0%  {opacity:0;   transform:translateY(30px)}
       20% {opacity:.85; transform:translateY(15px)}
@@ -1332,10 +1313,8 @@
       85% {opacity:.2;  transform:translateY(-20px)}
       100%{opacity:0;   transform:translateY(-30px)}
     }
-    .anim-academy .sp{
-      opacity:0;
-      animation:acSparkle 4s linear infinite;
-    }
+    .anim-academy .sp{opacity:0}
+    .anim-academy.beat .sp{animation:acSparkle 4s linear}
     .anim-academy .sp.sp1{animation-delay:.4s}
     .anim-academy .sp.sp2{animation-delay:1.6s}
     .anim-academy .sp.sp3{animation-delay:2.5s}
@@ -1355,37 +1334,30 @@
     /* ---- 5. Vision Sync (Trade Journal) ----
        Heatmap cells light up with a diagonal sweep shimmer;
        P&L bar grows from 0 to ~70% width; subtle journal float. */
-    .anim-journal .journal{
-      transform-origin:center;transform-box:fill-box;
-      animation:journalFloat 5s ease-in-out infinite;
-    }
+
     @keyframes journalFloat{
       0%,100%{transform:translateY(0)}
       50%    {transform:translateY(-3px)}
     }
-    .anim-journal .cell{
-      transform-origin:center;transform-box:fill-box;
-      animation:journalCellShimmer 3.6s ease-in-out infinite;
-    }
-    /* Diagonal stagger — each cell delayed by (row+col)*0.08s */
-    .anim-journal .cell[data-d="0"]{animation-delay:0s}
-    .anim-journal .cell[data-d="1"]{animation-delay:.10s}
-    .anim-journal .cell[data-d="2"]{animation-delay:.20s}
-    .anim-journal .cell[data-d="3"]{animation-delay:.30s}
-    .anim-journal .cell[data-d="4"]{animation-delay:.40s}
-    .anim-journal .cell[data-d="5"]{animation-delay:.50s}
-    .anim-journal .cell[data-d="6"]{animation-delay:.60s}
-    .anim-journal .cell[data-d="7"]{animation-delay:.70s}
-    .anim-journal .cell[data-d="8"]{animation-delay:.80s}
-    .anim-journal .cell[data-d="9"]{animation-delay:.90s}
+    /* One diagonal shimmer sweeps the calendar per beat */
+    .anim-journal .cell{transform-origin:center;transform-box:fill-box}
+    .anim-journal.beat .cell{animation:journalCellShimmer 1.4s ease-in-out}
+    .anim-journal.beat .cell[data-d="1"]{animation-delay:.07s}
+    .anim-journal.beat .cell[data-d="2"]{animation-delay:.14s}
+    .anim-journal.beat .cell[data-d="3"]{animation-delay:.21s}
+    .anim-journal.beat .cell[data-d="4"]{animation-delay:.28s}
+    .anim-journal.beat .cell[data-d="5"]{animation-delay:.35s}
+    .anim-journal.beat .cell[data-d="6"]{animation-delay:.42s}
+    .anim-journal.beat .cell[data-d="7"]{animation-delay:.49s}
+    .anim-journal.beat .cell[data-d="8"]{animation-delay:.56s}
+    .anim-journal.beat .cell[data-d="9"]{animation-delay:.63s}
     @keyframes journalCellShimmer{
       0%,100%{transform:scale(1);   filter:brightness(1)}
       50%    {transform:scale(1.08);filter:brightness(1.6)}
     }
     .anim-journal .pnl-bar-fill{
       transform-origin:left center;transform-box:fill-box;
-      animation:journalPnlGrow 2.4s cubic-bezier(.22,1,.36,1) .4s backwards,
-                journalPnlPulse 3s ease-in-out infinite 2.8s;
+      animation:journalPnlGrow 2.4s cubic-bezier(.22,1,.36,1) .4s backwards;
     }
     @keyframes journalPnlGrow{
       0%  {transform:scaleX(0)}
@@ -1405,28 +1377,17 @@
        The continent dots gently shimmer as a whole; location pins pulse
        in sequence across the map with an expanding ring (a community
        lighting up worldwide). */
-    .anim-network .netmap{
-      animation:netmapShimmer 5s ease-in-out infinite;
-    }
+    /* The 455-dot map no longer shimmers as a whole (that repainted the
+       entire map every frame); one city pings at a time instead. */
+    .anim-network .netmap{opacity:.62}
     @keyframes netmapShimmer{
       0%,100%{opacity:.52}
       50%    {opacity:.74}
     }
-    .anim-network .pin .dot{
-      transform-origin:center;transform-box:fill-box;
-      animation:netPinDot 4s ease-in-out infinite;
-    }
-    .anim-network .pin .ring{
-      transform-origin:center;transform-box:fill-box;
-      opacity:0;
-      animation:netPinRing 4s ease-out infinite;
-    }
-    .anim-network .pin.p1 .dot,.anim-network .pin.p1 .ring{animation-delay:0s}
-    .anim-network .pin.p2 .dot,.anim-network .pin.p2 .ring{animation-delay:-.66s}
-    .anim-network .pin.p3 .dot,.anim-network .pin.p3 .ring{animation-delay:-1.33s}
-    .anim-network .pin.p4 .dot,.anim-network .pin.p4 .ring{animation-delay:-2s}
-    .anim-network .pin.p5 .dot,.anim-network .pin.p5 .ring{animation-delay:-2.66s}
-    .anim-network .pin.p6 .dot,.anim-network .pin.p6 .ring{animation-delay:-3.33s}
+    .anim-network .pin .dot{transform-origin:center;transform-box:fill-box;opacity:.55}
+    .anim-network .pin .ring{transform-origin:center;transform-box:fill-box;opacity:0}
+    .anim-network .pin.ping .dot{animation:netPinDot 2.6s ease-in-out}
+    .anim-network .pin.ping .ring{animation:netPinRing 2.6s ease-out}
     @keyframes netPinDot{
       0%,100%{opacity:.55;transform:scale(1)}
       8%     {opacity:1;  transform:scale(1.5)}
@@ -2892,6 +2853,7 @@
                   <stop offset="0" stop-color="rgba(122,224,255,.10)"/>
                   <stop offset="1" stop-color="rgba(122,224,255,0)"/>
                 </radialGradient>
+                <clipPath id="liveCamClip"><circle cx="56" cy="140" r="11.4"/></clipPath>
               </defs>
 
               <!-- Ambient glow under frame -->
@@ -2926,12 +2888,12 @@
                   <path d="M215,34 c2.5,-3 5.5,-3 8,0 c-2.5,3 -5.5,3 -8,0" fill="none" stroke="rgba(190,222,245,.7)" stroke-width=".6"/>
                   <circle cx="219" cy="34" r="1.1" fill="rgba(190,222,245,.85)"/>
                   <!-- Viewer count: 3 stacked tspans that cross-fade -->
-                  <text x="229" y="37" fill="rgba(190,222,245,.9)" font-family="JetBrains Mono,monospace" font-size="6" font-weight="700">
+                  <text x="229" y="37" fill="rgba(190,222,245,.9)" font-family="JetBrains Mono,monospace" font-size="6.5" font-weight="700">
                     <tspan class="vn vn1" x="229" y="37">324</tspan>
                     <tspan class="vn vn2" x="229" y="37">325</tspan>
                     <tspan class="vn vn3" x="229" y="37">326</tspan>
                   </text>
-                  <text x="250" y="37" fill="rgba(190,222,245,.55)" font-family="Inter,sans-serif" font-size="5" font-weight="500">watching</text>
+                  <text x="249" y="37" fill="rgba(190,222,245,.65)" font-family="Inter,sans-serif" font-size="6" font-weight="500">watching</text>
                 </g>
 
                 <!-- Chart: 7 candles tell a "low → bounce → breakout → run" story -->
@@ -2977,25 +2939,23 @@
                 <g class="annotation">
                   <circle class="ann-ring" cx="174" cy="92" r="5.5" fill="none" stroke="#ff7a9b" stroke-width="1.2"/>
                   <circle class="ann-pulse" cx="174" cy="92" r="5.5" fill="none" stroke="#ff7a9b" stroke-width="1"/>
-                  <text class="ann-label" x="183" y="86" fill="#ff7a9b" font-family="JetBrains Mono,monospace" font-size="5" font-weight="800" letter-spacing="1">ENTRY</text>
+                  <text class="ann-label" x="180" y="113" fill="#ff7a9b" font-family="JetBrains Mono,monospace" font-size="6" font-weight="800" letter-spacing="1">ENTRY</text>
                 </g>
 
                 <!-- Bottom strip: educator webcam thumbnail + host info -->
                 <g class="webcam">
                   <!-- Expanding speak-ring (cyan, suggests they're talking) -->
                   <circle class="speak-ring" cx="56" cy="140" r="13" fill="none" stroke="rgba(122,224,255,.5)" stroke-width="1"/>
-                  <!-- Avatar background circle -->
-                  <circle cx="56" cy="140" r="12" fill="rgba(11,28,52,.95)" stroke="#7ae0ff" stroke-width="1.2"/>
-                  <!-- Head -->
-                  <circle cx="56" cy="136" r="3.6" fill="rgba(122,224,255,.5)"/>
-                  <!-- Shoulders -->
-                  <path d="M48,150 a8,7 0 0 1 16,0 L64,152 L48,152 Z" fill="rgba(122,224,255,.5)"/>
+                  <!-- Host photo in a cyan ring -->
+                  <circle cx="56" cy="140" r="12" fill="rgba(11,28,52,.95)"/>
+                  <image href="headshots/Gio.jpg" x="44.6" y="128.6" width="22.8" height="22.8" clip-path="url(#liveCamClip)" preserveAspectRatio="xMidYMid slice"/>
+                  <circle cx="56" cy="140" r="12" fill="none" stroke="#7ae0ff" stroke-width="1.2"/>
                 </g>
 
                 <!-- Host label + session title -->
                 <g class="host">
-                  <text x="74" y="138" fill="#eaf6ff" font-family="Inter,sans-serif" font-size="6" font-weight="700">GV Educator</text>
-                  <text x="74" y="148" fill="rgba(190,222,245,.6)" font-family="Inter,sans-serif" font-size="4.5" font-weight="500">XAUUSD · London Open Breakdown</text>
+                  <text x="74" y="138.5" fill="#eaf6ff" font-family="Inter,sans-serif" font-size="8" font-weight="700">Coach Gio</text>
+                  <text x="74" y="149" fill="rgba(190,222,245,.7)" font-family="Inter,sans-serif" font-size="6" font-weight="500">XAUUSD · London Open</text>
                 </g>
               </g>
             </svg>
@@ -3077,7 +3037,7 @@
 
                 <!-- Ticker status bar (bottom) -->
                 <rect x="22" y="148" width="276" height="14" fill="rgba(7,21,43,.7)"/>
-                <text x="32" y="158" fill="rgba(190,222,245,.7)" font-family="JetBrains Mono,monospace" font-size="5" font-weight="600">SCANNING: XAUUSD · BTCUSD · EURUSD · NAS100 · GBPJPY · US30</text>
+                <text x="32" y="158" fill="rgba(190,222,245,.7)" font-family="JetBrains Mono,monospace" font-size="6" font-weight="600">SCANNING: XAUUSD · BTCUSD · EURUSD · NAS100 · GBPJPY · US30</text>
 
                 <!-- Signal alert card (pops up to the right of the spike) -->
                 <g class="alert">
@@ -3086,9 +3046,9 @@
                   <rect x="200" y="50" width="94" height="34" rx="4"
                         fill="rgba(11,28,52,.95)" stroke="#ff7a9b" stroke-width=".7"/>
                   <rect x="200" y="50" width="2.5" height="34" rx="1.2" fill="#ff7a9b"/>
-                  <text x="208" y="60" fill="#ff7a9b" font-family="Inter,sans-serif" font-size="5.5" font-weight="800" letter-spacing="1.2">SETUP FOUND</text>
+                  <text x="208" y="60" fill="#ff7a9b" font-family="Inter,sans-serif" font-size="6" font-weight="800" letter-spacing="1.2">SETUP FOUND</text>
                   <text x="208" y="70" fill="#eaf6ff" font-family="JetBrains Mono,monospace" font-size="6" font-weight="700">XAUUSD · LONG</text>
-                  <text x="208" y="79" fill="rgba(190,222,245,.65)" font-family="JetBrains Mono,monospace" font-size="4.5">87% · ENTRY ZONE</text>
+                  <text x="208" y="79" fill="rgba(190,222,245,.65)" font-family="JetBrains Mono,monospace" font-size="5.5">87% · ENTRY ZONE</text>
                 </g>
               </g>
             </svg>
@@ -3133,12 +3093,12 @@
 
               <!-- Discipline names rising from below (rendered behind cap) -->
               <g class="disciplines">
-                <text class="disc d1" x="160" y="140" text-anchor="middle" fill="rgba(122,224,255,.95)" font-family="JetBrains Mono,monospace" font-size="6" font-weight="700" letter-spacing="1.5">MARKET STRUCTURE</text>
-                <text class="disc d2" x="100" y="140" text-anchor="middle" fill="rgba(122,224,255,.95)" font-family="JetBrains Mono,monospace" font-size="6" font-weight="700" letter-spacing="1.5">ORDER FLOW</text>
-                <text class="disc d3" x="220" y="140" text-anchor="middle" fill="rgba(122,224,255,.95)" font-family="JetBrains Mono,monospace" font-size="6" font-weight="700" letter-spacing="1.5">RISK MANAGEMENT</text>
-                <text class="disc d4" x="80"  y="140" text-anchor="middle" fill="rgba(122,224,255,.95)" font-family="JetBrains Mono,monospace" font-size="6" font-weight="700" letter-spacing="1.5">PSYCHOLOGY</text>
-                <text class="disc d5" x="240" y="140" text-anchor="middle" fill="rgba(122,224,255,.95)" font-family="JetBrains Mono,monospace" font-size="6" font-weight="700" letter-spacing="1.5">STRATEGY</text>
-                <text class="disc d6" x="160" y="140" text-anchor="middle" fill="rgba(122,224,255,.95)" font-family="JetBrains Mono,monospace" font-size="6" font-weight="700" letter-spacing="1.5">TECHNICAL ANALYSIS</text>
+                <text class="disc d1" x="160" y="140" text-anchor="middle" fill="rgba(122,224,255,.95)" font-family="JetBrains Mono,monospace" font-size="7" font-weight="700" letter-spacing="1.5">MARKET STRUCTURE</text>
+                <text class="disc d2" x="100" y="140" text-anchor="middle" fill="rgba(122,224,255,.95)" font-family="JetBrains Mono,monospace" font-size="7" font-weight="700" letter-spacing="1.5">ORDER FLOW</text>
+                <text class="disc d3" x="220" y="140" text-anchor="middle" fill="rgba(122,224,255,.95)" font-family="JetBrains Mono,monospace" font-size="7" font-weight="700" letter-spacing="1.5">RISK MANAGEMENT</text>
+                <text class="disc d4" x="80"  y="140" text-anchor="middle" fill="rgba(122,224,255,.95)" font-family="JetBrains Mono,monospace" font-size="7" font-weight="700" letter-spacing="1.5">PSYCHOLOGY</text>
+                <text class="disc d5" x="240" y="140" text-anchor="middle" fill="rgba(122,224,255,.95)" font-family="JetBrains Mono,monospace" font-size="7" font-weight="700" letter-spacing="1.5">STRATEGY</text>
+                <text class="disc d6" x="160" y="140" text-anchor="middle" fill="rgba(122,224,255,.95)" font-family="JetBrains Mono,monospace" font-size="7" font-weight="700" letter-spacing="1.5">TECHNICAL ANALYSIS</text>
               </g>
 
               <!-- Mortarboard cap (rendered last so it sits on top) -->
@@ -4516,6 +4476,52 @@
       const sync = () => (onScreen && !document.hidden) ? start() : stop();
       new IntersectionObserver(es => { onScreen = es[0].isIntersecting; sync(); }, { threshold: .35 }).observe(card);
       document.addEventListener('visibilitychange', sync);
+    })();
+
+    /* ---------- Trading cards: one calm beat at a time ----------
+       The other five illustrations used to loop ~90 animations non-stop,
+       which kept their SVGs repainting every frame. Now each plays its
+       intro once, then gets one short move every few seconds (the CSS
+       .beat / .rise / .ping rules), only while it is on screen. */
+    (function(){
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      const pulse = (el, cls, ms) => {
+        el.classList.remove(cls); void el.getBoundingClientRect(); // restart
+        el.classList.add(cls); setTimeout(() => el.classList.remove(cls), ms);
+      };
+      let viewers = 326, disc = 0, pin = 0;
+      const cards = [
+        { sel: '.anim-live',       every: 5200, beat(svg){
+            pulse(svg, 'beat', 2600);
+            const n = svg.querySelector('.vn3');
+            if (n){ viewers += 1 + Math.floor(Math.random()*3); n.textContent = viewers; } } },
+        { sel: '.anim-indicators', every: 5600, beat(svg){ pulse(svg, 'beat', 2600); } },
+        { sel: '.anim-academy',    every: 4800, beat(svg){
+            pulse(svg, 'beat', 4200);
+            const d = svg.querySelectorAll('.disc');
+            if (d.length) pulse(d[disc++ % d.length], 'rise', 4300); } },
+        { sel: '.anim-journal',    every: 6000, beat(svg){ pulse(svg, 'beat', 2200); } },
+        { sel: '.anim-network',    every: 1900, beat(svg){
+            const p = svg.querySelectorAll('.pin');
+            if (p.length) pulse(p[pin++ % p.length], 'ping', 2700); } },
+      ];
+      cards.forEach((c, i) => {
+        const svg = document.querySelector(c.sel);
+        if (!svg) return;
+        let onScreen = false, timer = null, introDone = false, introTimer = null;
+        const run = () => { if (!timer) timer = setInterval(() => c.beat(svg), c.every); };
+        const halt = () => { clearInterval(timer); timer = null; };
+        const sync = () => {
+          if (!onScreen || document.hidden){ halt(); return; }
+          if (introDone) run();
+          else if (!introTimer) introTimer = setTimeout(() => {   // let the intro finish
+            introDone = true; if (onScreen && !document.hidden){ c.beat(svg); run(); }
+          }, 4800 + i*1100);
+        };
+        new IntersectionObserver(es => { onScreen = es[0].isIntersecting; sync(); }, { threshold: .3 })
+          .observe(svg.closest('.f-card') || svg);
+        document.addEventListener('visibilitychange', sync);
+      });
     })();
 
     /* ---------- Stars ----------
