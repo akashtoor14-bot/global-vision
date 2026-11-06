@@ -5261,7 +5261,7 @@
           var wasVisible = heroVisible;
           heroVisible = es[0].isIntersecting;
           // Re-prime the clock + restart the loop when it scrolls back in.
-          if (heroVisible && !wasVisible){ last = performance.now(); requestAnimationFrame(tick); }
+          if (heroVisible && !wasVisible){ last = performance.now(); cancelAnimationFrame(rafId); rafId = requestAnimationFrame(tick); }
         }, { threshold: 0 });
         visIO.observe(section);
       }
@@ -5279,10 +5279,14 @@
 
       // ---- Animation loop ----
       var last = performance.now();
+      var rafId = 0;
       function tick(now){
         // Hero off-screen → stop the loop entirely (the IntersectionObserver
         // re-primes the clock and restarts it when it scrolls back in).
         if (!heroVisible) return;
+        // ~60fps cap: on 120Hz/144Hz screens skip every other refresh. The
+        // globe turns slowly enough that 60 looks identical, at half the work.
+        if (now - last < 11){ rafId = requestAnimationFrame(tick); return; }
         var dt = Math.min(0.1, (now - last) / 1000);
         last = now;
 
@@ -5365,9 +5369,9 @@
         }
 
         renderer.render(scene, camera);
-        requestAnimationFrame(tick);
+        rafId = requestAnimationFrame(tick);
       }
-      requestAnimationFrame(tick);
+      rafId = requestAnimationFrame(tick);
 
       // Fade the canvas in once the first frame paints
       requestAnimationFrame(function(){
