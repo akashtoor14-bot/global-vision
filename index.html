@@ -2653,19 +2653,21 @@
     (function(){
       function loadTicker(){
         var cfg = {
+          /* TVC:DJI, TVC:SPX, NASDAQ:NDX and TVC:DXY show a red error badge in
+             the free widget (index data licensing) — use CFD feeds instead. */
           "symbols": [
             {"description": "Gold (XAU/USD)",   "proName": "OANDA:XAUUSD"},
             {"description": "Bitcoin",          "proName": "BITSTAMP:BTCUSD"},
-            {"description": "Dow Jones (US30)", "proName": "TVC:DJI"},
+            {"description": "Dow Jones (US30)", "proName": "OANDA:US30USD"},
             {"description": "Crude Oil (WTI)",  "proName": "TVC:USOIL"},
             {"description": "Brent Oil",        "proName": "TVC:UKOIL"},
             {"description": "Silver (XAG/USD)", "proName": "OANDA:XAGUSD"},
-            {"description": "S&P 500",          "proName": "TVC:SPX"},
-            {"description": "Nasdaq 100",       "proName": "NASDAQ:NDX"},
+            {"description": "S&P 500",          "proName": "OANDA:SPX500USD"},
+            {"description": "Nasdaq 100",       "proName": "OANDA:NAS100USD"},
             {"description": "Ethereum",         "proName": "BITSTAMP:ETHUSD"},
             {"description": "EUR/USD",          "proName": "FX:EURUSD"},
             {"description": "GBP/USD",          "proName": "FX:GBPUSD"},
-            {"description": "USD Index (DXY)",  "proName": "TVC:DXY"}
+            {"description": "USD Index (DXY)",  "proName": "CAPITALCOM:DXY"}
           ],
           "showSymbolLogo": true,
           "isTransparent": true,
